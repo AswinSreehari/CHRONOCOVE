@@ -10,9 +10,10 @@ const userController = require('../controller/User')
 router.get('/',userController.home),
 router.get('/signup',userController.signup),
 router.get('/signin',userController.signIn),
-router.post('/signup',userController.signupPost)
-router.post('/signin',userController.signInPost)
-router.get('/signout',userController.signOut)
+router.post('/signup',userController.signupPost),
+router.post('/signin',userController.signInPost),
+router.get('/signout',userController.signOut),
+router.get('/about',userController.about)
 
 
 

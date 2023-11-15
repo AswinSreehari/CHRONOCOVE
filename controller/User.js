@@ -74,6 +74,12 @@ const signOut = (req,res)=>{
     res.redirect('/signin')
 }
 
+//About
+
+const about = ((req,res)=>{
+    res.render('User/about')
+})
+
 
 
 
@@ -84,5 +90,6 @@ module.exports={
     signupPost,
     signIn,
     signInPost,
-    signOut
+    signOut,
+    about
 }
