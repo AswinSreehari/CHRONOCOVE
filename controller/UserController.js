@@ -3,8 +3,9 @@ const bcrypt = require('bcrypt')
 
 
 const home = (req,res)=>{
-    console.log("inside the index");
-    res.render('User/index')
+    const email = req.session.email
+    res.render('User/index',{email})
+     
 }
 //SignUp 
 
@@ -15,11 +16,10 @@ const signupPost = (async(req,res)=>{
     const {name,email,password} = req.body
     try{
 
-        const existingMail = await collection.findOne({emailId:email})
-        console.log("existing mail:",existingMail);
+        const existingEmail = await collection.findOne({emailId:email})
+        console.log("existing email:",existingEmail);
         const hashedPassword = await bcrypt.hash(password,10)
-        if(existingMail){
-            console.log("hai");
+        if(existingEmail){
             return res.status(400).send("Email already existing.Please choose another Email")
         }else{
         const Data={
@@ -29,55 +29,79 @@ const signupPost = (async(req,res)=>{
         }
         await collection.create(Data)
         console.log(Data)
-        req.session.user = req.body.name
+        req.session.email = req.body.email
         res.render('User/index')
     }
     }catch(error){
         console.log(error)
-        res.status(500).send('Internal Server Error')
+        // res.status(500).send('Internal Server Error')
+        res.redirect('/error')
     }
 })
 
 //SignIn
 
 const signIn = (req,res)=>{
-    res.render('User/signin')
+    if(req.session.email){
+        res.redirect('/home')
+    }else{
+         res.render('User/signIn')
+    } 
 }
+
 const signInPost = async(req,res)=>{
-     const email = req.body.mail;
+    console.log("inside signinPost  ")
+     const email = req.body.email;
      console.log("email is :",email);
     try{
         console.log("inside try")
         const check = await collection.findOne({ emailId:email})
-        console.log(check)
+        console.log("checked user",check)
         if(!check){
             console.log("User name cannot found")
         } else{
         const isPasswordmatch = await bcrypt.compare(req.body.password,check.password)
         if(isPasswordmatch){
-            req.session.email = check.email;
-            res.render('User/index')
+            req.session.email = check.emailId;
+            console.log(req.session.email);
+            res.redirect("/")
         }else{
             res.send('Invalid password')
         }
         }
        
-    }catch{
-        res.send("Wrong Details")
+    }catch(error){
+         console.error("Error during SignIn:",error)
+        //  res.status(500).send("Internal Status Error")
+        res.redirect('/error')
+
     }
 }
 
 //Signout
 
 const signOut = (req,res)=>{
-    req.session.user = null
-    res.redirect('/signin')
+    console.log("inside signout");
+    req.session.destroy((err)=>{
+        if(err){
+            console.log("got an error");
+            console.error("Error destroying Session :",err)
+        }
+        console.log("gonna redirect to home");
+        res.redirect("/")
+    })
 }
 
 //About
 
 const about = ((req,res)=>{
     res.render('User/about')
+})
+
+//404_Error
+
+const error = ((req,res)=>{
+    res.render('User/404')
 })
 
 
@@ -91,5 +115,6 @@ module.exports={
     signIn,
     signInPost,
     signOut,
-    about
+    about,
+    error
 }

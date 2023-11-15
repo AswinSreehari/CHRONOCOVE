@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const userController = require('../controller/User')
+const userController = require('../controller/UserController')
+const adminController = require('../controller/AdminController')
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -13,10 +14,10 @@ router.get('/signin',userController.signIn),
 router.post('/signup',userController.signupPost),
 router.post('/signin',userController.signInPost),
 router.get('/signout',userController.signOut),
-router.get('/about',userController.about)
+router.get('/about',userController.about),
+router.get('/error',userController.error)
 
-
-
+ 
 
 
 module.exports = router;

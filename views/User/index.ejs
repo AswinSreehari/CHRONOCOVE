@@ -79,11 +79,30 @@
             </div>
           </div>
         </div>
-        <div class="signout-button btn btn-danger" style="color: white; text-decoration: none; float: right;">
+
+
+        <!-- <div class="signout-button btn btn-danger" style="color: white; text-decoration: none; float: right;">
+          
+        </div> -->
+
+        <% if (email) { %>
+          <!-- User is signed in -->
+          <div class="signout-button  btn-danger" style="color: white; text-decoration: none; float: right;border-radius: 10px;">
           <form action="/signout" method="GET">
             <button type="submit" class="btn btn-link" style="color: white; text-decoration: none;">Sign Out</button>
           </form>
         </div>
+      <% } else { %>
+          <!-- User is not signed in -->
+          <div class="signout-button  btn-danger" style="color: white; text-decoration: none; float: right;border-radius: 10px;">
+          <form action="/signin" method="GET">
+            <button type="submit" class="btn btn-link" style="color: white; text-decoration: none;">Sign In</button>
+          </form>
+        </div>
+      <% } %>
+  
+
+
       </div> 
       <nav class="site-navigation text-right text-md-center" role="navigation">
         <div class="container">
@@ -95,7 +114,6 @@
               <a href="/about">About</a>
             </li>
             <li><a href="shop.ejs">Shop</a></li>
-            <li><a href="/signin">SignIn</a></li>
             <li><a href="#">Search</a></li>
             <li><a href="contact.ejs">Contact</a></li>
           </ul>

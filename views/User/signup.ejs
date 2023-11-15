@@ -11,6 +11,67 @@
 
     <!-- Main css -->
     <link rel="stylesheet" href="/stylesheets/signup.css">
+
+    <!-- JS -->
+    <script src="/javascripts/signup_jquery.min.js"></script>
+    <script src="/javascripts/signup_jquery-ui.min.js"></script>
+    <script src="/javascripts/signup.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var registerForm = document.getElementById('register-form');
+
+            registerForm.addEventListener('submit', function(event) {
+                // Prevent the form from submitting
+                event.preventDefault();
+
+                // Reset previous error messages
+                resetErrorMessages();
+
+                // Validate form fields
+                var name = document.getElementById('name').value;
+                var email = document.getElementById('email').value;
+                var password = document.getElementById('password').value;
+
+                if (name.trim() === '') {
+                    displayErrorMessage('name', 'Please enter your name.');
+                }
+
+                if (email.trim() === '') {
+                    displayErrorMessage('email', 'Please enter your email.');
+                }
+
+                if (password.trim() === '') {
+                    displayErrorMessage('password', 'Please enter your password.');
+                }
+
+                // If there are errors, prevent form submission
+                if (document.querySelectorAll('.error-message').length > 0) {
+                    return;
+                }
+
+                // If validation passes, you can submit the form
+                registerForm.submit();
+            });
+
+            function displayErrorMessage(fieldId, message) {
+                var errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.innerHTML = message;
+
+                var formGroup = document.querySelector('#' + fieldId).closest('.form-group');
+                formGroup.appendChild(errorDiv);
+            }
+
+            function resetErrorMessages() {
+                var errorMessages = document.querySelectorAll('.error-message');
+                errorMessages.forEach(function(errorMessage) {
+                    errorMessage.remove();
+                });
+            }
+        });
+    </script>
+     
 </head>
 <body>
 
@@ -35,18 +96,13 @@
                                 <label for="pass"><i class="zmdi zmdi-lock"></i></label>
                                 <input type="password" name="password" id="password" placeholder="Password"/>
                             </div>
-                            
-                            <div class="form-group">
-                                <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
-                                <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
-                            </div>
                             <div class="form-group form-button">
                                 <input type="submit" name="signup" id="signup" class="form-submit" value="Register"/>
                             </div>
                         </form>
                     </div>
                     <div class="signup-image">
-                        <figure><img src="/images/signup-image.jpg" alt="sing up image"></figure>
+                        <figure><img src="/images/Logo.png" alt="sing up image" style="border-radius: 10px;"></figure>
                         <a href="/signin" class="signup-image-link">I am already a member</a>
 
                     </div>
