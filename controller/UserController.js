@@ -66,7 +66,9 @@ const signInPost = async(req,res)=>{
             console.log(req.session.email);
             res.redirect("/")
         }else{
-            res.send('Invalid password')
+            // res.send('Invalid password')
+            const error = "Invalid Details"
+            res.render('User/signin',{error})
         }
         }
        
