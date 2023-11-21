@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session')
+const flash = require('express-flash')
 
 var indexRouter = require('./routes/admin');
 var usersRouter = require('./routes/users');
@@ -25,6 +26,10 @@ app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-store');
   next();
 });
+
+//Flash
+
+app.use(flash())
 
 
 // view engine setup

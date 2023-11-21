@@ -17,6 +17,11 @@ router.get('/categorymanagement',adminController.categorymanagement)
 router.get('/productmanagement',adminController.productmanagement)
 router.get('/blank',adminController.blank)
 router.get('/error',adminController.error)
+router.get('/addCategory',adminController.addCategory)
+router.post('/categorymanagement',adminController.addCategoryPost)
+router.get('/editCategory/:id',adminController.editCategory)
+router.post('/editCategoryPost/:id',adminController.editCategoryPost)
+router.get('/deleteCategory/:id',adminController.deleteCategory)
 
 
 module.exports = router;

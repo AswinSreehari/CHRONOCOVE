@@ -11,6 +11,7 @@ const userController = require('../controller/UserController')
 router.get('/',userController.home),
 router.get('/signup',userController.signup),
 router.get('/signin',userController.signIn),
+
 router.post('/signup',userController.signupPost),
 router.post('/signin',userController.signInPost),
 router.get('/signout',userController.signOut),
