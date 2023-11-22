@@ -22,6 +22,11 @@ router.post('/categorymanagement',adminController.addCategoryPost)
 router.get('/editCategory/:id',adminController.editCategory)
 router.post('/editCategoryPost/:id',adminController.editCategoryPost)
 router.get('/deleteCategory/:id',adminController.deleteCategory)
+router.get('/addProducts',adminController.addProducts)
+router.post('/addProductsPost',adminController.addProductsPost)
+router.get('/editProduct/:id',adminController.editProduct)
+router.post('/editProductPost/:id',adminController.editProductPost)
+router.get('deleteProduct/:id',adminController.deleteProduct)
 
 
 module.exports = router;
