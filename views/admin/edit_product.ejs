@@ -42,7 +42,7 @@
         <!-- Spinner End -->
 
 
-                  <!-- Sidebar Start -->
+                    <!-- Sidebar Start -->
                   <div class="sidebar pe-4 pb-3">
                     <nav class="navbar bg-secondary navbar-dark">
                         <a href="index.html" class="navbar-brand mx-4 mb-3">
@@ -59,7 +59,7 @@
                             </div>
                         </div>
                         <div class="navbar-nav w-100">
-                            <a href="/admin/admin_index" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                            <a href="/admin/dashboard" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                         
                             <a href="/admin/usermanagement" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Users </a>
                             <a href="/admin/categorymanagement" class="nav-item nav-link "><i class="fa fa-keyboard me-2"></i>Category </a>
@@ -78,6 +78,7 @@
                     </nav>
                 </div>
                 <!-- Sidebar End -->
+
 
 
         <!-- Content Start -->
@@ -187,36 +188,41 @@
                             <%= locals.error %>
                         </div>
                     <% } %>
-                    <form action="/admin/editProductPost/<%= product ? product._id : '' %>" method="POST" enctype="multipart/form-data">
-
+                    <form action="/admin/editProductPost/<%= product ? product.id : '' %>" method="post" enctype="multipart/form-data">
                         <div class="mb-3">
-                            <label for="productName" class="form-label">Product Name</label>
+                            <label for="productName">Product Name:</label>
                             <input type="text" class="form-control" id="productName" value="<%= product ? product.productName : '' %>" name="productName" required>
                         </div>
+                    
                         <div class="mb-3">
-                            <label for="productDescription" class="form-label">Product Description</label>
-                            <textarea class="form-control" id="productDescription" name="productDescription" rows="3"><%= product && product.productDescription ? product.productDescription : '' %></textarea>
+                            <label for="productDescription">Product Description:</label>
+                            <textarea class="form-control" id="productDescription" name="productDescription" rows="3" required><%= product && product.productDescription ? product.productDescription : '' %></textarea>
                         </div>
-                        <div class="mb-3">
-                            <label for="productCategory" class="form-label">Product Category</label>
+                    
+                          <div class="mb-3">
+                            <label for="productCategory">Product Category:</label>
                             <input type="text" class="form-control" id="productCategory" value="<%= product && product.productCategory ? product.productCategory : '' %>" name="productCategory" required>
-                        </div>
+                        </div>  
+                         
+                    
                         <div class="mb-3">
-                            <label for="mainProductImage" class="form-label">Main Product Image</label>
+                            <label for="mainProductImage">Main Product Image:</label>
                             <input type="file" class="form-control" id="mainProductImage" name="mainProductImage">
                         </div>
+                    
                         <div class="mb-3">
-                            <label for="additionalProductImage" class="form-label">Additional Product Image</label>
+                            <label for="additionalProductImage">Additional Product Images:</label>
                             <input type="file" class="form-control" id="additionalProductImage" name="additionalProductImage" multiple>
                         </div>
-                        
+                    
                         <div class="mb-3">
-                            <label for="productQuantity" class="form-label">Product Quantity</label>
+                            <label for="productQuantity">Product Quantity:</label>
                             <input type="number" class="form-control" id="productQuantity" value="<%= product && product.productQuantity ? product.productQuantity : '' %>" name="productQuantity" required>
                         </div>
-                        
+                    
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>
+                    
                 </div>
             </div>
         </div>

@@ -16,7 +16,11 @@ router.post('/signup',userController.signupPost),
 router.post('/signin',userController.signInPost),
 router.get('/signout',userController.signOut),
 router.get('/about',userController.about),
-router.get('/error',userController.error)
+router.get('/error',userController.error),
+router.post('/verifyOTP',userController.verifyOTP)
+router.post("/resendOTP",userController.resendOTP)
+router.get("/productDetails/:id",userController.productDetails)
+
 
  
 

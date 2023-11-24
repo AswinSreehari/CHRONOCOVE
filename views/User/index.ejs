@@ -144,6 +144,7 @@
     <div class="site-section site-section-sm site-blocks-1">
       <div class="container">
         <div class="row">
+          
           <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="">
             <div class="icon mr-4 align-self-start">
               <span class="icon-truck"></span>
@@ -175,42 +176,33 @@
       </div>
     </div>
 
-    <div class="site-section site-blocks-2">
+    <div class="site-section  ">
       <div class="container">
         <div class="row">
+          <% products.forEach(product => { %>
           <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
             <a class="block-2-item" href="#">
               <figure class="image">
-                <img src="/images/pic_3.jpg" alt="" class="img-fluid">
+                <img  src="/uploads/<%= product.mainProductImage %>" alt="<%= product.productName %>" class="img-fluid">
               </figure>
+               
               <div class="text">
-                <span class="text-uppercase">Collections</span>
-                <h3>Jacob & Co.</h3>
+                <span class="text-uppercase"><%= product.productCategory %></span>
+                <h3><%= product.productName %></h3>
+                <!-- Price and Category -->
+        <p>Price: <%= product.productPrice %></p>
+
+        <!-- Buttons (View Details and Add to Cart) -->
+        <div class="buttons">
+          <a href="/productDetails/<%=product._id%>" class="btn btn-primary">View Details</a>
+          <a href="#" class="btn btn-success">Add to Cart</a>
+        </div>
               </div>
             </a>
           </div>
-          <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
-            <a class="block-2-item" href="#">
-              <figure class="image">
-                <img src="/images/pic_8.jpg" alt="" class="img-fluid">
-              </figure>
-              <div class="text">
-                <span class="text-uppercase">Collections</span>
-                <h3>Richard Mille</h3>
-              </div>
-            </a>
-          </div>
-          <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
-            <a class="block-2-item" href="#">
-              <figure class="image">
-                <img src="/images/pic_10.jpg" alt="" class="img-fluid">
-              </figure>
-              <div class="text">
-                <span class="text-uppercase">Collections</span>
-                <h3>Audemars Piguet</h3>
-              </div>
-            </a>
-          </div>
+          <% }) %>
+
+ 
         </div>
       </div>
     </div>

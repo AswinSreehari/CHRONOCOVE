@@ -20,7 +20,11 @@ const LoginSchema = new mongoose.Schema({
     password:{
         type:String,
         required:true
-    }
+    },
+    isBlocked : {
+        type : Boolean,
+        default : false
+    },
 })
 
 const collection = new mongoose.model('user',LoginSchema)

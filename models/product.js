@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { boolean } = require('webidl-conversions')
 const productSchema = new mongoose.Schema({
     productName:{
         type : String,
@@ -27,7 +28,11 @@ const productSchema = new mongoose.Schema({
     productQuantity:{
         type : Number,
         required : true
-    }
+    },
+    isDeleted: {
+        type: Boolean,
+        default:false
+    },
 })
 const productCollection = new mongoose.model('productData',productSchema)
 module.exports = productCollection

@@ -59,9 +59,9 @@
                             </div>
                         </div>
                         <div class="navbar-nav w-100">
-                            <a href="/admin/admin_index" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                            <a href="/admin/dashboard" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                         
-                            <a href="/admin/usermanagement" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Users </a>
+                            <a href="/admin/usermanagement" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>Users </a>
                             <a href="/admin/categorymanagement" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Category </a>
                             <a href="/admin/productmanagement" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Product  </a>
                             <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a> -->
@@ -173,34 +173,64 @@
             <!-- Navbar End -->
 
 
-            <!-- Table Start -->
-            <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">User_id</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Email</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    <% data.forEach(user=> { %>
-                  <tr>
-                    <td><%= user.id %></td>
-                    <td><%= user.username %></td>
-                    <td><%= user.emailId %></td>
-                    <td>
-                        <button id="block" class="btn btn-danger">
-                            <a href=" " style="color: white;">Block</a>
-                        </button>
-                        <button id="unblock" class="btn btn-success">
-                            <a href=" " style="color: white;">Unblock</a>
-                        </button>
-                    </td>
-                  </tr>
-                  <% }); %>
-                </tbody>
-              </table>
-            <!-- Table End -->
+ <!-- Table Start -->
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">User_id</th>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% data.forEach(user => { %>
+            <tr>
+                <td><%= user.id %></td>
+                <td><%= user.username %></td>
+                <td><%= user.emailId %></td>
+                <td>
+                    <button class="toggleButton btn <%= user.isBlocked ? 'btn-success' : 'btn-danger' %>"
+                        data-user-id="<%= user.id %>"
+                        data-user-blocked="<%= user.isBlocked %>"
+                        onclick="toggleBlock(this)">
+                        <%= user.isBlocked ? 'Unblock' : 'Block' %>
+                    </button>
+                </td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>
+<!-- Table End -->
+
+<script>
+    function toggleBlock(button) {
+        const userId = button.getAttribute('data-user-id');
+        const isBlocked = button.getAttribute('data-user-blocked') === 'true';
+
+        // Send an AJAX request to your server based on the updated button status.
+        const url = isBlocked ? `/admin/unblock/${userId}` : `/admin/block/${userId}`;
+
+        fetch(url, {
+            method: 'GET',
+        })
+        .then(response => {
+            if (response.status === 200) {
+                // Toggle the button text and data attribute immediately upon success.
+                button.setAttribute('data-user-blocked', (!isBlocked).toString());
+                button.textContent = isBlocked ? 'Block' : 'Unblock';
+                button.classList.toggle('btn-danger');
+                button.classList.toggle('btn-success');
+            } else {
+                // Handle errors or display a message if the request fails.
+                console.error('Request failed.');
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+</script>
+
 
 
             <!-- Footer Start -->

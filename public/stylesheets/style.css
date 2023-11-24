@@ -5,6 +5,30 @@ body {
   font-weight: 300;
   font-size: 16px; }
 
+  .additional-images {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px; /* Adjust as needed */
+    border: none; /* Remove border */
+    background-color: transparent; /* Remove background color */
+  }
+  
+  .additional-image {
+    width: 70px;
+    height: 70px;
+    margin-right: 5px; /* Adjust as needed */
+    border: none; /* Remove border */
+    background-color: transparent; /* Remove background color */
+  }
+  
+  .text {
+    border: none; /* Remove border */
+    background-color: transparent; /* Remove background color */
+  }
+  
+  
+
 ::-moz-selection {
   background: #000;
   color: #fff; }
@@ -530,6 +554,7 @@ a {
     right: 0;
     bottom: 0;
     left: 0;
+    background: transparent;
     background: -moz-linear-gradient(top, transparent 0%, transparent 18%, rgba(0, 0, 0, 0.8) 99%, rgba(0, 0, 0, 0.8) 100%);
     background: -webkit-linear-gradient(top, transparent 0%, transparent 18%, rgba(0, 0, 0, 0.8) 99%, rgba(0, 0, 0, 0.8) 100%);
     background: -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(18%, transparent), color-stop(99%, rgba(0, 0, 0, 0.8)), to(rgba(0, 0, 0, 0.8)));

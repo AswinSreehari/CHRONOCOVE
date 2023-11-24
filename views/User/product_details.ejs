@@ -52,7 +52,7 @@
 
             <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
               <div class="site-logo">
-                <a href="index.ejs" class="js-logo-clone">Shoppers</a>
+                <a href="index.ejs" class="js-logo-clone">CHRONOCOVE</a>
               </div>
             </div>
 
@@ -69,101 +69,94 @@
                   </li> 
                   <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>
                 </ul>
+               
               </div> 
             </div>
-
           </div>
         </div>
+
+
+        
       </div> 
       <nav class="site-navigation text-right text-md-center" role="navigation">
         <div class="container">
           <ul class="site-menu js-clone-nav d-none d-md-block">
-            <li class="has-children">
-              <a href="index.ejs">Home</a>
-              <ul class="dropdown">
-                <li><a href="#">Menu One</a></li>
-                <li><a href="#">Menu Two</a></li>
-                <li><a href="#">Menu Three</a></li>
-                <li class="has-children">
-                  <a href="#">Sub Menu</a>
-                  <ul class="dropdown">
-                    <li><a href="#">Menu One</a></li>
-                    <li><a href="#">Menu Two</a></li>
-                    <li><a href="#">Menu Three</a></li>
-                  </ul>
-                </li>
-              </ul>
+            <li>
+              <a href="/">Home</a>
             </li>
-            <li class="has-children">
-              <a href="about.ejs">About</a>
-              <ul class="dropdown">
-                <li><a href="#">Menu One</a></li>
-                <li><a href="#">Menu Two</a></li>
-                <li><a href="#">Menu Three</a></li>
-              </ul>
+            <li>
+              <a href="/about">About</a>
             </li>
-            <li class="active"><a href="shop.ejs">Shop</a></li>
-            <li><a href="#">Catalogue</a></li>
-            <li><a href="#">New Arrivals</a></li>
+            <li><a href="shop.ejs">Shop</a></li>
+            <li><a href="#">Search</a></li>
             <li><a href="contact.ejs">Contact</a></li>
           </ul>
         </div>
+        <div class="col-12 text-right">
+        
+      </div>
+    </div>
       </nav>
     </header>
+
+  
 
     <div class="bg-light py-3">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 mb-0"><a href="index.ejs">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Tank Top T-Shirt</strong></div>
+     
         </div>
       </div>
     </div>  
 
-    <div class="site-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <img src="/images/cloth_1.jpg" alt="Image" class="img-fluid">
-          </div>
-          <div class="col-md-6">
-            <h2 class="text-black">Tank Top T-Shirt</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, vitae, explicabo? Incidunt facere, natus soluta dolores iusto! Molestiae expedita veritatis nesciunt doloremque sint asperiores fuga voluptas, distinctio, aperiam, ratione dolore.</p>
-            <p class="mb-4">Ex numquam veritatis debitis minima quo error quam eos dolorum quidem perferendis. Quos repellat dignissimos minus, eveniet nam voluptatibus molestias omnis reiciendis perspiciatis illum hic magni iste, velit aperiam quis.</p>
-            <p><strong class="text-primary h4">$50.00</strong></p>
-            <div class="mb-1 d-flex">
-              <label for="option-sm" class="d-flex mr-3 mb-3">
-                <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-sm" name="shop-sizes"></span> <span class="d-inline-block text-black">Small</span>
-              </label>
-              <label for="option-md" class="d-flex mr-3 mb-3">
-                <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-md" name="shop-sizes"></span> <span class="d-inline-block text-black">Medium</span>
-              </label>
-              <label for="option-lg" class="d-flex mr-3 mb-3">
-                <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-lg" name="shop-sizes"></span> <span class="d-inline-block text-black">Large</span>
-              </label>
-              <label for="option-xl" class="d-flex mr-3 mb-3">
-                <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-xl" name="shop-sizes"></span> <span class="d-inline-block text-black"> Extra Large</span>
-              </label>
-            </div>
-            <div class="mb-5">
-              <div class="input-group mb-3" style="max-width: 120px;">
-              <div class="input-group-prepend">
-                <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
-              </div>
-              <input type="text" class="form-control text-center" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-              <div class="input-group-append">
-                <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
-              </div>
-            </div>
+     <!-- product.ejs -->
 
-            </div>
-            <p><a href="cart.ejs" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p>
-
-          </div>
+<div class="site-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div >
+          <img id="main"  style="max-width: 50%; max-height: 50vh; margin: auto; display: flex;justify-content:center;" src="/uploads/<%=products.mainProductImage %>" alt="<%= products.productName %>"   class="img-fluid">
         </div>
+     
+       <!-- Additional Product Images -->
+       <div class="additional-images">
+          
+        <% for (let i = 0; i < products.additionalProductImage.length; i++) { %>
+                  
+          <img width="70" height="70" class="rounded-2" src="/uploads/<%= products.additionalProductImage[i] %>" alt="<%= products.productName %>">
+        
+          <%}%>
       </div>
     </div>
+      <div class="col-md-6">
+        <h2 class="text-black"><%= products.productName %></h2>
+        <p><%= products.productDescription %></p>
+        <p class="mb-4"><strong class="text-primary h4">$<%=products.productPrice %></strong></p>
 
-    <div class="site-section block-3 site-blocks-2 bg-light">
+       
+       
+
+        <!-- Radio Buttons for Sizes -->
+        <div class="mb-1 d-flex">
+          <!-- Add your radio buttons for sizes here -->
+        </div>
+
+        <!-- Quantity Input -->
+        <div class="mb-5">
+          <div class="input-group mb-3" style="max-width: 120px;">
+            <!-- Quantity input code here -->
+          </div>
+        </div>
+
+        <!-- Add to Cart Button -->
+        <p><a href="cart.ejs" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- <div class="site-section block-3 site-blocks-2 bg-light">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-md-7 site-section-heading text-center pt-4">
@@ -303,15 +296,15 @@
         <div class="row pt-5 mt-5 text-center">
           <div class="col-md-12">
             <p>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            Copyright &copy;<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" class="text-primary">Colorlib</a>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            </p>
-          </div>
+            Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            <!-- Copyright &copy;<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" class="text-primary">Colorlib</a>
+            Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            <!-- </p>
+          </div> -->
           
-        </div>
+        <!-- </div>
       </div>
-    </footer>
+    </footer> -->
   </div>
 
   <!-- <script src="js/jquery-3.3.1.min.js"></script>
@@ -335,3 +328,41 @@
     
   </body>
 </html>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/igorlino/elevatezoom-plus/1.1.6/src/jquery.ez-plus.js"></script>
+
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script src="/javascripts/zoom.js"></script>
+<script src="/javascripts/zoomsl.js"></script>
+
+<!-- Add this script block after including jQuery -->
+<script>
+    $(document).ready(function() {
+        // Handle click event on both main and additional images
+        $('.img-fluid, .additional-images img').click(function() {
+            // Get the source of the main image
+            var mainImageSrc = $('.img-fluid').attr('src');
+
+            // Get the source of the clicked image (either main or additional)
+            var clickedImageSrc = $(this).attr('src');
+
+            // Set the main image source to the clicked image source
+            $('.img-fluid').attr('src', clickedImageSrc);
+
+            // Set the clicked image source to the main image source
+            $(this).attr('src', mainImageSrc);
+        });
+    });
+
+   
+    
+</script>
+

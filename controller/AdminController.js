@@ -4,16 +4,17 @@ const productCollection  = require('../models/product')
 const multer = require('multer')
 
 // Multer Configuration
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'public/images/'); 
-    },
-    filename: function (req, file, cb) {
-      cb(null, Date.now() + '-' + file.originalname); 
-    },
-  });
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       cb(null, 'public/uploads'); 
+//     },
+//     filename: function (req, file, cb) {
+//       cb(null, Date.now() + '-' + file.originalname); 
+//     },
+//   });
   
-  const upload = multer({ storage: storage });
+ //const upload = multer({ storage: storage });
+ const upload = multer({dest:"public/uploads"})
     
 
 
@@ -55,13 +56,8 @@ const signinPost = ((req,res)=>{
 //Sign Out
 
 const signout = ((req,res)=>{
-    req.session.destroy((err)=>{
-        if(err){
-            console.log('Error destroying session :',err)
-        }else{
-            res.redirect('/admin/signin')
-        }
-    })
+     req.session.admin = null
+     res.render('admin/admin_signin')
 })
 
 //Admin_Dashboard
@@ -108,48 +104,33 @@ const addProducts = (async(req,res)=>{
     const categories  = await categoryCollection.find({},'categoryName')
     res.render('admin/add_products',{categories})
 })
-const addProductsPost = async (req, res) => {
-    try {
-        const uploadConfig = upload.fields([
-            { name: 'mainProductImage', maxCount: 1 },
-            { name: 'additionalProductImage', maxCount: 3 }
-        ])
-        uploadConfig(req, res, async (err) => {
-            if (err) {
-                console.error(err);
-                return res.redirect('/admin/error');
-            }
-            try {
-                const { productName, productDescription, productCategory, productQuantity , productPrice } = req.body;
-                const mainProductImage = req.files['mainProductImage'][0].filename;
-                if (!req.files['additionalProductImage'] || !req.files['additionalProductImage'][0]) {
-                    throw new Error('Additional product image is required!!');
-                }
-                const additionalProductImage = req.files['additionalProductImage'][0].filename;
-        
-                const newProduct = new productCollection({
-                    productName,
-                    productDescription,
-                    productCategory,
-                    mainProductImage,
-                    additionalProductImage: req.files['additionalProductImage'].map(file => file.filename),
-                    productQuantity,
-                    productPrice
-                });
-                
-                await newProduct.save();
 
-                res.redirect('/admin/productmanagement');
-            } catch (error) {
-                console.error(error);
-                res.redirect('/admin/error');
-            }
-        });
-    } catch (error) {
-        console.error(error);
-        res.redirect('/admin/error');
+const addProductsPost = async (req, res) => {
+    const { productName, productDescription, productCategory, productQuantity , productPrice} = req.body;
+    const mainProductImage = req.files.mainProductImage[0] ? req.files.mainProductImage[0].filename : '';
+   
+    const additionalProductImage = req.files.additionalProductImage ? req.files.additionalProductImage.map(file => file.filename) : [];
+  
+    console.log(additionalProductImage);
+  
+    if (!mainProductImage || additionalProductImage.length === 0) {
+      return res.status(400).json({ error: 'mainProductImage and additionalProductImages are required.' });
     }
-};
+  
+    try {
+  
+      const newProduct = new productCollection({  productName, productDescription, productCategory, productQuantity , productPrice , mainProductImage,additionalProductImage });
+      await newProduct.save();
+  
+      res.redirect('/admin/productmanagement');
+    } catch (error) {
+      console.error(error);
+     res.redirect('/admin/error')
+  }
+  };
+
+
+
 
 
 //Edit_Product
@@ -171,35 +152,56 @@ const editProduct = async (req, res) => {
 const editProductPost = async (req, res) => {
     console.log("hai");
     const productId = req.params.id;
-    console.log("products id is :",productId);
+    console.log("products id is :", productId);
+    console.log("hello:",req.body);
+    const productName= req.body.productName
+    console.log("product name is :",productName);
     try {
+        
         const product = await productCollection.findById(productId);
 
         if (!product) {
-             
-            return res.redirect('/admin/error')
+            return res.redirect('/admin/error');
         }
 
-        const updatedProduct = { ...req.body };
+        const updatedProduct = {
+            productName: req.body.productName,
+            productDescription: req.body.productDescription,
+            productCategory: req.body.productCategory,
+            productQuantity: req.body.productQuantity
+            // Add other properties you want to update
+        };
 
-        if (req.files['additionalProductImage']) {
+        // Check if additionalProductImage exists in req.files
+        if (req.files && req.files['additionalProductImage']) {
             updatedProduct.additionalProductImage = req.files['additionalProductImage'].map(file => file.filename);
+        }
+
+        // Check if mainProductImage exists in req.files
+        if (req.files && req.files['mainProductImage']) {
+            updatedProduct.mainProductImage = req.files['mainProductImage'][0].filename;
         }
 
         await productCollection.findByIdAndUpdate(productId, updatedProduct);
         res.redirect('/admin/productmanagement');
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.redirect('/admin/error');
     }
 };
 
+
+
 // Delete_Product
 
 const deleteProduct = (async(req,res)=>{
-    const productId = req.params.Id
+    const productId = req.params.id
+    console.log("product id is :",productId);
+    console.log("bye");
     try{
-        await productCollection.findByIdAndRemove(productId)
+        console.log("hey");
+        await productCollection.findByIdAndUpdate(productId,{ isDeleted:true})
+        console.log("dey");
         res.redirect('/admin/productmanagement')
     }catch(error){
         console.log(error)
@@ -318,6 +320,54 @@ const deleteCategory = (async(req,res)=>{
     res.redirect('/admin/categorymanagement')
 })
 
+// function to block the user
+const blockUser = async (req, res) => {
+
+    const userId = req.params.id;
+  
+    try {
+      console.log("inside the try hai")
+      const userData = await collection.findById(userId)
+      if (!userData) {
+        res.status(404).json({ error: 'User not found' });
+  
+      } else {
+        userData.isBlocked = true
+        await userData.save()
+        //res.status(500).json({ error: 'cannot login in' });
+        res.redirect('/admin/usermanagement')
+      }
+    }
+    catch (err) {
+      console.error(err);
+      res.redirect("/admin/error")
+    }
+  }
+  
+  // function for unblocking the user
+  
+  const unblockUser = async (req, res) => {
+    const userid = req.params.id
+    try {
+      const userData = await  collection.findById(userid)
+      if (!userData) {
+        res.redirect("/admin/error")
+  
+      } else {
+        userData.isBlocked = false
+        await userData.save()
+        console.log("user can now login");
+        const msg = "unblocked  the specified user"
+        //res.send("user can now login")
+        console.log(msg);
+        res.redirect('/admin/usermanagement')
+      }
+    }
+    catch (err) {
+      res.redirect("/admin/error")
+    }
+  }
+
 
 
 
@@ -352,5 +402,7 @@ module.exports={
     editProduct,
     editProductPost,
     deleteProduct,
+    unblockUser,
+    blockUser
     
 }
