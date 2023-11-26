@@ -122,5 +122,75 @@
     <script src="/javascripts/signup_jquery.min.js"></script>
     <script src="/javascripts/signup.js"></script>
     <script src="/javascripts/signup_jquery-ui.min.js"></script>
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var registerForm = document.getElementById('register-form');
+    
+            registerForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+    
+                resetErrorMessages();
+    
+                var name = document.getElementById('name').value;
+                var email = document.getElementById('email').value;
+                var password = document.getElementById('password').value;
+    
+                if (name.trim() === '') {
+                    displayErrorMessage('name', 'Please enter your name.');
+                } else if (!/^[a-zA-Z]+$/.test(name.trim())) {
+                    displayErrorMessage('name', 'Name should only contain alphabets.');
+                }
+    
+                if (email.trim() === '') {
+                    displayErrorMessage('email', 'Please enter your email.');
+                } else if (!isValidEmail(email.trim())) {
+                    displayErrorMessage('email', 'Please enter a valid email address.');
+                }
+    
+                if (password.trim() === '') {
+                    displayErrorMessage('password', 'Please enter your password.');
+                } else if (containsSpecialCharacters(password)) {
+                    displayErrorMessage('password', 'Password cannot contain special characters.');
+                }
+    
+                if (document.querySelectorAll('.error-message').length === 0) {
+                    // If there are no errors, you can submit the form
+                    registerForm.submit();
+                }
+            });
+    
+            function displayErrorMessage(fieldId, message) {
+                var errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.innerHTML = message;
+    
+                var formGroup = document.querySelector('#' + fieldId).closest('.form-group');
+                formGroup.appendChild(errorDiv);
+            }
+    
+            function resetErrorMessages() {
+                var errorMessages = document.querySelectorAll('.error-message');
+                errorMessages.forEach(function(errorMessage) {
+                    errorMessage.remove();
+                });
+            }
+    
+            function isValidEmail(email) {
+                // Add your email validation logic here
+                // For a basic example, you can use a regular expression
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+    
+            function containsSpecialCharacters(text) {
+                // Add your password validation logic here
+                // For a basic example, you can use a regular expression
+                return /[!@#$%^&*(),.?":{}|<>]/.test(text);
+            }
+        });
+    </script>
+    
+    
+
+</body> 
 </html>
