@@ -1,23 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Shoppers &mdash; Colorlib e-Commerce Template</title>
+    <title>CHRONOCOVE</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700"> 
-    <!-- <link rel="stylesheet" href="fonts/icomoon/style.css">
-
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
-    <link rel="stylesheet" href="css/jquery-ui.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
-
-
-    <link rel="stylesheet" href="css/aos.css">
-
-    <link rel="stylesheet" href="css/style.css"> -->
+   
 
     <link rel="stylesheet" href="/fonts/icomoon/style.css">
 
@@ -145,12 +134,33 @@
         <!-- Quantity Input -->
         <div class="mb-5">
           <div class="input-group mb-3" style="max-width: 120px;">
+            <p>
+              <% if (products.productQuantity <= 0) { %>
+                <span style="color: red;">Product Out of Stock</span>
+              <% } else if (products.productQuantity <= 5) { %>
+                <% if (products.productQuantity === 1) { %>
+                  <span style="color: red;">Only one more left</span>
+                <% } else { %>
+                  <span style="color: red;">Only <%= products.productQuantity %> more left</span>
+                <% } %>
+              <% } else { %>
+                Item left: <%= products.productQuantity %>
+              <% } %>
+            </p>
+
             <!-- Quantity input code here -->
           </div>
         </div>
 
         <!-- Add to Cart Button -->
-        <p><a href="cart.ejs" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p>
+        <!-- <p><a href="cart.ejs" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p> -->
+        <form action="/cart" method="post">
+          <input type="hidden" name="productId" value="<%= products._id %>">
+          <button type="submit" class="buy-now btn btn-sm btn-primary" <% if (products.productQuantity <= 0) { %>disabled<% } %>>
+              Add to Cart <i class="fa-solid fa-cart-shopping"></i>
+          </button>
+      </form>
+      
       </div>
     </div>
   </div>

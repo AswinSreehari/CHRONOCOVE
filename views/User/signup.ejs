@@ -19,61 +19,49 @@
     <script src="/javascripts/signup_jquery-ui.min.js"></script>
     <script src="/javascripts/signup.js"></script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var registerForm = document.getElementById('register-form');
+ <!-- Validatiing Form -->
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
 
-            registerForm.addEventListener('submit', function(event) {
-                // Prevent the form from submitting
+        form.addEventListener('submit', function(event) {
+            // Prevent the form from submitting if validation fails
+            if (!validateForm()) {
                 event.preventDefault();
-
-                // Reset previous error messages
-                resetErrorMessages();
-
-                // Validate form fields
-                var name = document.getElementById('name').value;
-                var email = document.getElementById('email').value;
-                var password = document.getElementById('password').value;
-
-                if (name.trim() === '') {
-                    displayErrorMessage('name', 'Please enter your name.');
-                }
-
-                if (email.trim() === '') {
-                    displayErrorMessage('email', 'Please enter your email.');
-                }
-
-                if (password.trim() === '') {
-                    displayErrorMessage('password', 'Please enter your password.');
-                }
-
-                // If there are errors, prevent form submission
-                if (document.querySelectorAll('.error-message').length > 0) {
-                    return;
-                }
-
-                // If validation passes, you can submit the form
-                registerForm.submit();
-            });
-
-            function displayErrorMessage(fieldId, message) {
-                var errorDiv = document.createElement('div');
-                errorDiv.className = 'error-message';
-                errorDiv.innerHTML = message;
-
-                var formGroup = document.querySelector('#' + fieldId).closest('.form-group');
-                formGroup.appendChild(errorDiv);
-            }
-
-            function resetErrorMessages() {
-                var errorMessages = document.querySelectorAll('.error-message');
-                errorMessages.forEach(function(errorMessage) {
-                    errorMessage.remove();
-                });
             }
         });
+
+        function validateForm() {
+            const username = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            let isValid = true;
+
+            // Simple username validation (at least 3 characters) and no white space
+            if (username.length < 3 || /\s/.test(username)) {
+                alert('Username must be at least 3 characters long and cannot contain white space');
+                isValid = false;
+            }
+
+            // Simple email validation and no white space
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email) || /\s/.test(email)) {
+                alert('Please enter a valid email address without white space');
+                isValid = false;
+            }
+
+            // Simple password validation (at least 6 characters) and no white space
+            if (password.length < 6 || /\s/.test(password)) {
+                alert('Password must be at least 6 characters long and cannot contain white space');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    });
     </script>
-     
+
 </head>
 <body>
 
@@ -122,5 +110,11 @@
     <script src="/javascripts/signup_jquery.min.js"></script>
     <script src="/javascripts/signup.js"></script>
     <script src="/javascripts/signup_jquery-ui.min.js"></script>
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+ 
+
+     
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+</body> 
 </html>

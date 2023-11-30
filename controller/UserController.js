@@ -3,9 +3,6 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer');
 const productCollection = require('../models/product');
 
-
-
-
 const passwordcrypt = async function (password) {
     const bcrptPass = await bcrypt.hash(password, 8);
     return bcrptPass;
@@ -46,7 +43,8 @@ const generateOTP = () => {
       console.log('Email sent:' + info.response)
     } catch (err) {
       console.log(err);
-      res.json("Internal server error")
+       console.log("Error Sending mail : ",err)
+       res.redirect('/error')
    }
   }
 
@@ -55,8 +53,16 @@ const home = async(req,res)=>{
     try{
     const products = await productCollection.find({isDeleted:false})
     const email = req.session.email
-    res.render('User/index',{email,products})
-    console.log("home products :",products)
+    if(req.session.user)
+    {
+      user= true;
+       res.render('User/index',{email,products,user})
+      console.log("home products :",products)
+  
+    }else{
+       user = false;
+       res.render('User/index',{email,products,user})
+    }
     }catch(error){
         console.log(error)
         res.redirect('/error')
@@ -72,61 +78,55 @@ const signup = (req,res)=>{
 
 const signupPost = async (req, res) => {
     let email = req.body.email;
-    const userFound = await collection.findOne({ emailId :email});
-    
-    if (userFound) {
+    const userFound = await collection.findOne({ emailId: email });
 
-      const msg = "Email is already Registered";
-      res.render("User/signup",{ msg });
-      console.log("inside user found!!")
-  
-      
+    if (userFound) {
+        const msg = "Email is already Registered";
+        res.render("User/signup", { msg });
+        console.log("Inside user found!!");
     } else {
-      const pass = req.body.password
-      const bcryptedPass = await passwordcrypt(pass)
-      req.body.password = bcryptedPass
-  
-      const data = {
-        username: req.body.name,
-        emailId: req.body.email,
-        password: req.body.password,
-      };
-      await collection.create(data);
-  
-      try {
-        const { email } = req.body;
-        const check = await collection.findOne({ emailId: req.body.email });
-          if (check.password == req.body.password) {
-            const otp = generateOTP();
+        try {
+            const { otp, otpExpiry } = generateOTPWithExpiry();
             console.log(otp);
-            if (check.isblocked) {
-              res.render("User/signIn", { error: "you are blocked by admin !!!" });
+
+            const data = {
+                username: req.body.name,
+                emailId: req.body.email,
+                password: await passwordcrypt(req.body.password),
+                otp: otp,
+                otpExpiry: otpExpiry,
+            };
+
+            await collection.create(data);
+
+            const check = await collection.findOne({ emailId: req.body.email });
+
+            if (check.isBlocked) {
+                res.render("User/signIn", { error: "You are blocked by admin!!!" });
             }
+
             req.session.user = req.body.email;
             req.session.otp = otp;
+            req.session.otpExpiry = otpExpiry;
             req.session.requestedOTP = true;
-            await sendOTPByEmail(email, otp);
+            await sendOTPByEmail(req.body.email, otp);
             res.render("User/otp", {
-              msg: "Please enter the OTP sent to your email",
+                msg: "Please enter the OTP sent to your email",
             });
-          } else {
-            res.render("User/signup", { error: "Wrong Password !!!" });
-          } 
-      } catch (error) {
-        console.error(error);
-        res.send("An error occurred while processing your request.");
-      }
-      
 
+        } catch (error) {
+            console.error(error);
+            res.redirect('/error');
+        }
     }
-  };
-  
+};
+
 
 //SignIn
 
 const signIn = (req,res)=>{
     if(req.session.email){
-        res.redirect('/home')
+        res.redirect('/')
     }else{
          res.render('User/signIn')
     } 
@@ -153,6 +153,7 @@ const signInPost = async (req, res) => {
 
           if (isPasswordmatch) {
               req.session.email = check.emailId;
+              req.session.user= req.session.email
               console.log(req.session.email);
               return res.redirect("/");
           } else {
@@ -169,15 +170,20 @@ const signInPost = async (req, res) => {
 
 //Signout
 
-const signOut = (req,res)=>{
-    console.log("inside signout");
-    req.session.destroy((err)=>{
-        if(err){
-            console.log("got an error");
-            console.error("Error destroying Session :",err)
+// const signOut = (req,res)=>{
+//     req.session.user=null;
+//     user= false;
+//     res.redirect("/")   
+
+// }
+const signOut=(req,res)=>{
+    req.session.destroy((error)=>{
+        console.log("error in destroying session");
+        if(error){
+            res.send("session destroyed!!")
+        }else{
+            res.redirect("/")
         }
-        console.log("gonna redirect to home");
-        res.redirect("/")
     })
 }
 
@@ -185,40 +191,41 @@ const signOut = (req,res)=>{
 
 //function for verifying otp
 const verifyOTP = async (req, res) => {
-    console.log("hello boi");
     const enteredOTP = parseInt(req.body.otp, 10);
     const storedOTP = req.session.otp;
-    console.log("entered otp is ",enteredOTP);
-    console.log("entstoredOTPered otp is ",storedOTP);
+    const otpExpiry = req.session.otpExpiry;
+
+    if (new Date() > new Date(otpExpiry)) {
+        return res.json({ isValid: false, msg: "OTP has expired. Please request a new one." });
+    }
+
     try {
         const user = await collection.findOne({ emailId: req.session.user });
-  
+
         if (!user) {
             return res.json({ isValid: false, msg: "User not found" });
         }
-  
+
         if (user.isBlocked) {
             return res.json({
                 isValid: false,
                 msg: "Your account has been blocked. Please contact support.",
             });
         }
-  
+
         if (enteredOTP === storedOTP) {
-          
             // Correct OTP
             // Redirect to home page
-            return res.json({ isValid: true});
+            return res.json({ isValid: true });
         } else {
             // Incorrect OTP
             return res.json({ isValid: false, msg: "Invalid OTP. Please try again" });
         }
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ isValid: false, msg: "An error occurred during OTP verification." });
-   }
-  };
-
+        return res.status(500).json({ isValid: false, msg: "An error occurred during OTP verification." });
+    }
+};
 
 
   const resendOTP = async (req, res) => {
@@ -236,6 +243,16 @@ const verifyOTP = async (req, res) => {
     }
   
   };
+
+//   OTP_Expiry
+
+  const generateOTPWithExpiry = () => {
+    const otp = generateOTP();
+    const otpExpiry = new Date();
+    otpExpiry.setMinutes(otpExpiry.getMinutes() + 1);  
+    return { otp, otpExpiry };
+};
+
 
   //Product_Details
 
@@ -284,4 +301,5 @@ module.exports={
     verifyOTP,
     resendOTP,
     productDetails,
+    generateOTPWithExpiry
 }
