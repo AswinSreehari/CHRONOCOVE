@@ -34,6 +34,7 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default:false
     },
+    
 })
 const productCollection = new mongoose.model('productData',productSchema)
 module.exports = productCollection
