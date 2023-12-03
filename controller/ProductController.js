@@ -26,6 +26,8 @@ const addProducts = (async(req,res)=>{
 const addProductsPost = async (req, res) => {
     const { productName, productDescription, productCategory, productQuantity , productPrice} = req.body;
     const mainProductImage = req.files.mainProductImage[0] ? req.files.mainProductImage[0].filename : '';
+
+    console.log('Its an Object ID')
    
     const additionalProductImage = req.files.additionalProductImage ? req.files.additionalProductImage.map(file => file.filename) : [];
   
@@ -33,7 +35,7 @@ const addProductsPost = async (req, res) => {
   
     if (!mainProductImage || additionalProductImage.length === 0) {
       return res.status(400).json({ error: 'mainProductImage and additionalProductImages are required.' });
-    }
+    }else{
   
     try {
   
@@ -45,11 +47,8 @@ const addProductsPost = async (req, res) => {
       console.error(error);
      res.redirect('/admin/error')
   }
+}
   };
-
-
-
-
 
 //Edit_Product
 
@@ -57,10 +56,17 @@ const editProduct = async (req, res) => {
     const productId = req.params.id;
     console.log("product id is:",productId);
     try {
-        const product = await productCollection.findById(productId);
+        const product = await productCollection.findOne({_id: productId});
         const categories = await categoryCollection.find()
-        console.log("the product is :",product);
-        res.render('admin/edit_product', { product,categories});
+
+        const productWithImagePaths = {
+            ...product.toJSON(), 
+            mainProductImagePath: product.mainProductImage ? `/uploads/${product.mainProductImage}` : null,
+            additionalProductImagePaths: product.additionalProductImage ? product.additionalProductImage.map(image => `/uploads/${image}`) : [],
+        };
+        console.log("the product is :", productWithImagePaths);
+        res.render('admin/edit_product', { product: productWithImagePaths, categories });
+   
     } catch (error) {
         console.log(error);
         res.redirect('/admin/error');

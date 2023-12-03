@@ -1,11 +1,17 @@
+require('dotenv').config();
+
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost:27017/CHRONOCOVE')
+
+mongoose.connect(process.env.MONGO_URI, {
+    user: process.env.MONGO_USER,
+    pass: process.env.MONGO_PASS,
+   })
 .then(()=>{
     console.log('MongoDB Connected!!')
-}).catch(()=>{
+}).catch((err)=>{
+    console.log("MongoConnectionError:",err)
     console.log("Failed to Connect!!")
 })
-
 const LoginSchema = new mongoose.Schema({
     username:{
         type:String,

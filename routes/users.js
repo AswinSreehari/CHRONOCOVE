@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const userController = require('../controller/UserController')
+const userAuthentication = require('../middleware/userAuth')
 
 
 /* GET users listing. */
@@ -20,6 +21,7 @@ router.get('/error',userController.error),
 router.post('/verifyOTP',userController.verifyOTP)
 router.post("/resendOTP",userController.resendOTP)
 router.get("/productDetails/:id",userController.productDetails)
+router.get("/cart",userController.cart)
 
 
  

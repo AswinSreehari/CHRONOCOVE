@@ -92,7 +92,7 @@ const blockUser = async (req, res) => {
   
     try {
       console.log("inside the try hai")
-      const userData = await collection.findById(userId)
+      const userData = await collection.findOne({ _id: userId })
       if (!userData) {
         res.status(404).json({ error: 'User not found' });
   
@@ -112,6 +112,7 @@ const blockUser = async (req, res) => {
   // function for unblocking the user
   
   const unblockUser = async (req, res) => {
+
     const userid = req.params.id
     try {
       const userData = await  collection.findById(userid)

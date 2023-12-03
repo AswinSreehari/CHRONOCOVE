@@ -209,17 +209,35 @@
                             </select>
                          </div>
                           
-                         
-                    
+
+                          <!-- Existing Main Product Image -->
                         <div class="mb-3">
-                            <label for="mainProductImage">Main Product Image:</label>
+                            <label>Current Main Product Image:</label>
+                            <img src="<%= product.mainProductImage ? product.mainProductImage : '' %>" alt="Main Product Image" class="img-thumbnail" style="max-width: 200px;">
+                        </div>
+
+                        <!-- Upload New Main Product Image -->
+                        <div class="mb-3">
+                            <label for="mainProductImage">Upload New Main Product Image:</label>
                             <input type="file" class="form-control" id="mainProductImage" name="mainProductImage" onchange="validateImage(event)">
                         </div>
-                    
-                        <div class="mb-3">
-                            <label for="additionalProductImage">Additional Product Images:</label>
-                            <input type="file" class="form-control" id="additionalProductImage" name="additionalProductImage" multiple onchange="validateImage(event)">
 
+                        <!-- Existing Additional Product Images -->
+                        <div class="mb-3">
+                            <label>Current Additional Product Images:</label>
+                            <% if ( product.additionalProductImage && product.additionalProductImage.length > 0) { %>
+                                <% product.additionalProductImage.forEach(image => { %>
+                                    <img src="<%= image %>" alt="Additional Product Image" class="img-thumbnail" style="max-width: 100px;">
+                                <% }); %>
+                            <% } else { %>
+                                <p>No additional images.</p>
+                            <% } %>
+                        </div>
+
+                        <!-- Upload New Additional Product Images -->
+                        <div class="mb-3">
+                            <label for="additionalProductImage">Upload New Additional Product Images:</label>
+                            <input type="file" class="form-control" id="additionalProductImage" name="additionalProductImage" multiple onchange="validateImage(event)">
                         </div>
                         <div class="mb-3">
                             <label for="productQuantity">Product Quantity:</label>

@@ -170,12 +170,6 @@ const signInPost = async (req, res) => {
 
 //Signout
 
-// const signOut = (req,res)=>{
-//     req.session.user=null;
-//     user= false;
-//     res.redirect("/")   
-
-// }
 const signOut=(req,res)=>{
     req.session.destroy((error)=>{
         console.log("error in destroying session");
@@ -285,6 +279,12 @@ const error = ((req,res)=>{
     res.render('User/404')
 })
 
+//Cart
+
+const cart = ((req,res)=>{
+    res.render('User/cart')
+})
+
 
 
 
@@ -301,5 +301,6 @@ module.exports={
     verifyOTP,
     resendOTP,
     productDetails,
-    generateOTPWithExpiry
+    generateOTPWithExpiry,
+    cart,
 }
