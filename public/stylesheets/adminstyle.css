@@ -6,6 +6,22 @@
     --dark: #000000;
 }
 
+.image-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .delete-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #f44336; /* Red background color */
+    color: white; /* White text color */
+    padding: 5px; /* Some padding */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer/hand icon on hover */
+  }
+
 .back-to-top {
     position: fixed;
     display: none;

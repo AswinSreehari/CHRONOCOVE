@@ -11,7 +11,7 @@ const passwordcrypt = async function (password) {
 // function for generating otp
 const generateOTP = () => {
     // generating a 6 digit otp number   
-    return Math.floor(1000 + Math.random() * 900000); // Generate a 6-digit OTP
+    return Math.floor(1000 + Math.random() * 900000); 
   };
   
   
@@ -42,7 +42,6 @@ const generateOTP = () => {
   
       console.log('Email sent:' + info.response)
     } catch (err) {
-      console.log(err);
        console.log("Error Sending mail : ",err)
        res.redirect('/error')
    }
@@ -186,8 +185,10 @@ const signOut=(req,res)=>{
 //function for verifying otp
 const verifyOTP = async (req, res) => {
     const enteredOTP = parseInt(req.body.otp, 10);
-    const storedOTP = req.session.otp;
+    const storedOTP = parseInt(req.session.otp, 10);
     const otpExpiry = req.session.otpExpiry;
+    console.log('correct otp:',storedOTP)
+    console.log('entered otp:', enteredOTP)
 
     if (new Date() > new Date(otpExpiry)) {
         return res.json({ isValid: false, msg: "OTP has expired. Please request a new one." });
@@ -208,11 +209,8 @@ const verifyOTP = async (req, res) => {
         }
 
         if (enteredOTP === storedOTP) {
-            // Correct OTP
-            // Redirect to home page
             return res.json({ isValid: true });
         } else {
-            // Incorrect OTP
             return res.json({ isValid: false, msg: "Invalid OTP. Please try again" });
         }
     } catch (error) {
@@ -226,10 +224,10 @@ const verifyOTP = async (req, res) => {
 
     const usermail = req.session.user
     if (req.session.requestedOTP) {
-      const otp = generateOTP()
+      const {otp, otpExpiry} = generateOTPWithExpiry()
       console.log("otp generated for resend is :", otp);
       req.session.otp = otp;
-      // sendig resend otp for verification
+      req.session.otpExpiry = otpExpiry;
       await sendOTPByEmail(usermail, otp);
       res.json({ msg: "otp have been resented to your email " })
     } else {
@@ -285,8 +283,15 @@ const cart = ((req,res)=>{
     res.render('User/cart')
 })
 
+const checkout = ((req,res)=>{
+    res.render('User/checkout')
+})
 
 
+
+const contact = ((req,res)=>{
+    res.render('User/contact')
+})
 
 
 module.exports={
@@ -303,4 +308,6 @@ module.exports={
     productDetails,
     generateOTPWithExpiry,
     cart,
+    checkout,
+    contact,
 }

@@ -123,17 +123,41 @@ const editProductPost = async (req, res) => {
 const deleteProduct = (async(req,res)=>{
     const productId = req.params.id
     console.log("product id is :",productId);
-    console.log("bye");
     try{
         console.log("hey");
         await productCollection.findByIdAndUpdate(productId,{ isDeleted:true})
-        console.log("dey");
         res.redirect('/admin/productmanagement')
     }catch(error){
         console.log(error)
         res.redirect('/admin/error')
     }
 })
+
+//Shop
+
+const shop = (async(req,res)=>{
+    try{
+    const searchQuery = req.query.searchQuery || ''
+    const products = await productCollection.find({productName:{$regex:searchQuery, $options: 'i'}},{isDeleted:false})
+    console.log('Shop data recived!!')
+    console.log("searchQUery :",searchQuery)
+    res.render('User/shop',{products,searchQuery})
+    }catch(error){
+        console.log("Shop",error)
+        res.redirect('/error')
+    }
+})
+
+
+//Image_Delete
+
+const deleteProductImage = async (req, res) => {
+    var productId = req.params._id;
+    var imageId = req.params.mainProductImagePath;
+ 
+ }
+ 
+ 
 
 
 module.exports={
@@ -143,4 +167,6 @@ module.exports={
     editProduct,
     editProductPost,
     deleteProduct,
+    shop,
+    deleteProductImage,
 }

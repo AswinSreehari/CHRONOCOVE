@@ -46,6 +46,7 @@ router.post('/editProductPost/:id',upload.fields(
 router.get('/deleteProduct/:id',adminauthenticaton.adminauthenticaton,productController.deleteProduct)
 router.get("/block/:id",adminauthenticaton.adminauthenticaton,adminController.blockUser)
 router.get("/unblock/:id",adminauthenticaton.adminauthenticaton,adminController.unblockUser)
+router.delete('deleteProductImage/:id/:mainProductImage',productController.deleteProductImage)
 
 
 module.exports = router;

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const userController = require('../controller/UserController')
+const productController = require('../controller/ProductController')
 const userAuthentication = require('../middleware/userAuth')
 
 
@@ -22,6 +23,9 @@ router.post('/verifyOTP',userController.verifyOTP)
 router.post("/resendOTP",userController.resendOTP)
 router.get("/productDetails/:id",userController.productDetails)
 router.get("/cart",userController.cart)
+router.get('/checkout',userController.checkout)
+router.get('/contact',userController.contact)
+router.get('/shop',productController.shop)
 
 
  

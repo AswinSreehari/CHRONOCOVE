@@ -6,14 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700"> 
-    <!-- <link rel="stylesheet" href="fonts/icomoon/style.css"> -->
+ 
     <link rel="stylesheet" href="/fonts/icomoon/style.css">
 
-    <!-- <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
-    <link rel="stylesheet" href="css/jquery-ui.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css"> -->
+ 
 
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
     <link rel="stylesheet" href="/stylesheets/magnific-popup.css">
@@ -22,12 +18,11 @@
     <link rel="stylesheet" href="/stylesheets/owl.theme.default.min.css">
 
 
-    <!-- <link rel="stylesheet" href="css/aos.css"> -->
+ 
     <link rel="stylesheet" href="/stylesheets/aos.css">
-
-    <!-- <link rel="stylesheet" href="css/style.css"> -->
+ 
      <link rel="stylesheet" href="/stylesheets/style.css">
-    <!-- <link rel="stylesheet" href="/stylesheets/style.css"> -->
+ 
     <link rel="stylesheet" href="/stylesheets/aos.css">
 
     <style>
@@ -57,7 +52,7 @@
 
             <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
               <div class="site-logo">
-                <a href="index.ejs" class="js-logo-clone">CHRONOCOVE</a>
+                <a href="/" class="js-logo-clone">CHRONOCOVE</a>
               </div>
             </div>
 
@@ -67,7 +62,7 @@
                   <li><a href="#"><span class="icon icon-person"></span></a></li>
                   <li><a href="#"><span class="icon icon-heart-o"></span></a></li>
                   <li>
-                    <a href="cart.ejs" class="site-cart">
+                    <a href="/cart" class="site-cart">
                       <span class="icon icon-shopping_cart"></span>
                       <span class="count">2</span>
                     </a>
@@ -108,14 +103,14 @@
         <div class="container">
           <ul class="site-menu js-clone-nav d-none d-md-block">
             <li>
-              <a href="index.ejs">Home</a>
+              <a href="/">Home</a>
             </li>
             <li>
               <a href="/about">About</a>
             </li>
-            <li><a href="shop.ejs">Shop</a></li>
+            <li><a href="/shop">Shop</a></li>
             <li><a href="#">Search</a></li>
-            <li><a href="contact.ejs">Contact</a></li>
+            <li><a href="/contact">Contact</a></li>
           </ul>
         </div>
         <div class="col-12 text-right">
@@ -181,7 +176,7 @@
         <div class="row">
           <% products.forEach(product => { %>
           <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
-            <a class="block-2-item" href="#">
+            <a class="block-2-item" href="/productDetails/<%=product._id%>">
               <figure class="image">
                 <img  src="/uploads/<%= product.mainProductImage %>" alt="<%= product.productName %>" class="img-fluid">
               </figure>
@@ -195,7 +190,7 @@
         <!-- Buttons (View Details and Add to Cart) -->
         <div class="buttons">
           <a href="/productDetails/<%=product._id%>" class="btn btn-primary">View Details</a>
-          <a href="#" class="btn btn-success">Add to Cart</a>
+          <a href="/cart" class="btn btn-success">Add to Cart</a>
         </div>
               </div>
             </a>

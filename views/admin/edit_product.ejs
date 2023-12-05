@@ -210,11 +210,13 @@
                          </div>
                           
 
-                          <!-- Existing Main Product Image -->
-                        <div class="mb-3">
-                            <label>Current Main Product Image:</label>
-                            <img src="<%= product.mainProductImage ? product.mainProductImage : '' %>" alt="Main Product Image" class="img-thumbnail" style="max-width: 200px;">
-                        </div>
+                        <!-- Existing Main Product Image -->
+<div class="mb-3 image-container" >
+    <label>Current Main Product Image:</label>
+    <img src="<%= product.mainProductImagePath ? product.mainProductImagePath : '' %>" alt="Main Product Image" class="img-thumbnail" style="max-width: 200px;">
+    <button class="delete-button" onclick="deleteImage('<%= product._id %>','<%=product.mainProductImagePath%>')">Delete</button>
+
+ </div>
 
                         <!-- Upload New Main Product Image -->
                         <div class="mb-3">
@@ -222,17 +224,20 @@
                             <input type="file" class="form-control" id="mainProductImage" name="mainProductImage" onchange="validateImage(event)">
                         </div>
 
-                        <!-- Existing Additional Product Images -->
-                        <div class="mb-3">
-                            <label>Current Additional Product Images:</label>
-                            <% if ( product.additionalProductImage && product.additionalProductImage.length > 0) { %>
-                                <% product.additionalProductImage.forEach(image => { %>
-                                    <img src="<%= image %>" alt="Additional Product Image" class="img-thumbnail" style="max-width: 100px;">
-                                <% }); %>
-                            <% } else { %>
-                                <p>No additional images.</p>
-                            <% } %>
-                        </div>
+                       <!-- Existing Additional Product Images -->
+<div class="mb-3 image-container">
+    <label>Current Additional Product Images:</label>
+    <% if (product.additionalProductImagePaths && product.additionalProductImagePaths.length > 0) { %>
+        <% product.additionalProductImagePaths.forEach(imagePath => { %>
+            <div class="image-container">
+            <img src="<%= imagePath %>" alt="Additional Product Image" class="img-thumbnail" style="max-width: 100px;">
+            <button class="delete-button" onclick="deleteImage('<%= imagePath %>')">Delete</button>
+        </div>
+            <% }); %>
+    <% } else { %>
+        <p>No additional images.</p>
+    <% } %>
+ </div>
 
                         <!-- Upload New Additional Product Images -->
                         <div class="mb-3">
@@ -360,6 +365,24 @@
             var allowedExtensions = /(\.png|\.jpeg|\.jpg)$/i;
             return allowedExtensions.exec(filePath) !== null;
         }
+
+        //Image deletion
+        
+        var deleteBtns = document.querySelectorAll('.delete-button');
+ for (var i = 0; i < deleteBtns.length; i++) {
+   deleteBtns[i].addEventListener('click', function(event) {
+     // Get the parent element of the delete button
+     var parent = event.target.parentElement;
+
+     // Delete the image
+     var img = parent.querySelector('img');
+     img.remove();
+
+     // Remove the delete button
+     parent.removeChild(event.target);
+   });
+ }
+
     </script>
     
 </body>
