@@ -122,14 +122,16 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <%=cartProducts.forEach(product => {%>
+                     
                   <tr>
                     <td class="product-thumbnail">
-                      <img src="/uploads/1700715592039-Hublot_Spirit-Of-Big-Bang-Red-Magic_642.CF_.0113.RX-SD-HR-W.jpg" alt="Image" class="img-fluid">
+                      <img src="/uploads/<%=product.mainProductImage%>" alt="Image" class="img-fluid">
                     </td>
                     <td class="product-name">
-                      <h2 class="h5 text-black">Hublot_Spirit-Of-Big-Bang-Red-Magic_642</h2>
+                      <h2 class="h5 text-black"><%=product.productName%>></h2>
                     </td>
-                    <td>$49.00</td>
+                    <td><%=product.productPrice%></td>
                     <td>
                       <div class="input-group mb-3" style="max-width: 120px;">
                         <div class="input-group-prepend">
@@ -142,9 +144,10 @@
                       </div>
 
                     </td>
-                    <td>$49.00</td>
+                    <td><%=product.productPrice%></td>
                     <td><a href="#" class="btn btn-primary btn-sm">X</a></td>
                   </tr>
+                <%});%>
 
                   
                 </tbody>

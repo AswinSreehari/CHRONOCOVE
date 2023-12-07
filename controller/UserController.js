@@ -2,6 +2,7 @@ const collection = require('../models/user')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer');
 const productCollection = require('../models/product');
+const cartCollection = require('../models/cart')
 
 const passwordcrypt = async function (password) {
     const bcrptPass = await bcrypt.hash(password, 8);
@@ -279,8 +280,18 @@ const error = ((req,res)=>{
 
 //Cart
 
-const cart = ((req,res)=>{
-    res.render('User/cart')
+const cart = (async(req,res)=>{
+    try{
+    const productId = req.params.id
+    const cartProducts = await productCollection.findById(productId) 
+    console.log('CartProducts:',cartProducts)
+    const cartData = await  cartCollection.find()
+    await cartData.save()
+    res.render('User/cart',{cartData})
+    }catch(error){
+        console.log("Error is",error)
+        res.redirect('/error')
+    }
 })
 
 const checkout = ((req,res)=>{

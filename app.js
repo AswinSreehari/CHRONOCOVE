@@ -6,8 +6,11 @@ const logger = require('morgan');
 const session = require('express-session')
 const flash = require('express-flash')
 
+//Routes
+
 const indexRouter = require('./routes/admin');
 const usersRouter = require('./routes/users');
+const productRouter = require('./routes/products')
 
 const app = express()
 

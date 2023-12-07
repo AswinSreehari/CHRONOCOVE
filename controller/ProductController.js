@@ -76,31 +76,52 @@ const editProduct = async (req, res) => {
 
 const editProductPost = async (req, res) => {
     console.log("hai");
+    let toDelArr = []
+    if(req.body.deleteImage){
+        toDelArr.push(...JSON.parse(req.body.deleteImage))
+    }
+    console.log(toDelArr);
     const productId = req.params.id;
     console.log("products id is :", productId);
     console.log("hello:",req.body);
     const productName= req.body.productName
     console.log("product name is :",productName);
+
     try {
         
         const product = await productCollection.findById(productId);
+
+       
 
         if (!product) {
             return res.redirect('/admin/error');
         }
 
+        const productCat = categoryCollection.findOne({categoryName : req.body.productCategory})
+
         const updatedProduct = {
             productName: req.body.productName,
             productDescription: req.body.productDescription,
-            productCategory: req.body.productCategory,
-            productQuantity: req.body.productQuantity,
-            productPrice: req.body.productPrice
+            productCategory: productCat._id,
+            productQuantity: Number(req.body.productQuantity),
+            productPrice: Number(req.body.productPrice)
              
         };
 
+        if(toDelArr){
+            toDelArr = toDelArr.map(each => each.slice(9))
+            const res =  product.additionalProductImage.filter(element => !toDelArr.includes(element));
+
+            updatedProduct.additionalProductImage = res
+        }
+
+        console.log(updatedProduct)
+        console.log('after updated')
+
         // Check if additionalProductImage exists in req.files
         if (req.files && req.files['additionalProductImage']) {
-            updatedProduct.additionalProductImage = req.files['additionalProductImage'].map(file => file.filename);
+            updatedProduct.additionalProductImage = [...req.files['additionalProductImage'].map(file => file.filename),... updatedProduct.additionalProductImage];
+           
         }
 
         // Check if mainProductImage exists in req.files
@@ -108,7 +129,7 @@ const editProductPost = async (req, res) => {
             updatedProduct.mainProductImage = req.files['mainProductImage'][0].filename;
         }
 
-        await productCollection.findByIdAndUpdate(productId, updatedProduct);
+        await productCollection.findByIdAndUpdate(productId,updatedProduct,{new : true});
         res.redirect('/admin/productmanagement');
     } catch (error) {
         console.error(error);

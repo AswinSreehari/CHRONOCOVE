@@ -154,7 +154,7 @@
 
         <!-- Add to Cart Button -->
         <!-- <p><a href="cart.ejs" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p> -->
-        <form action="/cart" method="post">
+        <form action="/cart/<%=products._id%>" method="GET">
           <input type="hidden" name="productId" value="<%= products._id %>">
           <button type="submit" class="buy-now btn btn-sm btn-primary" <% if (products.productQuantity <= 0) { %>disabled<% } %>>
               Add to Cart <i class="fa-solid fa-cart-shopping"></i>

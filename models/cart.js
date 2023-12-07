@@ -17,7 +17,11 @@ const cartSchema = new mongoose.Schema({
                 type: Number,
                 required: true,
                 default: 1
-            }
+            },
+            mainProductImage:{
+                type : [String],
+                required : true,
+            },
         }
     ],
     totalPrice: {
@@ -27,4 +31,4 @@ const cartSchema = new mongoose.Schema({
     }
 })
 const cartCollection = mongoose.model('cartData',cartSchema)
-mongoose.exports = cartData
+module.exports = cartCollection
