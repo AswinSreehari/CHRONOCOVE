@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer');
 const productCollection = require('../models/product');
 const cartCollection = require('../models/cart')
+const mongoose = require('mongoose')
+ 
+ 
 
 const passwordcrypt = async function (password) {
     const bcrptPass = await bcrypt.hash(password, 8);
@@ -278,31 +281,19 @@ const error = ((req,res)=>{
     res.render('User/404')
 })
 
-//Cart
 
-const cart = (async(req,res)=>{
-    try{
-    const productId = req.params.id
-    const cartProducts = await productCollection.findById(productId) 
-    console.log('CartProducts:',cartProducts)
-    const cartData = await  cartCollection.find()
-    await cartData.save()
-    res.render('User/cart',{cartData})
-    }catch(error){
-        console.log("Error is",error)
-        res.redirect('/error')
-    }
-})
 
-const checkout = ((req,res)=>{
-    res.render('User/checkout')
-})
+
 
 
 
 const contact = ((req,res)=>{
     res.render('User/contact')
 })
+
+
+
+//<------------------------------------ Cart------------------------------------->
 
 
 module.exports={
@@ -318,7 +309,5 @@ module.exports={
     resendOTP,
     productDetails,
     generateOTPWithExpiry,
-    cart,
-    checkout,
     contact,
 }

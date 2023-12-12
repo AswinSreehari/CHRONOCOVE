@@ -1,5 +1,5 @@
 const userAuthentication = (async(req,res,next)=>{
-    if(user.session.email){
+    if(req.session && req.session.email){
         next()
     }else{
         res.redirect('/signin')

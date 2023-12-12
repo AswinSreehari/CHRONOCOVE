@@ -10,7 +10,7 @@ const flash = require('express-flash')
 
 const indexRouter = require('./routes/admin');
 const usersRouter = require('./routes/users');
-const productRouter = require('./routes/products')
+ 
 
 const app = express()
 
