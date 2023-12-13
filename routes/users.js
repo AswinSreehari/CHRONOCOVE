@@ -4,7 +4,8 @@ const userController = require('../controller/UserController')
 const productController = require('../controller/ProductController')
 const userAuthentication = require('../middleware/userAuth')
 const cartController = require('../controller/cartController')
-const addressController = require('../controller/addressController')
+const addressController = require('../controller/addressController');
+const cartCollection = require('../models/cart');
 
 
 /* GET users listing. */
@@ -37,13 +38,15 @@ router.get('/shop',productController.shop)
 
 router.get('/cartGet',userAuthentication.userAuthentication,cartController.cartGet)
 router.post("/cart/:id",userAuthentication.userAuthentication,cartController.cart)
+router.put('/cart/:productId',userAuthentication.userAuthentication,cartController.updateQty)
+router.delete('/cart/:productId',userAuthentication.userAuthentication,cartController.deleteCartproduct)
 
 
 //<-------------------------Address_Route----------------------------->
 
-router.get('/checkout',addressController.checkout)
-router.post('/checkoutPost',addressController.addAddress)
-router.get('/thankyou',addressController.thankyou)
+router.get('/checkout',userAuthentication.userAuthentication,addressController.checkout)
+router.post('/checkoutPost',userAuthentication.userAuthentication ,addressController.addAddressPost)
+router.get('/thankyou',userAuthentication.userAuthentication,addressController.thankyou)
 
 
 

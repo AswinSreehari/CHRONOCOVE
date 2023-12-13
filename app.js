@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session')
 const flash = require('express-flash')
-
+const nocache = require('nocache');
 //Routes
 
 const indexRouter = require('./routes/admin');
@@ -26,11 +26,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
-app.use((req, res, next) => {
-  res.setHeader('Cache-Control', 'no-store');
-  next();
-});
-
+app.use(nocache());
 //Flash
 
 app.use(flash())
