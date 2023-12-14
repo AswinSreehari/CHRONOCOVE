@@ -126,54 +126,51 @@
                 </tr>
               </thead>
               <tbody>
-                <% if ( populatedCart.items.length > 0) { %>
-                <% populatedCart.items.forEach(item=>{%>
-                  <tr>
-                    <td class="product-thumbnail">
-                      <img src="/uploads/<%=item.mainProductImage%>" alt="Image" class="img-fluid">
-                    </td>
-                    <td class="product-name">
-                      <h2 class="h5 text-black">
-                        <%=item.productName%>
-                      </h2>
-                    </td>
-                    <td>
-                      <%=item.productPrice%>
-                    </td>
-                    <td>
-                      <div class="input-group mb-3" style="max-width: 120px;">
-                        <div class="input-group-prepend">
-                          <button class="btn btn-outline-primary"
-                            onclick="updateProductQuantity('<%=item.productId%>',-1)" type="button">&minus;</button>
-                        </div>
-                        <input type="text" class="form-control text-center" id="quantity-<%=item.productId%>"
-                          value="<%=item.quantity%>" placeholder="" aria-label="Example text with button addon"
-                          aria-describedby="button-addon1">
-                        <div class="input-group-append">
-                          <button class="btn btn-outline-primary"
-                            onclick="updateProductQuantity('<%=item.productId%>',1)" type="button">&plus;</button>
-                        </div>
-                      </div>
-
-                    </td>
-                    <td>
-                      <%=item.productPrice * item.quantity%>
-                    </td>
-
-                    <td id="populatedCart-<%=item.productId%>">
-                      <a href="#" class="btn btn-primary btn-sm"
-                        onclick="deleteCartProduct('<%= item.productId %>')">X</a>
-                      </td>
-                  </tr>
-                </tr>
-                  <% }) %>
-                  <% } else { %>
+                <% if (populatedCart.items.length > 0) { %>
+                  <% populatedCart.items.forEach(item => { %>
                     <tr>
-                      <td colspan="6">No product in the cart</td>
+                      <td class="product-thumbnail">
+                        <img src="/uploads/<%= item.mainProductImage %>" alt="Image" class="img-fluid">
+                      </td>
+                      <td class="product-name">
+                        <h2 class="h5 text-black">
+                          <%= item.productName %>
+                        </h2>
+                      </td>
+                      <td>
+                        <%= item.productPrice %>
+                      </td>
+                      <td>
+                        <div class="input-group mb-3" style="max-width: 120px;">
+                          <div class="input-group-prepend">
+                            <button class="btn btn-outline-primary" onclick="updateProductQuantity('<%= item.productId %>', -1)" type="button">&minus;</button>
+                          </div>
+                          <input type="text" class="form-control text-center" id="quantity-<%= item.productId %>" value="<%= item.quantity %>" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                          <div class="input-group-append">
+                            <button class="btn btn-outline-primary" onclick="updateProductQuantity('<%= item.productId %>', 1)" type="button">&plus;</button>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <% totalPrice.forEach(price => { %>
+                          <% if (price._id.equals(item.productId)) { %>
+                            <%= price.totalPrice %>
+                          <% } %>
+                        <% }); %>
+                      </td>
+                      <td id="populatedCart-<%= item.productId %>">
+                        <a href="/cartGet" class="btn btn-primary btn-sm" onclick="deleteCartProduct('<%= item.productId %>')">X</a>
+                      </td>
                     </tr>
-                  <% } %>
-
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="6">No product in the cart</td>
+                  </tr>
+                <% } %>
               </tbody>
+              
+
             </table>
           </div>
         </form>
@@ -216,7 +213,7 @@
                   <span class="text-black">Subtotal</span>
                 </div>
                 <div class="col-md-6 text-right">
-                  <strong class="text-black">$230.00</strong>
+                  <strong class="text-black">$1905</strong>
                 </div>
               </div>
               <div class="row mb-5">
@@ -360,36 +357,36 @@
   //Close Button 
 
   const deleteCartProduct = (productId) => {
-  console.log('Before Fetch!!')
-  fetch(`/cart/${productId}`, {
-  method: "DELETE",
-  headers: {
-    "Content-Type": "application/json"
-  },
-})
-.then(res => {
-  console.log('After fetch call!!')
-  if (!res.ok) {
-    throw new Error(`HTTP error! Status: ${res.status}`);
-  }
-  return res.json();
-})
-.then(data => {
-  console.log('Data:',data)
-  if (data.success) {
-    const productRow = document.getElementById(`populatedCart-${productId}`)
-    console.log("Delete button poy!!")
-    if (productRow) {
-      productRow.remove();
-    }
-  } else {
-    alert(`Failed to delete product.`);
-  }
-})
-.catch(err => {
-  console.error("Error deleting product:", err);
-  alert("An error occurred. Please try again!!");
-});
+    console.log('Before Fetch!!')
+    fetch(`/cart/${productId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    })
+      .then(res => {
+        console.log('After fetch call!!')
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log('Data:', data)
+        if (data.success) {
+          const productRow = document.getElementById(`populatedCart-${productId}`)
+          console.log("Delete button poy!!")
+          if (productRow) {
+            productRow.remove();
+          }
+        } else {
+          alert(`Failed to delete product.`);
+        }
+      })
+      .catch(err => {
+        console.error("Error deleting product:", err);
+        alert("An error occurred. Please try again!!");
+      });
 
   }
 

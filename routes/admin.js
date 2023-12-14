@@ -47,6 +47,7 @@ router.get('/deleteProduct/:id',adminauthenticaton.adminauthenticaton,productCon
 router.get("/block/:id",adminauthenticaton.adminauthenticaton,adminController.blockUser)
 router.get("/unblock/:id",adminauthenticaton.adminauthenticaton,adminController.unblockUser)
 router.delete('deleteProductImage/:id/:mainProductImage',productController.deleteProductImage)
+router.get('/ordermanagement',adminController.orderManagement)
 
 
 module.exports = router;

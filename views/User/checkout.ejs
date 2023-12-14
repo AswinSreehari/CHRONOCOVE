@@ -119,24 +119,7 @@
 
 
           <!----------------------------------Default_Address--------------------------------------->
-          <div class="p-3 p-lg-5 border">
-            <% userAddresss.Address.forEach(data=>{%>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                <label class="form-check-label" for="flexCheckDefault">
-                  <h5><%=data.firstName%></h5>
-                  <p>
-                  <h6><%=data.address%></h6>
-                  <h6><%=data.landmark%></h6>
-                  <h6><%=data.state%></h6>
-                  <h6><%=data.zip%></h6>
-                  <h6><%=data.email%></h6>
-                  <h6><%=data.phone%></h6>
-                  </p>
-                </label>
-              </div>
-          </div>
-          <% }) %>
+  
 
           <!----------------------------------Second_Address_Form------------------------------------>
           <form method="post" action="/checkoutPost">

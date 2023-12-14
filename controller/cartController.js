@@ -13,7 +13,6 @@ const cart = async (req, res) => {
   // Else
     // Add item to cart with qty 1
   
-    const userEmail = req.session.email;
     const productId = req.params.id;
     const product = await productCollection.findById(productId);
     if (!product) {
@@ -24,6 +23,7 @@ const cart = async (req, res) => {
 
     try {
       let userCart = await cartCollection.findOne({ userId: userData._id });
+      let subTotal = 10000
       if (!userCart) {
         const newCart = new cartCollection({
           userId: userData._id,
@@ -32,6 +32,7 @@ const cart = async (req, res) => {
             quantity: 1
           }],
           totalPrice: product.productPrice 
+          
         });
   
         userCart = await newCart.save();
@@ -45,20 +46,25 @@ const cart = async (req, res) => {
         userCart.items.push({
           productId: product._id,
           quantity: 1,
-        });
-        userCart.totalPrice = product.productPrice 
+          totalPrice: product.productPrice,  
+        })
+      
+        subTotal = userCart.items.reduce((total, item) => total + (item.totalPrice || 0), 0);
+
       }
       await userCart.save();
 
       const populatedCart = await populateProductDetails(userCart);
-      res.render('User/cart', { populatedCart });
+      const totalPrice = await cartCollection.aggregate([{$match: {userId: userData._id}}, {$unwind: "$items"}, {$lookup: {from: "productdatas", localField: "items.productId", foreignField: "_id", as: "cartProduct"}}, {$project: {userId: 1, items: 1, productPrice: {$arrayElemAt: ["$cartProduct.productPrice", 0]}, calculatedPrice: {$multiply: ["$items.quantity", {$arrayElemAt: ["$cartProduct.productPrice", 0]}]}}}, {$group: {_id: "$items.productId", userId: {$first: "$userId"}, quantity: {$sum: "$items.quantity"}, totalPrice: {$sum: "$calculatedPrice"}, productPrice: {$first: "$productPrice"}}}]);
+
+      res.render('User/cart', { populatedCart , totalPrice});
     } catch (err) {
       console.error("Error at god knows where.");
       console.error(err);
       res.redirect('/error');
     }
   }  
- 
+  
 
  const populateProductDetails = async function (cart) {
     if (!cart || !cart.items) {
@@ -90,17 +96,26 @@ const cart = async (req, res) => {
   };
   
 
-  const cartGet = async(req, res) => {
+  const cartGet = async (req, res) => {
     try {
-    const userData = await collection.findOne({ emailId: req.session.email });
+      const userData = await collection.findOne({ emailId: req.session.email });
       let userCart = await cartCollection.findOne({ userId: userData._id });
       const populatedCart = await populateProductDetails(userCart);
-      res.render('User/cart',{populatedCart});
+  
+      const totalPrice = await cartCollection.aggregate([{$match: {userId: userData._id}}, {$unwind: "$items"}, {$lookup: {from: "productdatas", localField: "items.productId", foreignField: "_id", as: "cartProduct"}}, {$project: {userId: 1, items: 1, productPrice: {$arrayElemAt: ["$cartProduct.productPrice", 0]}, calculatedPrice: {$multiply: ["$items.quantity", {$arrayElemAt: ["$cartProduct.productPrice", 0]}]}}}, {$group: {_id: "$items.productId", userId: {$first: "$userId"}, quantity: {$sum: "$items.quantity"}, totalPrice: {$sum: "$calculatedPrice"}, productPrice: {$first: "$productPrice"}}}]);
+
+      const calculatedPrices = totalPrice.map(item => item.calculatedPrice);
+      const subTotal = calculatedPrices.reduce((sum, price) => sum + price, 0);
+      console.log('iTS THE SUBTOTAL GUYZZZ : ',subTotal)
+      
+  
+      res.render("User/cart", { populatedCart, totalPrice });
     } catch (error) {
       console.log(error);
-      res.redirect('/error');
+      res.redirect("/error");
     }
-  }
+  };
+  
 
   
 

@@ -134,6 +134,10 @@ const blockUser = async (req, res) => {
     }
   }
 
+  //orderManagement
+  const orderManagement = (req,res)=>{
+    res.render('Admin/orderManagement')
+  }
 
 
 
@@ -147,6 +151,7 @@ module.exports={
     blank,
     error,
     unblockUser,
-    blockUser
+    blockUser,
+    orderManagement
     
 }
