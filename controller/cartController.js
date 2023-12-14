@@ -56,8 +56,8 @@ const cart = async (req, res) => {
 
       const populatedCart = await populateProductDetails(userCart);
       const totalPrice = await cartCollection.aggregate([{$match: {userId: userData._id}}, {$unwind: "$items"}, {$lookup: {from: "productdatas", localField: "items.productId", foreignField: "_id", as: "cartProduct"}}, {$project: {userId: 1, items: 1, productPrice: {$arrayElemAt: ["$cartProduct.productPrice", 0]}, calculatedPrice: {$multiply: ["$items.quantity", {$arrayElemAt: ["$cartProduct.productPrice", 0]}]}}}, {$group: {_id: "$items.productId", userId: {$first: "$userId"}, quantity: {$sum: "$items.quantity"}, totalPrice: {$sum: "$calculatedPrice"}, productPrice: {$first: "$productPrice"}}}]);
-
-      res.render('User/cart', { populatedCart , totalPrice});
+      const total = totalPrice.reduce((sum, item) => sum + item.totalPrice, 0);
+      res.render('User/cart', { populatedCart , totalPrice,total});
     } catch (err) {
       console.error("Error at god knows where.");
       console.error(err);
@@ -104,12 +104,9 @@ const cart = async (req, res) => {
   
       const totalPrice = await cartCollection.aggregate([{$match: {userId: userData._id}}, {$unwind: "$items"}, {$lookup: {from: "productdatas", localField: "items.productId", foreignField: "_id", as: "cartProduct"}}, {$project: {userId: 1, items: 1, productPrice: {$arrayElemAt: ["$cartProduct.productPrice", 0]}, calculatedPrice: {$multiply: ["$items.quantity", {$arrayElemAt: ["$cartProduct.productPrice", 0]}]}}}, {$group: {_id: "$items.productId", userId: {$first: "$userId"}, quantity: {$sum: "$items.quantity"}, totalPrice: {$sum: "$calculatedPrice"}, productPrice: {$first: "$productPrice"}}}]);
 
-      const calculatedPrices = totalPrice.map(item => item.calculatedPrice);
-      const subTotal = calculatedPrices.reduce((sum, price) => sum + price, 0);
-      console.log('iTS THE SUBTOTAL GUYZZZ : ',subTotal)
-      
-  
-      res.render("User/cart", { populatedCart, totalPrice });
+      const total = totalPrice.reduce((sum, item) => sum + item.totalPrice, 0);
+       
+      res.render("User/cart", { populatedCart, totalPrice ,total});
     } catch (error) {
       console.log(error);
       res.redirect("/error");
