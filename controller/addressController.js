@@ -1,14 +1,54 @@
 const addressCollection = require('../models/address')
 const collection = require('../models/user')
+const cartCollection = require('../models/cart')
+const productCollection = require('../models/product')
 
-const checkout = ((req,res)=>{
-    res.render('User/checkout')
+const checkout = (async(req,res)=>{
+    const userData = await collection.findOne({ emailId: req.session.email });
+    const userCart = await cartCollection.findOne({ userId: userData._id });
+    const totalPrice = await cartCollection.aggregate([{$match: {userId: userData._id}}, {$unwind: "$items"}, {$lookup: {from: "productdatas", localField: "items.productId", foreignField: "_id", as: "cartProduct"}}, {$project: {userId: 1, items: 1, productPrice: {$arrayElemAt: ["$cartProduct.productPrice", 0]}, calculatedPrice: {$multiply: ["$items.quantity", {$arrayElemAt: ["$cartProduct.productPrice", 0]}]}}}, {$group: {_id: "$items.productId", userId: {$first: "$userId"}, quantity: {$sum: "$items.quantity"}, totalPrice: {$sum: "$calculatedPrice"}, productPrice: {$first: "$productPrice"}}}]);
+  
+    console.log('Its the UserCart',userCart)
+    const populateProductDetails = async function (cart) {
+        if (!cart || !cart.items) {
+          return null; 
+        }
+      
+        const populatedItems = await Promise.all(cart.items.map(async (item) => {
+          const product = await productCollection.findById(item.productId, {
+            productName: 1,
+            mainProductImage: 1,
+            productPrice: 1,
+          });
+      
+          return {
+            productId: item.productId,
+            quantity: item.quantity,
+            productName: product.productName,
+            mainProductImage: product.mainProductImage,
+            productPrice: product.productPrice,
+          };
+        }));
+        
+        return {
+          _id: cart._id,
+          userId: cart.userId,
+          totalPrice: cart.totalPrice,
+          items: populatedItems,
+        };
+      };
+      const total = totalPrice.reduce((sum, item) => sum + item.totalPrice, 0);
+      const userAddress = await addressCollection.find({userId : userData._id})
+      const populatedCart = await populateProductDetails(userCart);
+      console.log("populatedCart:",populatedCart)
+    res.render('User/checkout',{populatedCart , totalPrice, total , userAddress})
 })
 
 const addAddressPost = async(req,res)=>{
     
     const userData = await collection.findOne({ emailId: req.session.email });
-    console.log("I AM IRONMAN:",userData)
+      let userCart = await cartCollection.findOne({ userId: userData._id });
+      
     try {
         let userAddress = await addressCollection.findOne({ userId: userData._id })
     if(!userAddress){
@@ -47,7 +87,41 @@ const addAddressPost = async(req,res)=>{
 
         const userAddresss = await addressCollection.find({userId : userData._id}) 
        console.log("UserAddress",userAddresss)
-        res.render('User/checkout',{userAddresss});
+       const totalPrice = await cartCollection.aggregate([{$match: {userId: userData._id}}, {$unwind: "$items"}, {$lookup: {from: "productdatas", localField: "items.productId", foreignField: "_id", as: "cartProduct"}}, {$project: {userId: 1, items: 1, productPrice: {$arrayElemAt: ["$cartProduct.productPrice", 0]}, calculatedPrice: {$multiply: ["$items.quantity", {$arrayElemAt: ["$cartProduct.productPrice", 0]}]}}}, {$group: {_id: "$items.productId", userId: {$first: "$userId"}, quantity: {$sum: "$items.quantity"}, totalPrice: {$sum: "$calculatedPrice"}, productPrice: {$first: "$productPrice"}}}]);
+       const total = totalPrice.reduce((sum, item) => sum + item.totalPrice, 0);
+       const populateProductDetails = async function (cart) {
+        if (!cart || !cart.items) {
+          return null; 
+        }
+      
+        const populatedItems = await Promise.all(cart.items.map(async (item) => {
+          const product = await productCollection.findById(item.productId, {
+            productName: 1,
+            mainProductImage: 1,
+            productPrice: 1,
+          });
+      
+          return {
+            productId: item.productId,
+            quantity: item.quantity,
+            productName: product.productName,
+            mainProductImage: product.mainProductImage,
+            productPrice: product.productPrice,
+          };
+        }));
+        
+        return {
+          _id: cart._id,
+          userId: cart.userId,
+          totalPrice: cart.totalPrice,
+          items: populatedItems,
+        };
+      };
+       
+       
+      console.log("This is the address in the cart:",address)
+      const populatedCart = await populateProductDetails(userCart);
+        res.render('User/checkout',{populatedCart , totalPrice, total , userAddress});
 
         
     } catch (error) {
@@ -57,11 +131,20 @@ const addAddressPost = async(req,res)=>{
 }
 
 const thankyou = ((req,res)=>{
+  const orderId = req.params.id
+  console.log("this is the orderId:",orderId)
  res.render('User/thankyou')
 })
+
+ 
+
+ 
+
+
 
 module.exports = {
     checkout,
     addAddressPost,
-    thankyou
+    thankyou,
+
 }

@@ -5,6 +5,7 @@ const multer = require('multer')
 const adminController = require('../controller/AdminController')
 const productController = require('../controller/ProductController')
 const categoryController = require('../controller/CategoryController')
+const orderController = require('../controller/orderController')
 const storage = require('../storage/multer')
 const upload = multer({storage})
 
@@ -47,7 +48,11 @@ router.get('/deleteProduct/:id',adminauthenticaton.adminauthenticaton,productCon
 router.get("/block/:id",adminauthenticaton.adminauthenticaton,adminController.blockUser)
 router.get("/unblock/:id",adminauthenticaton.adminauthenticaton,adminController.unblockUser)
 router.delete('deleteProductImage/:id/:mainProductImage',productController.deleteProductImage)
-router.get('/ordermanagement',adminController.orderManagement)
+
+
+//orderManagement
+
+router.get('/ordermanagement',adminauthenticaton.adminauthenticaton,orderController.orderManagement)
 
 
 module.exports = router;

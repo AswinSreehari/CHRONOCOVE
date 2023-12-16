@@ -62,7 +62,7 @@
             <div class="col-6 col-md-4 order-3 order-md-3 text-right">
               <div class="site-top-icons">
                 <ul>
-                  <li><a href="#"><span class="icon icon-person"></span></a></li>
+                  <li><a href="/profile"><span class="icon icon-person"></span></a></li>
                   <li><a href="#"><span class="icon icon-heart-o"></span></a></li>
                   <li>
                     <a href="/cartGet" class="site-cart">
@@ -110,16 +110,46 @@
     </div>
   </div>
 
-  <div class="site-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6 mb-5 mb-md-0">
-          <h2 class="h3 mb-3 text-black">Billing Details</h2>
-
+  <div class="site-section mb-4" >
+    <div class="container" style="display: flex; justify-content: space-evenly; ">
+      <div class="row" >
+        <div class="col-md-12 d-flex-col mb-5 mb-md-0 " >
+          <h2 class="h3 mb-3 text-black " style="width: 100%;">Billing Details</h2>
+          
 
 
           <!----------------------------------Default_Address--------------------------------------->
-  
+ <!-- Address Card -->
+<div class="container text-black">
+  <form action="/submitOrder" method="POST" id="addressForm">
+    <div class="row">
+      <% userAddress.forEach((addr, index) => { %>
+        <% addr.Address.forEach(ad => { %>
+          <div class="col-md-6 mb-4">
+            <div class="address-card border p-3">
+              <div class="address-title font-weight-bold">Address</div>
+
+              <strong><%= ad.firstName %> <%= ad.lastName %><br></strong>
+              <strong><%= ad.address %></strong><br>
+              <strong><%= ad.landmark %></strong><br>
+              <strong><%= ad.state %></strong><br>
+              <strong><%= ad.zip %></strong><br>
+              <strong class="text-truncate"><%= ad.email %></strong><br>
+              <strong><%= ad.phone %></strong><br>
+
+              <!-- Radio button for each address -->
+              <input type="radio" name="selectedAddress" value="<%= ad._id %>" onchange="document.getElementById('addressForm').submit()">
+            </div>
+          </div>
+        <% }) %>
+      <% }); %>
+    </div>
+  </form>
+</div>
+<!-- End Address Card -->
+
+
+
 
           <!----------------------------------Second_Address_Form------------------------------------>
           <form method="post" action="/checkoutPost">
@@ -238,68 +268,37 @@
                   <th>Product</th>
                   <th>Total</th>
                 </thead>
+                <% populatedCart.items.forEach(item => { %>
                 <tbody>
                   <tr>
-                    <td>Top Up T-Shirt <strong class="mx-2">x</strong> 1</td>
-                    <td>$250.00</td>
+                    <td><%= item.productName %><strong class="mx-2">*</strong><%= item.quantity %></td>
+                    <td> <% totalPrice.forEach(price => { %>
+                      <% if (price._id.equals(item.productId)) { %>
+                        $<%= price.totalPrice %>
+                      <% } %>
+                    <% }); %></td>
+                    <% }); %>
                   </tr>
-                  <tr>
-                    <td>Polo Shirt <strong class="mx-2">x</strong> 1</td>
-                    <td>$100.00</td>
-                  </tr>
-                  <tr>
-                    <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-                    <td class="text-black">$350.00</td>
-                  </tr>
-                  <tr>
                     <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-                    <td class="text-black font-weight-bold"><strong>$350.00</strong></td>
+                    <td class="text-black font-weight-bold"><strong>$<%=total%></strong></td>
                   </tr>
                 </tbody>
+              
               </table>
 
-              <div class="border p-3 mb-3">
-                <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsebank" role="button"
-                    aria-expanded="false" aria-controls="collapsebank">Direct Bank Transfer</a></h3>
-
-                <div class="collapse" id="collapsebank">
-                  <div class="py-2">
-                    <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the
-                      payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
+              <div class="row" style="width:100%;">
+                <div class="col-12">
+                  <div class="list-group" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#" role="tab" aria-controls="home">Cash On Delivery</a>
+                    <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#" role="tab" aria-controls="profile">UPI</a>
+                    <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#" role="tab" aria-controls="profile">Credit Card</a>
                   </div>
                 </div>
+
               </div>
-
-              <div class="border p-3 mb-3">
-                <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsecheque" role="button"
-                    aria-expanded="false" aria-controls="collapsecheque">Cheque Payment</a></h3>
-
-                <div class="collapse" id="collapsecheque">
-                  <div class="py-2">
-                    <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the
-                      payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="border p-3 mb-5">
-                <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsepaypal" role="button"
-                    aria-expanded="false" aria-controls="collapsepaypal">Paypal</a></h3>
-
-                <div class="collapse" id="collapsepaypal">
-                  <div class="py-2">
-                    <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the
-                      payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='thankyou.html'">Place
-                  Order</button>
-              </div>
-
-            </div>
+            <div class="form-group" style="margin-top: 50px;">
+            <a href="/thankyou" class="btn btn-primary btn-lg py-3 btn-block"> place Order</a>
+          </div>
           </div>
         </div>
 
@@ -388,14 +387,7 @@
   </footer>
   </div>
 
-  <!-- <script src="js/jquery-3.3.1.min.js"></script>
-  <script src="js/jquery-ui.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/owl.carousel.min.js"></script>
-  <script src="js/jquery.magnific-popup.min.js"></script>
-  <script src="js/aos.js"></script>
-  <script src="js/main.js"></script> -->
+ 
 
   <script src="/javascripts/jquery-3.3.1.min.js"></script>
   <script src="/javascripts/jquery-ui.js"></script>

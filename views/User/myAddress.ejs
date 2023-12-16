@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title> CHRONOCOVE</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+
+  <link rel="stylesheet" href="/fonts/icomoon/style.css">
+
+
+
+  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+  <link rel="stylesheet" href="/stylesheets/magnific-popup.css">
+  <link rel="stylesheet" href="/stylesheets/jquery-ui.css">
+  <link rel="stylesheet" href="/stylesheets/owl.carousel.min.css">
+  <link rel="stylesheet" href="/stylesheets/owl.theme.default.min.css">
+  <link rel="stylesheet" href="/stylesheets/checkout.css">
+
+
+
+  <link rel="stylesheet" href="/stylesheets/aos.css">
+
+  <link rel="stylesheet" href="/stylesheets/style.css">
+
+  <link rel="stylesheet" href="/stylesheets/aos.css">
+
+  <!-- <style> 
+    /* Custom styles to position the Sign Out button */
+    /* .signout-button {
+        top: -184px;
+        right: 10px;
+      } */
+     
+  /* </style> */-->
+
+  <style>
+    .address-card {
+      border: 1px solid #e4e4e4;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    .address-title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .address-details {
+      font-size: 16px;
+    }
+
+    .main-body {
+      margin-top: 20px;
+    }
+
+    .site-navbar {
+      background-color: #fff;
+      border-bottom: 1px solid #e4e4e4;
+      padding: 10px 0;
+    }
+
+    .tab-content {
+      padding: 20px;
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+  <div class="site-wrap">
+    <header class="site-navbar" role="banner">
+      <div class="site-navbar-top">
+        <div class="container">
+          <div class="row align-items-center">
+
+            <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+              <form action="" class="site-block-top-search">
+                <span class="icon icon-search2"></span>
+                <input type="text" class="form-control border-0" placeholder="Search">
+              </form>
+            </div>
+
+            <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
+              <div class="site-logo">
+                <a href="/" class="js-logo-clone">CHRONOCOVE</a>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 order-3 order-md-3 text-right">
+              <div class="site-top-icons">
+                <ul>
+                  <li><a href="/profile"><span class="icon icon-person"></span></a></li>
+                  <li><a href="#"><span class="icon icon-heart-o"></span></a></li>
+                  <li>
+                    <a href="/cartGet" class="site-cart">
+                      <span class="icon icon-shopping_cart"></span>
+                      <span class="count">2</span>
+                    </a>
+                  </li>
+                  <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span
+                        class="icon-menu"></span></a></li>
+                       
+                </ul>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <nav class="site-navigation text-right text-md-center" role="navigation">
+        <div class="container">
+          <ul class="site-menu js-clone-nav d-none d-md-block">
+            <li>
+              <a href="/">Home</a>
+            </li>
+            <li>
+              <a href="/about">About</a>
+            </li>
+            <li><a href="/shop">Shop</a></li>
+            <li><a href="#">Search</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-12 text-right">
+
+        </div>
+  </div>
+  </nav>
+  </header>
+
+
+<a href="/addAddress" class="btn btn-primary">Add Address</a> 
+  
+<!-- Address Card -->
+<div class="container">
+  <div class="row">
+    <% address.forEach(addr => { %>
+      <% addr.Address.forEach(ad => { %>
+        <div class="col-md-6">
+          <div class="address-card">
+            <div class="address-title">Address</div>
+
+            <strong><%=ad.firstName %> <%=ad.lastName%><br></strong>
+            <strong><%= ad.address %></strong><br>
+            <strong><%= ad.landmark %></strong><br>
+            <strong><%= ad.state %></strong><br>
+            <strong><%= ad.zip %></strong><br>
+            <strong><%= ad.email %></strong><br>
+            <strong><%= ad.phone %></strong><br>
+
+            <div class="address-details">
+              <button class="btn btn-primary" onclick="editAddress('<%= ad._id %>')">Edit Address</button>
+              <button class="btn btn-primary" onclick="console.log('Address ID:', '<%= ad._id %>'); deleteAddress('<%= ad._id %>')">Delete Address</button>
+
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% }); %>
+  </div>
+</div>
+<!-- End Address Card -->
+
+
+  <script src="/javascripts/jquery-3.3.1.min.js"></script>
+  <script src="/javascripts/jquery-ui.js"></script>
+  <script src="/javascripts/popper.min.js"></script>
+  <script src="/javascripts/bootstrap.min.js"></script>
+  <script src="/javascripts/owl.carousel.min.js"></script>
+  <script src="/javascripts/jquery.magnific-popup.min.js"></script>
+  <script src="/javascripts/aos.js"></script>
+  <script src="/javascripts/main.js"></script>
+  
+
+  <script>
+    const deleteAddress = async (addressId) => {
+      console.log('Before Fetch!!');
+      
+      try {
+        const response = await fetch(`/deleteAddress/${addressId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        console.log('After fetch call!!');
+  
+        if (response.status === 204) {
+          // 204 No Content indicates successful deletion
+          const addressCard = document.getElementById(`addressCard_${addressId}`);
+          console.log('Delete button clicked!!');
+  
+          if (addressCard) {
+            // Remove the address card from the UI immediately
+            addressCard.remove();
+          } else {
+            console.error('Failed to find the address card in the UI.');
+          }
+        } else {
+          // Handle other status codes
+          try {
+            const data = await response.json();
+            console.error('Failed to delete address. Server responded with:', response.status, data);
+            alert('Failed to delete address.');
+          } catch (jsonError) {
+            // Handle JSON parsing error
+            console.error('Error parsing JSON:', jsonError);
+            alert('An error occurred. Please try again!!');
+          }
+        }
+      } catch (error) {
+        console.error('Error deleting address:', error);
+        alert('An error occurred. Please try again!!');
+      }
+    }
+  </script>
+  
+  
+
+</body>
+
+</html>

@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer');
 const productCollection = require('../models/product');
 const cartCollection = require('../models/cart')
+const addressColleciton = require('../models/address')
 const mongoose = require('mongoose')
  
  
@@ -282,18 +283,20 @@ const error = ((req,res)=>{
 })
 
 
-
-
-
-
-
 const contact = ((req,res)=>{
     res.render('User/contact')
 })
 
 
 
-//<------------------------------------ Cart------------------------------------->
+//<------------------------------------User_profile------------------------------------->
+
+
+
+
+
+
+
 
 
 module.exports={

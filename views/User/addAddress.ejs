@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title> CHRONOCOVE</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+
+  <link rel="stylesheet" href="/fonts/icomoon/style.css">
+
+
+
+  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+  <link rel="stylesheet" href="/stylesheets/magnific-popup.css">
+  <link rel="stylesheet" href="/stylesheets/jquery-ui.css">
+  <link rel="stylesheet" href="/stylesheets/owl.carousel.min.css">
+  <link rel="stylesheet" href="/stylesheets/owl.theme.default.min.css">
+  <link rel="stylesheet" href="/stylesheets/checkout.css">
+
+
+
+  <link rel="stylesheet" href="/stylesheets/aos.css">
+
+  <link rel="stylesheet" href="/stylesheets/style.css">
+
+  <link rel="stylesheet" href="/stylesheets/aos.css">
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+  <!-- <style> 
+    /* Custom styles to position the Sign Out button */
+    /* .signout-button {
+        top: -184px;
+        right: 10px;
+      } */
+     
+  /* </style> */-->
+
+   
+
+
+</head>
+
+<body>
+
+  <div class="site-wrap">
+    <header class="site-navbar" role="banner">
+      <div class="site-navbar-top">
+        <div class="container">
+          <div class="row align-items-center">
+
+            <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+              <form action="" class="site-block-top-search">
+                <span class="icon icon-search2"></span>
+                <input type="text" class="form-control border-0" placeholder="Search">
+              </form>
+            </div>
+
+            <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
+              <div class="site-logo">
+                <a href="/" class="js-logo-clone">CHRONOCOVE</a>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 order-3 order-md-3 text-right">
+              <div class="site-top-icons">
+                <ul>
+                  <li><a href="/profile"><span class="icon icon-person"></span></a></li>
+                  <li><a href="#"><span class="icon icon-heart-o"></span></a></li>
+                  <li>
+                    <a href="/cartGet" class="site-cart">
+                      <span class="icon icon-shopping_cart"></span>
+                      <span class="count">2</span>
+                    </a>
+                  </li>
+                  <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span
+                        class="icon-menu"></span></a></li>
+                       
+                </ul>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <nav class="site-navigation text-right text-md-center" role="navigation">
+        <div class="container">
+          <ul class="site-menu js-clone-nav d-none d-md-block">
+            <li>
+              <a href="/">Home</a>
+            </li>
+            <li>
+              <a href="/about">About</a>
+            </li>
+            <li><a href="/shop">Shop</a></li>
+            <li><a href="#">Search</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-12 text-right">
+
+        </div>
+  </div>
+  </nav>
+  </header>
+
+  <form method="post" action="/AddressPost"class="ml-3 mx-5"id="addAddressForm" >
+    <div class="form-group">
+        <div class="py-2">
+
+          <div class="form-group">
+            <label for="c_diff_country" class="text-black">Country <span class="text-danger">*</span></label>
+            <select id="country" name="country" class="form-control">
+              <option value="Select a country">Select a country</option>
+              <option value="India">India</option>
+              <option value="USA">USA</option>
+              <option value="Germany">Germany</option>
+              <option value="Ghana">Ghana</option>
+              <option value="Albania">Albania</option>
+              <option value="Bahrain">Bahrain</option>
+              <option value="Colombia">Colombia</option>
+              <option value="Paris">Paris</option>
+            </select>
+          </div>
+
+
+          <div class="form-group row">
+            <div class="col-md-6">
+              <label for="c_diff_fname" class="text-black">First Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="firstName" name="firstName">
+            </div>
+            <div class="col-md-6">
+              <label for="c_diff_lname" class="text-black">Last Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="lastName" name="lastName">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-md-12">
+              <label for="c_diff_address" class="text-black">Address <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="address" name="address" placeholder=" Address">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <input type="text" class="form-control" name="landmark" id="landmark" placeholder="Land mark">
+          </div>
+
+          <div class="form-group row">
+            <div class="col-md-6">
+              <label for="c_diff_state_country" class="text-black">State <span
+                  class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="state" name="state">
+            </div>
+            <div class="col-md-6">
+              <label for="c_diff_postal_zip" class="text-black">Posta / Zip <span
+                  class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="zip" name="zip">
+            </div>
+          </div>
+
+          <div class="form-group row mb-5">
+            <div class="col-md-6">
+              <label for="c_diff_email_address" class="text-black">Email Address <span
+                  class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="email" name="email">
+            </div>
+            <div class="col-md-6">
+              <label for="c_diff_phone" class="text-black">Phone <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number">
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <button class="btn btn-primary btn-lg py-3 btn-block" type="submit" name="saveAdd" id="saveAdd"
+            class="form-submit" >Save</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+
+  <script src="/javascripts/jquery-3.3.1.min.js"></script>
+  <script src="/javascripts/jquery-ui.js"></script>
+  <script src="/javascripts/popper.min.js"></script>
+  <script src="/javascripts/bootstrap.min.js"></script>
+  <script src="/javascripts/owl.carousel.min.js"></script>
+  <script src="/javascripts/jquery.magnific-popup.min.js"></script>
+  <script src="/javascripts/aos.js"></script>
+  <script src="/javascripts/main.js"></script>
+
+  
+
+  <!-- <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const saveAddButton = document.getElementById("saveAdd");
+      saveAddButton.addEventListener("click", function () {
+        swal("Good job!", "You clicked the button!", "success");
+      });
+    });
+  </script> -->
+
+</body>
+
+</html>

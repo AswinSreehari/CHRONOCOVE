@@ -5,6 +5,7 @@ const productController = require('../controller/ProductController')
 const userAuthentication = require('../middleware/userAuth')
 const cartController = require('../controller/cartController')
 const addressController = require('../controller/addressController');
+const profileController = require('../controller/profileController')
 const cartCollection = require('../models/cart');
 
 
@@ -34,7 +35,7 @@ router.get('/contact',userController.contact)
 router.get('/shop',productController.shop)
 
 
-//<-------------------------Cart_Route----------------------------->
+//<------------------------------Cart_Route--------------------------------------------->
 
 router.get('/cartGet',userAuthentication.userAuthentication,cartController.cartGet)
 router.post("/cart/:id",userAuthentication.userAuthentication,cartController.cart)
@@ -42,13 +43,20 @@ router.put('/cart/:productId',userAuthentication.userAuthentication,cartControll
 router.delete('/cart/:productId',userAuthentication.userAuthentication,cartController.deleteCartproduct)
 
 
-//<-------------------------Address_Route----------------------------->
+//<------------------------------Address_Route------------------------------------------>
 
 router.get('/checkout',userAuthentication.userAuthentication,addressController.checkout)
 router.post('/checkoutPost',userAuthentication.userAuthentication ,addressController.addAddressPost)
 router.get('/thankyou',userAuthentication.userAuthentication,addressController.thankyou)
 
 
+//<---------------------------------User_Profile----------------------------------------->
+
+router.get('/profile',userAuthentication.userAuthentication,profileController.profile)
+router.get('/myAddress',userAuthentication.userAuthentication,profileController.myAddress)
+router.get('/addAddress',userAuthentication.userAuthentication,profileController.addAddress)
+router.post('/AddressPost',userAuthentication.userAuthentication,profileController.AddressPost)
+router.delete('/deleteAddress/:id',userAuthentication.userAuthentication,profileController.deleteAddress)
 
 
 module.exports = router;

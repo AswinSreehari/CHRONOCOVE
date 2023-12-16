@@ -23,7 +23,7 @@ const cart = async (req, res) => {
 
     try {
       let userCart = await cartCollection.findOne({ userId: userData._id });
-      let subTotal = 10000
+     
       if (!userCart) {
         const newCart = new cartCollection({
           userId: userData._id,
@@ -49,8 +49,7 @@ const cart = async (req, res) => {
           totalPrice: product.productPrice,  
         })
       
-        subTotal = userCart.items.reduce((total, item) => total + (item.totalPrice || 0), 0);
-
+        
       }
       await userCart.save();
 
