@@ -121,7 +121,7 @@
           <!----------------------------------Default_Address--------------------------------------->
  <!-- Address Card -->
 <div class="container text-black">
-  <form action="/submitOrder" method="POST" id="addressForm">
+  <form action="" method="POST" id="addressForm">
     <div class="row">
       <% userAddress.forEach((addr, index) => { %>
         <% addr.Address.forEach(ad => { %>
@@ -138,7 +138,7 @@
               <strong><%= ad.phone %></strong><br>
 
               <!-- Radio button for each address -->
-              <input type="radio" name="selectedAddress" value="<%= ad._id %>" onchange="document.getElementById('addressForm').submit()">
+              <input type="radio" name="selectedAddress" value="<%= ad._id %>" >
             </div>
           </div>
         <% }) %>
@@ -297,14 +297,14 @@
 
               </div>
             <div class="form-group" style="margin-top: 50px;">
-            <a href="/thankyou" class="btn btn-primary btn-lg py-3 btn-block"> place Order</a>
+            <a href="/thankyou" class="btn btn-primary btn-lg py-3 btn-block" id="placeOrderBtn"> place Order</a>
           </div>
           </div>
         </div>
 
       </div>
     </div>
-    <!-- </form> -->
+   
   </div>
   </div>
 
@@ -397,6 +397,13 @@
   <script src="/javascripts/jquery.magnific-popup.min.js"></script>
   <script src="/javascripts/aos.js"></script>
   <script src="/javascripts/main.js"></script>
+
+  <script>
+    document.getElementById('placeOrderBtn').addEventListener('click', () => {
+  document.getElementById('addressForm').submit();
+});
+
+  </script>
 
 </body>
 

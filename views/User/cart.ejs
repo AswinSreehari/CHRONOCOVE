@@ -151,12 +151,14 @@
                           </div>
                         </div>
                       </td>
-                      <td>
+                      <td >
                         <% totalPrice.forEach(price => { %>
+                         
                           <% if (price._id.equals(item.productId)) { %>
                             $<%= price.totalPrice %>
                           <% } %>
                         <% }); %>
+                    
                       </td>
                       <td id="populatedCart-<%= item.productId %>">
                         <a href="/cartGet" class="btn btn-primary btn-sm" onclick="deleteCartProduct('<%= item.productId %>')">X</a>
@@ -375,7 +377,7 @@
         console.log('Data:', data)
         if (data.success) {
           const productRow = document.getElementById(`populatedCart-${productId}`)
-          console.log("Delete button poy!!")
+          
           if (productRow) {
             productRow.remove();
           }
