@@ -92,13 +92,18 @@ const deleteAddress = async (req, res) => {
       res.status(500).json({ message: "Internal Server Error", success: false });
     }
   };
- 
+// <!----------------------------Edit_Address-------------------------------------------->
+
+const editAddress = (req,res) =>{
+    res.render('User/editAddress')
+}
 
 module.exports = {
     profile,
     myAddress,
     addAddress,
     AddressPost,
-    deleteAddress
+    deleteAddress,
+    editAddress
     
 }

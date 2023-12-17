@@ -6,6 +6,7 @@ const userAuthentication = require('../middleware/userAuth')
 const cartController = require('../controller/cartController')
 const addressController = require('../controller/addressController');
 const profileController = require('../controller/profileController')
+const orderController = require('../controller/orderController')
 const cartCollection = require('../models/cart');
 
 
@@ -46,7 +47,8 @@ router.delete('/cart/:productId',userAuthentication.userAuthentication,cartContr
 //<------------------------------Address_Route------------------------------------------>
 
 router.get('/checkout',userAuthentication.userAuthentication,addressController.checkout)
-router.post('/checkoutPost',userAuthentication.userAuthentication ,addressController.addAddressPost)
+router.post('/checkoutPost',userAuthentication.userAuthentication,orderController.checkoutPost)
+router.post('/addAddressPost',userAuthentication.userAuthentication ,addressController.addAddressPost)
 router.get('/thankyou',userAuthentication.userAuthentication,addressController.thankyou)
 
 
@@ -57,6 +59,7 @@ router.get('/myAddress',userAuthentication.userAuthentication,profileController.
 router.get('/addAddress',userAuthentication.userAuthentication,profileController.addAddress)
 router.post('/AddressPost',userAuthentication.userAuthentication,profileController.AddressPost)
 router.delete('/deleteAddress/:id',userAuthentication.userAuthentication,profileController.deleteAddress)
+router.get('/editAddress',userAuthentication.userAuthentication,profileController.editAddress)
 
 
 module.exports = router;

@@ -157,7 +157,7 @@
             <strong><%= ad.phone %></strong><br>
 
             <div class="address-details">
-              <button class="btn btn-primary" onclick="editAddress('<%= ad._id %>')">Edit Address</button>
+              <a href="/editAddress/<%= ad._id %>" class="btn btn-primary">Edit Address</a>
               <button class="btn btn-primary" onclick="console.log('Address ID:', '<%= ad._id %>'); deleteAddress('<%= ad._id %>')">Delete Address</button>
 
             </div>

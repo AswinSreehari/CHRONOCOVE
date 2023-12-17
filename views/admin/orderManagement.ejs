@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DarkPan - Bootstrap 5 Admin Template</title>
+    <title>CHRONOCOVE-Admin</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -190,11 +190,12 @@
                             <th>Action</th>
                         </tr>
                     </thead>
+                    <% orderDetails.forEach(odr => { %>
                     <tbody>
                         <tr>
-                            <td>121216516146146149681961</td>
+                            <td><%=odr._id%></td>
                             <td>Cash On Delivery</td>
-                            <td>$100.00</td>
+                            <td>$<%=odr.orderTotal%></td>
                             <td>
                                 <select class="form-select">
                                     <option value="pending">Pending</option>
@@ -207,8 +208,8 @@
                                 <button class="btn btn-danger">View Details</button>
                             </td>
                         </tr>
-                        <!-- Add more rows as needed -->
                     </tbody>
+                    <% }); %>
                 </table>
             </div>
         </div>

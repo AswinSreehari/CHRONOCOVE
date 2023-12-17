@@ -121,14 +121,14 @@
           <!----------------------------------Default_Address--------------------------------------->
  <!-- Address Card -->
 <div class="container text-black">
-  <form action="" method="POST" id="addressForm">
+  <form action="/checkoutPost" method="POST" id="addressForm">
     <div class="row">
       <% userAddress.forEach((addr, index) => { %>
         <% addr.Address.forEach(ad => { %>
           <div class="col-md-6 mb-4">
             <div class="address-card border p-3">
               <div class="address-title font-weight-bold">Address</div>
-
+  
               <strong><%= ad.firstName %> <%= ad.lastName %><br></strong>
               <strong><%= ad.address %></strong><br>
               <strong><%= ad.landmark %></strong><br>
@@ -136,15 +136,16 @@
               <strong><%= ad.zip %></strong><br>
               <strong class="text-truncate"><%= ad.email %></strong><br>
               <strong><%= ad.phone %></strong><br>
-
+  
               <!-- Radio button for each address -->
-              <input type="radio" name="selectedAddress" value="<%= ad._id %>" >
+              <input type="radio" name="selectedAddress" value="<%= ad._id %>">
             </div>
           </div>
         <% }) %>
       <% }); %>
     </div>
   </form>
+  
 </div>
 <!-- End Address Card -->
 
@@ -258,51 +259,67 @@
               </div>
             </div> -->
         <!-----------------------------------------------COUPON---------------------------------------------------------->
-
-        <div class="row mb-5">
-          <div class="col-md-12">
-            <h2 class="h3 mb-3 text-black">Your Order</h2>
-            <div class="p-3 p-lg-5 border">
-              <table class="table site-block-order-table mb-5">
-                <thead>
-                  <th>Product</th>
-                  <th>Total</th>
-                </thead>
-                <% populatedCart.items.forEach(item => { %>
-                <tbody>
+        <form action="/checkoutPost" method="post">
+          <div class="row mb-5">
+            <div class="col-md-12">
+              <h2 class="h3 mb-3 text-black">Your Order</h2>
+              <div class="p-3 p-lg-5 border">
+                <table class="table site-block-order-table mb-5">
+                  <thead>
+                    <th>Product</th>
+                    <th>Total</th>
+                  </thead>
+                  <% populatedCart.items.forEach(item => { %>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <%= item.productName %><strong class="mx-2">X</strong><%= item.quantity %>
+                        <input type="hidden" name="productName[]" value="<%= item.productId %>">
+                        <input type="hidden" name="quantity[]" value="<%= item.quantity %>">
+                      </td>
+                      <td>
+                        <% totalPrice.forEach(price => { %>
+                          <% if (price._id.equals(item.productId)) { %>
+                            $<%= price.totalPrice %>
+                            <input type="hidden" name="totalPrice[]" value="<%= price.totalPrice %>">
+                          <% } %>
+                        <% }); %>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <% }); %>
+                  
                   <tr>
-                    <td><%= item.productName %><strong class="mx-2">*</strong><%= item.quantity %></td>
-                    <td> <% totalPrice.forEach(price => { %>
-                      <% if (price._id.equals(item.productId)) { %>
-                        $<%= price.totalPrice %>
-                      <% } %>
-                    <% }); %></td>
-                    <% }); %>
-                  </tr>
                     <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-                    <td class="text-black font-weight-bold"><strong>$<%=total%></strong></td>
+                    <td class="text-black font-weight-bold"><strong>$<%= total %></strong>
+                      <input type="hidden" name="total[]" value="<%= total %>">
+                    </td>
                   </tr>
-                </tbody>
-              
-              </table>
+                </table>
+        
+                <input type="hidden" name="paymentMethod" id="paymentMethod" value="">
 
-              <div class="row" style="width:100%;">
-                <div class="col-12">
-                  <div class="list-group" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#" role="tab" aria-controls="home">Cash On Delivery</a>
-                    <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#" role="tab" aria-controls="profile">UPI</a>
-                    <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#" role="tab" aria-controls="profile">Credit Card</a>
-                  </div>
+<!-- Update your payment method list with data attributes for values -->
+<div class="row" style="width:100%;">
+  <div class="col-12">
+    <div class="list-group" id="list-tab" role="tablist">
+      <a class="list-group-item list-group-item-action active" id="list-home-list" data-method="Cash On Delivery" data-toggle="list" href="#"
+        role="tab" aria-controls="home">Cash On Delivery</a>
+      <a class="list-group-item list-group-item-action" id="list-profile-list" data-method="UPI" data-toggle="list" href="#"
+        role="tab" aria-controls="profile">UPI</a>
+      <a class="list-group-item list-group-item-action" id="list-profile-list" data-method="Credit Card" data-toggle="list" href="#"
+        role="tab" aria-controls="profile">Credit Card</a>
+    </div>
+  </div>
+</div>
+                <div class="form-group" style="margin-top: 50px;">
+                  <button type="submit" class="btn btn-primary btn-lg py-3 btn-block" id="placeOrderBtn">Place Order</button>
                 </div>
-
               </div>
-            <div class="form-group" style="margin-top: 50px;">
-            <a href="/thankyou" class="btn btn-primary btn-lg py-3 btn-block" id="placeOrderBtn"> place Order</a>
+            </div>
           </div>
-          </div>
-        </div>
-
-      </div>
+        </form>
+        
     </div>
    
   </div>
@@ -399,9 +416,59 @@
   <script src="/javascripts/main.js"></script>
 
   <script>
+    //place order Button
     document.getElementById('placeOrderBtn').addEventListener('click', () => {
   document.getElementById('addressForm').submit();
 });
+
+//Selcted address
+document.addEventListener('DOMContentLoaded', () => {
+  var radioButtons = document.querySelectorAll('input[name="selectedAddress"]');
+  var form = document.getElementById('addressForm');
+
+  if (radioButtons.length === 0 || !form) {
+    console.error('Error: Radio buttons or form not found.');
+    return;
+  }
+
+  radioButtons.forEach(function(radioButton) {
+    radioButton.addEventListener('change', function() {
+
+      let formData = new FormData(form);
+      formData.set('selectedAddress', this.value);
+
+      
+      console.log('Selected Address:', this.value);
+      
+    });
+  });
+
+  // Optional: Log the form data when the form is submitted
+  form.addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent the actual form submission for testing
+    console.log('Form Submitted. Form Data:', new FormData(form));
+    // Uncomment the line below for actual form submission
+    // form.submit();
+  });
+});
+
+
+//payment method
+document.addEventListener('DOMContentLoaded', function() {
+    var paymentMethodButtons = document.querySelectorAll('.list-group-item');
+
+    paymentMethodButtons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        var selectedMethod = this.getAttribute('data-method');
+        document.getElementById('paymentMethod').value = selectedMethod;
+
+        // Log to console for checking
+        console.log('Selected Payment Method:', selectedMethod);
+        console.log('Hidden Input Value:', document.getElementById('paymentMethod').value);
+      });
+    });
+  });
+
 
   </script>
 
