@@ -106,7 +106,7 @@
   </nav>
   </header>
 
-  <form method="post" action="/AddressPost"class="ml-3 mx-5"id="addAddressForm" >
+  <form method="post" action="/AddressPost"class="ml-3 mx-5"id="addAddressForm" onsubmit="return validateAddressForm()" >
     <div class="form-group">
         <div class="py-2">
 
@@ -183,7 +183,50 @@
     </div>
   </form>
 
-
+  <script>
+    // Function to validate the address form
+    const validateAddressForm = () => {
+      // Get form inputs
+      const country = document.getElementById('country').value;
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const address = document.getElementById('address').value;
+      const landmark = document.getElementById('landmark').value;
+      const state = document.getElementById('state').value;
+      const zip = document.getElementById('zip').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+  
+      // Regular expressions for validation
+      const nameRegex = /^[a-zA-Z]+$/;
+      const addressRegex = /^[a-zA-Z0-9\s,'-]+$/;
+      const stateRegex = /^[a-zA-Z\s]+$/;
+      const zipRegex = /^\d{6}(?:-\d{4})?$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phoneRegex = /^\d{10}$/;
+  
+      // Validate each field
+      if (
+        country === 'Select a country' ||
+        !nameRegex.test(firstName) ||
+        !nameRegex.test(lastName) ||
+        !addressRegex.test(address) ||
+        !addressRegex.test(landmark) ||
+        !stateRegex.test(state) ||
+        !zipRegex.test(zip) ||
+        !emailRegex.test(email) ||
+        !phoneRegex.test(phone)
+      ) {
+        alert('Please Enter Valid Data.');
+        return false;
+      }
+  
+      return true;
+    }
+  </script>
+  
+  
+   </script>
   <script src="/javascripts/jquery-3.3.1.min.js"></script>
   <script src="/javascripts/jquery-ui.js"></script>
   <script src="/javascripts/popper.min.js"></script>
@@ -194,15 +237,8 @@
   <script src="/javascripts/main.js"></script>
 
   
+ 
 
-  <!-- <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const saveAddButton = document.getElementById("saveAdd");
-      saveAddButton.addEventListener("click", function () {
-        swal("Good job!", "You clicked the button!", "success");
-      });
-    });
-  </script> -->
 
 </body>
 

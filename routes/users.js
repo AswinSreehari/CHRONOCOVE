@@ -59,7 +59,7 @@ router.get('/myAddress',userAuthentication.userAuthentication,profileController.
 router.get('/addAddress',userAuthentication.userAuthentication,profileController.addAddress)
 router.post('/AddressPost',userAuthentication.userAuthentication,profileController.AddressPost)
 router.delete('/deleteAddress/:id',userAuthentication.userAuthentication,profileController.deleteAddress)
-router.get('/editAddress',userAuthentication.userAuthentication,profileController.editAddress)
+router.get('/editAddress/:id',userAuthentication.userAuthentication,profileController.editAddress)
 
 
 module.exports = router;

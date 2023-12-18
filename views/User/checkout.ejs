@@ -153,7 +153,7 @@
 
 
           <!----------------------------------Second_Address_Form------------------------------------>
-          <form method="post" action="/checkoutPost">
+          <form method="post" action="/checkoutPost" onsubmit="return validateAddressForm()">
             <div class="form-group">
               <label for="c_ship_different_address" class="text-black" data-toggle="collapse"
                 href="#ship_different_address" role="button" aria-expanded="false"
@@ -403,7 +403,47 @@
     </div>
   </footer>
   </div>
-
+  <script>
+    // Function to validate the address form
+    const validateAddressForm = () => {
+      // Get form inputs
+      const country = document.getElementById('country').value;
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const address = document.getElementById('address').value;
+      const landmark = document.getElementById('landmark').value;
+      const state = document.getElementById('state').value;
+      const zip = document.getElementById('zip').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+  
+      // Regular expressions for validation
+      const nameRegex = /^[a-zA-Z]+$/;
+      const addressRegex = /^[a-zA-Z0-9\s,'-]+$/;
+      const stateRegex = /^[a-zA-Z\s]+$/;
+      const zipRegex = /^\d{6}(?:-\d{4})?$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phoneRegex = /^\d{10}$/;
+  
+      // Validate each field
+      if (
+        country === 'Select a country' ||
+        !nameRegex.test(firstName) ||
+        !nameRegex.test(lastName) ||
+        !addressRegex.test(address) ||
+        !addressRegex.test(landmark) ||
+        !stateRegex.test(state) ||
+        !zipRegex.test(zip) ||
+        !emailRegex.test(email) ||
+        !phoneRegex.test(phone)
+      ) {
+        alert('Please Enter Valid Data.');
+        return false;
+      }
+  
+      return true;
+    }
+  </script>
  
 
   <script src="/javascripts/jquery-3.3.1.min.js"></script>

@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const addressCollection = require('../models/address')
 const collection = require('../models/user')
 const cartCollection = require('../models/cart')
@@ -94,9 +95,20 @@ const deleteAddress = async (req, res) => {
   };
 // <!----------------------------Edit_Address-------------------------------------------->
 
-const editAddress = (req,res) =>{
-    res.render('User/editAddress')
+const editAddress = async(req,res) =>{
+    try {
+    const addressId = req.params.id
+    const address = await addressCollection.findById({_id:req.params.id})
+    console.log('Address id:',addressId)
+    console.log('Address is:',address)
+    res.render('User/editAddress',{address})
+}catch (error) {
+    console.error('Error fetching address:', error);
+    res.status(500).send('Internal Server Error');
+  }
 }
+
+
 
 module.exports = {
     profile,
@@ -104,6 +116,7 @@ module.exports = {
     addAddress,
     AddressPost,
     deleteAddress,
-    editAddress
+    editAddress,
+    
     
 }
