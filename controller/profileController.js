@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ObjectId } = require('mongodb');
 const addressCollection = require('../models/address')
 const collection = require('../models/user')
 const cartCollection = require('../models/cart')
@@ -98,9 +99,9 @@ const deleteAddress = async (req, res) => {
 const editAddress = async(req,res) =>{
     try {
     const addressId = req.params.id
-    const address = await addressCollection.findById({_id:req.params.id})
-    console.log('Address id:',addressId)
-    console.log('Address is:',address)
+    const ourAddress = await addressCollection.findOne({ 'Address._id': new ObjectId(addressId) });
+    const ourAddressIdx = ourAddress.Address.findIndex(e => e._id.equals(addressId));
+    const address = ourAddress.Address[ourAddressIdx];
     res.render('User/editAddress',{address})
 }catch (error) {
     console.error('Error fetching address:', error);
@@ -108,6 +109,30 @@ const editAddress = async(req,res) =>{
   }
 }
 
+const editAddressPost  = async(req,res) =>{
+  const addressId = req.params.id
+  console.log("AddressId a post",addressId)
+ const data = req.body
+const ourAddress = await addressCollection.findOne({ 'Address._id': new ObjectId(addressId) });
+const ourAddressIdx = ourAddress.Address.findIndex(e => e._id.equals(addressId));
+const address = ourAddress.Address[ourAddressIdx];
+address.country = req.body.country;
+address.firstName = req.body.firstName,
+address.lastName = req.body.lastName,
+address.address = req.body.address,
+address.landmark = req.body.landmark,
+address.state = req.body.state,
+address.zip = req.body.zip,
+address.email = req.body.email,
+address.phone = req.body.phone,
+await ourAddress.save();
+res.redirect('/myAddress')
+
+}
+
+const myOrders = (re,res) => {
+  res.render('User/myOrders')
+}
 
 
 module.exports = {
@@ -117,6 +142,8 @@ module.exports = {
     AddressPost,
     deleteAddress,
     editAddress,
+    editAddressPost,
+    myOrders
     
     
 }

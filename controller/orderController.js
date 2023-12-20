@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { ObjectId } = require('mongodb');
 const orderCollection = require('../models/order');
 const collection = require('../models/user')
 const cartCollection = require('../models/cart')
@@ -9,7 +10,6 @@ const checkoutPost = async (req, res) => {
      
     const {
       selectedAddress,paymentMethod,productName,quantity,totalPrice,total} = req.body;
-      console.log(req.body)
       if ( !productName || !quantity || !totalPrice || !total || !paymentMethod) {
         return res.status(400).send('Invalid request. Missing required fields.');
       }
@@ -17,15 +17,14 @@ const checkoutPost = async (req, res) => {
       const userId = userData._id
 
       const ProductTotalPrice = await cartCollection.aggregate([{$match: {userId: userData._id}}, {$unwind: "$items"}, {$lookup: {from: "productdatas", localField: "items.productId", foreignField: "_id", as: "cartProduct"}}, {$project: {userId: 1, items: 1, productPrice: {$arrayElemAt: ["$cartProduct.productPrice", 0]}, calculatedPrice: {$multiply: ["$items.quantity", {$arrayElemAt: ["$cartProduct.productPrice", 0]}]}}}, {$group: {_id: "$items.productId", userId: {$first: "$userId"}, quantity: {$sum: "$items.quantity"}, totalPrice: {$sum: "$calculatedPrice"}, productPrice: {$first: "$productPrice"}}}]);
-      const addressData = await addressCollection.findById(selectedAddress);
-      console.log("Selected address:",addressData)
-      // if (!mongoose.isValidObjectId(selectedAddress)) {
-      //   return res.status(400).send('Invalid selected address.');
-      // }
+      
+      const ourAddress = await addressCollection.findOne({ 'Address._id': new ObjectId(selectedAddress) });
+      const ourAddressIdx = ourAddress.Address.findIndex(e => e._id.equals(selectedAddress));
+      const address = ourAddress.Address[ourAddressIdx];
     
     const order = new orderCollection({
       userId,
-      selectedAddress: addressData._id,
+      selectedAddress: address,
       items: productName.map((name, index) => ({
         productId: name,
         quantity: quantity[index],
@@ -34,8 +33,9 @@ const checkoutPost = async (req, res) => {
       orderTotal: parseFloat(total),
       paymentMethod: paymentMethod
     });
-
+    
     await order.save();
+    console.log("Ordre Data",order)
     await cartCollection.updateOne({ userId }, { $set: { items: [] } });
     res.redirect('/thankyou'); 
   } catch (error) {
@@ -54,3 +54,5 @@ module.exports = {
   checkoutPost,
   orderManagement
 };
+
+ 

@@ -60,6 +60,10 @@ router.get('/addAddress',userAuthentication.userAuthentication,profileController
 router.post('/AddressPost',userAuthentication.userAuthentication,profileController.AddressPost)
 router.delete('/deleteAddress/:id',userAuthentication.userAuthentication,profileController.deleteAddress)
 router.get('/editAddress/:id',userAuthentication.userAuthentication,profileController.editAddress)
+router.post('/editAddressPost/:id',userAuthentication.userAuthentication,profileController.editAddressPost)
 
+//<---------------------------------User_Profile----------------------------------------->
+
+router.get('/myOrders',userAuthentication.userAuthentication,profileController.myOrders)
 
 module.exports = router;

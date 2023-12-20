@@ -106,82 +106,106 @@
   </nav>
   </header>
 
-  <form method="post" action=" "class="ml-3 mx-5"id="addAddressForm" >
+   <!-- User/editAddress.ejs -->
+<div class="col-md-6 my-auto mx-auto">
+   <form method="post" action="/editAddressPost/<%= address._id %>" class="ml-3 mx-5 " id="editAddressForm" onsubmit="return validateAddressForm()">
     <div class="form-group">
-        <div class="py-2">
+        <label for="country" class="text-black">Country <span class="text-danger">*</span></label>
+        <select id="country" name="country" class="form-control">
+            <option value="Select a country">Select a country</option>
+            <option value="India" <%= (address && address.country === 'India') ? 'selected' : '' %>>India</option>
+            <option value="India" <%= (address && address.country === 'USA') ? 'selected' : '' %>>USA</option>
+            <option value="India" <%= (address && address.country === 'Germany') ? 'selected' : '' %>>Germany</option>
+            <option value="India" <%= (address && address.country === 'Ghana') ? 'selected' : '' %>>Ghana</option>
+            <option value="India" <%= (address && address.country === 'Albania') ? 'selected' : '' %>>Albania</option>
+            <option value="India" <%= (address && address.country === 'Bahrain') ? 'selected' : '' %>>Bahrain</option>
+            <option value="India" <%= (address && address.country === 'Colombia') ? 'selected' : '' %>>Colombia</option>
+            <option value="India" <%= (address && address.country === 'Paris') ? 'selected' : '' %>>Paris</option>
+            <!-- Add other options with similar structure -->
+        </select>
 
-          <div class="form-group">
-            <label for="c_diff_country" class="text-black">Country <span class="text-danger">*</span></label>
-            <select id="country" name="country" class="form-control">
-              <option value="Select a country">Select a country</option>
-              <option value="India">India</option>
-              <option value="USA">USA</option>
-              <option value="Germany">Germany</option>
-              <option value="Ghana">Ghana</option>
-              <option value="Albania">Albania</option>
-              <option value="Bahrain">Bahrain</option>
-              <option value="Colombia">Colombia</option>
-              <option value="Paris">Paris</option>
-            </select>
+        <label for="firstName" class="text-black">First Name <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="firstName" name="firstName" value="<%= (address && address.firstName) ? address.firstName : '' %>">
+
+        <label for="lastName" class="text-black">Last Name <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="lastName" name="lastName" value="<%= (address && address.lastName) ? address.lastName : '' %>">
+
+        <label for="address" class="text-black">Address <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="address" name="address" value="<%= (address && address.address) ? address.address : '' %>">
+
+        <label for="landmark" class="text-black">Landmark <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="landmark" name="landmark" value="<%= (address && address.landmark) ? address.landmark : '' %>">
+
+        <div class="form-group row">
+          <div class="col-md-6">
+              <label for="state" class="text-black">State <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="state" name="state" value="<%= (address && address.state) ? address.state : '' %>">
           </div>
-
-
-          <div class="form-group row">
-            <div class="col-md-6">
-              <label for="c_diff_fname" class="text-black">First Name <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="firstName" name="firstName">
-            </div>
-            <div class="col-md-6">
-              <label for="c_diff_lname" class="text-black">Last Name <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="lastName" name="lastName">
-            </div>
+          <div class="col-md-6">
+              <label for="zip" class="text-black">Postal / Zip <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="zip" name="zip" value="<%= (address && address.zip) ? address.zip : '' %>">
           </div>
-
-          <div class="form-group row">
-            <div class="col-md-12">
-              <label for="c_diff_address" class="text-black">Address <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="address" name="address" placeholder=" Address">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <input type="text" class="form-control" name="landmark" id="landmark" placeholder="Land mark">
-          </div>
-
-          <div class="form-group row">
-            <div class="col-md-6">
-              <label for="c_diff_state_country" class="text-black">State <span
-                  class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="state" name="state">
-            </div>
-            <div class="col-md-6">
-              <label for="c_diff_postal_zip" class="text-black">Posta / Zip <span
-                  class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="zip" name="zip">
-            </div>
-          </div>
-
-          <div class="form-group row mb-5">
-            <div class="col-md-6">
-              <label for="c_diff_email_address" class="text-black">Email Address <span
-                  class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="email" name="email">
-            </div>
-            <div class="col-md-6">
-              <label for="c_diff_phone" class="text-black">Phone <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number">
-            </div>
-          </div>
-
-        </div>
-
-        <div class="form-group">
-          <button class="btn btn-primary btn-lg py-3 btn-block" type="submit" name="saveAdd" id="saveAdd"
-            class="form-submit" >Save</button>
-        </div>
       </div>
-    </div>
-  </form>
+
+      <div class="form-group row mb-5">
+          <div class="col-md-6">
+              <label for="email" class="text-black">Email Address <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="email" name="email" value="<%= (address && address.email) ? address.email : '' %>">
+          </div>
+          <div class="col-md-6">
+              <label for="phone" class="text-black">Phone <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="phone" name="phone" value="<%= (address && address.phone) ? address.phone : '' %>">
+          </div>
+      </div>
+  </div>
+
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary">Save</button>
+</div>
+
+</form>
+</div>
+
+<script>
+  // Function to validate the address form
+  const validateAddressForm = () => {
+    const country = document.getElementById('country').value;
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const address = document.getElementById('address').value;
+    const landmark = document.getElementById('landmark').value;
+    const state = document.getElementById('state').value;
+    const zip = document.getElementById('zip').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+
+    // Regular expressions for validation
+    const nameRegex = /^[a-zA-Z]+$/;
+    const addressRegex = /^[a-zA-Z0-9\s,'-]+$/;
+    const stateRegex = /^[a-zA-Z\s]+$/;
+    const zipRegex = /^\d{6}(?:-\d{4})?$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\d{10}$/;
+
+    // Validate each field
+    if (
+      country === 'Select a country' ||
+      !nameRegex.test(firstName) ||
+      !nameRegex.test(lastName) ||
+      !addressRegex.test(address) ||
+      !addressRegex.test(landmark) ||
+      !stateRegex.test(state) ||
+      !zipRegex.test(zip) ||
+      !emailRegex.test(email) ||
+      !phoneRegex.test(phone)
+    ) {
+      alert('Please Enter Valid Data.');
+      return false;
+    }
+
+    return true;
+  }
+</script>
 
 
   <script src="/javascripts/jquery-3.3.1.min.js"></script>
@@ -192,10 +216,6 @@
   <script src="/javascripts/jquery.magnific-popup.min.js"></script>
   <script src="/javascripts/aos.js"></script>
   <script src="/javascripts/main.js"></script>
-
-  
-
-  
 
 </body>
 

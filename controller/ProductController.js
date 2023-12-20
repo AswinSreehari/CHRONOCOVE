@@ -75,30 +75,20 @@ const editProduct = async (req, res) => {
 
 
 const editProductPost = async (req, res) => {
-    console.log("hai");
     let toDelArr = []
     if(req.body.deleteImage){
         toDelArr.push(...JSON.parse(req.body.deleteImage))
     }
-    console.log(toDelArr);
     const productId = req.params.id;
-    console.log("products id is :", productId);
-    console.log("hello:",req.body);
     const productName= req.body.productName
-    console.log("product name is :",productName);
 
     try {
         
         const product = await productCollection.findById(productId);
-
-       
-
         if (!product) {
             return res.redirect('/admin/error');
         }
-
         const productCat = categoryCollection.findOne({categoryName : req.body.productCategory})
-
         const updatedProduct = {
             productName: req.body.productName,
             productDescription: req.body.productDescription,

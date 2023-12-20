@@ -124,6 +124,8 @@ const addAddressPost = async(req,res)=>{
         res.render('User/checkout',{populatedCart , totalPrice, total , userAddress});
 
         
+
+        
     } catch (error) {
         console.error('Error adding address:', error);
         res.status(500).send('Internal Server Error');

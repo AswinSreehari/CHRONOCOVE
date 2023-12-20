@@ -137,37 +137,9 @@
   </header>
 
 
-<a href="/addAddress" class="btn btn-primary">Add Address</a> 
+
   
-<!-- Address Card -->
-<div class="container">
-  <div class="row">
-    <% address.forEach(addr => { %>
-      <% addr.Address.forEach(ad => { %>
-        <div id="addressCard-<%= ad._id %>" class="col-md-4 ">
-          <div class="address-card border border-dark p-4 rounded">
-            <div class="address-title h4 font-weight-bold">Address</div>
 
-            <strong><%=ad.firstName %> <%=ad.lastName%><br></strong>
-            <strong><%= ad.address %></strong><br>
-            <strong><%= ad.landmark %></strong><br>
-            <strong><%= ad.state %></strong><br>
-            <strong><%= ad.zip %></strong><br>
-            <strong><%= ad.email %></strong><br>
-            <strong><%= ad.phone %></strong><br>
-
-            <div class="address-details">
-              <a href="/editAddress/<%= ad._id %>" class="btn btn-primary">Edit</a>
-              <button class="btn btn-primary" onclick="console.log('Address ID:', '<%= ad._id %>'); deleteAddress('<%= ad._id %>')">Delete</button>
-
-            </div>
-          </div>
-        </div>
-      <% }) %>
-    <% }); %>
-  </div>
-</div>
-<!-- End Address Card -->
 
 
   <script src="/javascripts/jquery-3.3.1.min.js"></script>
@@ -178,55 +150,6 @@
   <script src="/javascripts/jquery.magnific-popup.min.js"></script>
   <script src="/javascripts/aos.js"></script>
   <script src="/javascripts/main.js"></script>
-  
-
-  <script>
-    const deleteAddress = async (addressId) => {
-
-      console.log('Before Fetch!!');
-      
-      try {
-        const response = await fetch(`/deleteAddress/${addressId}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-  
-        console.log('After fetch call!!');
-  
-        if (response.status === 204) {
-          // 204 No Content indicates successful deletion
-          const addressCard = document.getElementById(`addressCard-${addressId}`);
-          console.log('Delete button clicked!!');
-
-  
-          if (addressCard) {
-            // Remove the address card from the UI immediately
-            addressCard.remove();
-          } else {
-            console.error('Failed to find the address card in the UI.');
-          }
-        } else {
-          // Handle other status codes
-          try {
-            const data = await response.json();
-            console.error('Failed to delete address. Server responded with:', response.status, data);
-            alert('Failed to delete address.');
-          } catch (jsonError) {
-            // Handle JSON parsing error
-            console.error('Error parsing JSON:', jsonError);
-            alert('An error occurred. Please try again!!');
-          }
-        }
-      } catch (error) {
-        console.error('Error deleting address:', error);
-        alert('An error occurred. Please try again!!');
-      }
-    }
-  </script>
-  
-  
 
 </body>
 
