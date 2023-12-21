@@ -4,7 +4,7 @@ const userController = require('../controller/UserController')
 const productController = require('../controller/ProductController')
 const userAuthentication = require('../middleware/userAuth')
 const cartController = require('../controller/cartController')
-const addressController = require('../controller/addressController');
+const checkoutController = require('../controller/checkoutController');
 const profileController = require('../controller/profileController')
 const orderController = require('../controller/orderController')
 const cartCollection = require('../models/cart');
@@ -46,10 +46,10 @@ router.delete('/cart/:productId',userAuthentication.userAuthentication,cartContr
 
 //<------------------------------Address_Route------------------------------------------>
 
-router.get('/checkout',userAuthentication.userAuthentication,addressController.checkout)
+router.get('/checkout',userAuthentication.userAuthentication,checkoutController.checkout)
 router.post('/checkoutPost',userAuthentication.userAuthentication,orderController.checkoutPost)
-router.post('/addAddressPost',userAuthentication.userAuthentication ,addressController.addAddressPost)
-router.get('/thankyou',userAuthentication.userAuthentication,addressController.thankyou)
+router.post('/addAddressPost',userAuthentication.userAuthentication ,checkoutController.addAddressPost)
+router.get('/thankyou',userAuthentication.userAuthentication,checkoutController.thankyou)
 
 
 //<---------------------------------User_Profile----------------------------------------->

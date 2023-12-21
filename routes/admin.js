@@ -53,6 +53,7 @@ router.delete('deleteProductImage/:id/:mainProductImage',productController.delet
 //orderManagement
 
 router.get('/ordermanagement',adminauthenticaton.adminauthenticaton,orderController.orderManagement)
+router.get('/AdminViewOrderDetails',adminauthenticaton.adminauthenticaton,orderController.AdminViewOrderDetails)
 
 
 module.exports = router;

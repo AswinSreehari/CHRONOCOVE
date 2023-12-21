@@ -113,6 +113,17 @@
         <!-- Sign In End -->
     </div>
 
+    <script>
+        document.getElementById('signinPost').addEventListener('submit',() => {
+            event.preventDefault();
+            const userInput = document.getElementsByName('username')[0]
+            const passwordInput = document.getElementsByName('password')[0]
+            userInput.value = userInput.value.trim()
+            passwordInput.value = passwordInput.value.trim()
+             document.getElementById('signinPost').submit();
+        })
+    </script>
+
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -359,7 +359,6 @@
   //Close Button 
 
   const deleteCartProduct = (productId) => {
-    console.log('Before Fetch!!')
     fetch(`/cart/${productId}`, {
       method: "DELETE",
       headers: {
@@ -367,7 +366,6 @@
       },
     })
       .then(res => {
-        console.log('After fetch call!!')
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }

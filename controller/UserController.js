@@ -287,18 +287,6 @@ const contact = ((req,res)=>{
     res.render('User/contact')
 })
 
-
-
-//<------------------------------------User_profile------------------------------------->
-
-
-
-
-
-
-
-
-
 module.exports={
     home,
     signup,

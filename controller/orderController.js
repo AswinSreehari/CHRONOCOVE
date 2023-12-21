@@ -43,6 +43,7 @@ const checkoutPost = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
+//<!--------------------------Admin_Order_Management------------------------------------------->
 
 const orderManagement = async(req,res)=>{
   const orderDetails = await orderCollection.find()
@@ -50,9 +51,14 @@ const orderManagement = async(req,res)=>{
   res.render('admin/orderManagement',{orderDetails})
 }
 
+const AdminViewOrderDetails = (req,res) => {
+  res.render('admin/viewOrderDetails')
+}
+
 module.exports = {
   checkoutPost,
-  orderManagement
+  orderManagement,
+  AdminViewOrderDetails
 };
 
  

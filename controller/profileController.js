@@ -2,7 +2,9 @@ const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
 const addressCollection = require('../models/address')
 const collection = require('../models/user')
-const cartCollection = require('../models/cart')
+const orderCollection = require('../models/order')
+const cartCollection = require('../models/cart');
+const productCollection = require('../models/product');
  
 
 
@@ -130,13 +132,18 @@ res.redirect('/myAddress')
 
 }
 
-const myOrders = (re,res) => {
-  res.render('User/myOrders')
+//<!--------------------------My_Orders-------------------------------->
+
+const myOrders = async(req,res) => {
+  const userData = await collection.findOne({emailId:req.session.email})
+  const userId = userData._id  
+  const populatedOrders = await orderCollection.aggregate([{ $match: { userId: userId } }, { $unwind: "$items" }, { $lookup: { from: "productdatas", localField: "items.productId", foreignField: "_id", as: "items.productData" } }]);
+  console.log("populatedOrders:", JSON.stringify(populatedOrders[0].items, null, 2));
+  res.render('User/myOrders',{orderData : populatedOrders})
 }
 
-
-module.exports = {
-    profile,
+module.exports = { 
+    profile,  
     myAddress,
     addAddress,
     AddressPost,
