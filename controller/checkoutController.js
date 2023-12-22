@@ -48,6 +48,7 @@ const addAddressPost = async(req,res)=>{
     
     const userData = await collection.findOne({ emailId: req.session.email });
       let userCart = await cartCollection.findOne({ userId: userData._id });
+
       
     try {
         let userAddress = await addressCollection.findOne({ userId: userData._id })
@@ -84,6 +85,7 @@ const addAddressPost = async(req,res)=>{
         })
         userAddress.save()
     }
+    console.log("Its the addresssh:",req.body)
 
         const userAddresss = await addressCollection.find({userId : userData._id}) 
        console.log("UserAddress",userAddresss)
