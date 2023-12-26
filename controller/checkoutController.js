@@ -121,7 +121,7 @@ const addAddressPost = async(req,res)=>{
       };
        
        
-      console.log("This is the address in the cart:",address)
+      console.log("This is the address in the cart:",userAddress)
       const populatedCart = await populateProductDetails(userCart);
         res.render('User/checkout',{populatedCart , totalPrice, total , userAddress});
 

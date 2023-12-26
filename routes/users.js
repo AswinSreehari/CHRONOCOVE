@@ -29,6 +29,7 @@ router.post('/verifyOTP',userController.verifyOTP)
 router.post("/resendOTP",userController.resendOTP)
 router.get("/productDetails/:id",userController.productDetails)
 router.get('/contact',userController.contact)
+router.get('/forgotPassword',userController.forgotPassword)
 
 
 //<-------------------------Product_Route-------------------------->
@@ -44,7 +45,7 @@ router.put('/cart/:productId',userAuthentication.userAuthentication,cartControll
 router.delete('/cart/:productId',userAuthentication.userAuthentication,cartController.deleteCartproduct)
 
 
-//<------------------------------Address_Route------------------------------------------>
+//<------------------------------Checkout_Address_Route------------------------------------------>
 
 router.get('/checkout',userAuthentication.userAuthentication,checkoutController.checkout)
 router.post('/checkoutPost',userAuthentication.userAuthentication,orderController.checkoutPost)
@@ -61,9 +62,10 @@ router.post('/AddressPost',userAuthentication.userAuthentication,profileControll
 router.delete('/deleteAddress/:id',userAuthentication.userAuthentication,profileController.deleteAddress)
 router.get('/editAddress/:id',userAuthentication.userAuthentication,profileController.editAddress)
 router.post('/editAddressPost/:id',userAuthentication.userAuthentication,profileController.editAddressPost)
+router.get('/myOrders',userAuthentication.userAuthentication,profileController.myOrders)
+router.get('/orderDetails',userAuthentication.userAuthentication,profileController.orderDetails)
 
 //<---------------------------------User_Profile----------------------------------------->
 
-router.get('/myOrders',userAuthentication.userAuthentication,profileController.myOrders)
 
 module.exports = router;

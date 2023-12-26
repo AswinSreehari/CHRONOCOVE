@@ -132,7 +132,7 @@ res.redirect('/myAddress')
 
 }
 
-//<!--------------------------My_Orders-------------------------------->
+//<!--------------------------My_Orders---------------------------------------------------->
 
 const myOrders = async(req,res) => {
   const userData = await collection.findOne({emailId:req.session.email})
@@ -141,6 +141,17 @@ const myOrders = async(req,res) => {
   console.log("populatedOrders:", JSON.stringify(populatedOrders[0].items, null, 2));
   res.render('User/myOrders',{orderData : populatedOrders})
 }
+//<!--------------------------Orders_Details----------------------------------------------->
+
+const orderDetails = async(req,res) => {
+  const userData = await collection.findOne({emailId:req.session.email})
+  const userId = userData._id  
+  const populatedOrders = await orderCollection.aggregate([{ $match: { userId: userId } }, { $unwind: "$items" }, { $lookup: { from: "productdatas", localField: "items.productId", foreignField: "_id", as: "items.productData" } }]);
+  console.log("OrderDetails data:",populatedOrders)
+  console.log("OrderDetailsss:", JSON.stringify(populatedOrders[0].items, null, 2));
+  res.render('User/orderDetails',{orderData : populatedOrders})
+}
+
 
 module.exports = { 
     profile,  
@@ -150,7 +161,8 @@ module.exports = {
     deleteAddress,
     editAddress,
     editAddressPost,
-    myOrders
+    myOrders,
+    orderDetails
     
     
 }

@@ -100,8 +100,10 @@ const signupPost = async (req, res) => {
                 otp: otp,
                 otpExpiry: otpExpiry,
             };
-
-            await collection.create(data);
+//<!-------------Compare the otp here!!--------------------------------->
+          
+                await collection.create(data);
+            
 
             const check = await collection.findOne({ emailId: req.body.email });
 
@@ -265,7 +267,10 @@ const productDetails = (async(req,res)=>{
   }
 })
 
-
+//Forgot Password
+const forgotPassword = (req,res) => {
+    res.render('User/forgotPassword')
+}
 
 
 
@@ -301,4 +306,5 @@ module.exports={
     productDetails,
     generateOTPWithExpiry,
     contact,
+    forgotPassword
 }
