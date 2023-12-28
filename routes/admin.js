@@ -54,6 +54,10 @@ router.delete('deleteProductImage/:id/:mainProductImage',productController.delet
 
 router.get('/ordermanagement',adminauthenticaton.adminauthenticaton,orderController.orderManagement)
 router.get('/AdminViewOrderDetails',adminauthenticaton.adminauthenticaton,orderController.AdminViewOrderDetails)
+router.post('/updateOrderStatus/:orderId', adminauthenticaton.adminauthenticaton, orderController.updateOrderStatus);
+
+module.exports = router;
+
 
 
 module.exports = router;

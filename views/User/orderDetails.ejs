@@ -16,13 +16,8 @@
     <link rel="stylesheet" href="/stylesheets/jquery-ui.css">
     <link rel="stylesheet" href="/stylesheets/owl.carousel.min.css">
     <link rel="stylesheet" href="/stylesheets/owl.theme.default.min.css">
-
-
- 
     <link rel="stylesheet" href="/stylesheets/aos.css">
- 
      <link rel="stylesheet" href="/stylesheets/style.css">
- 
     <link rel="stylesheet" href="/stylesheets/aos.css">
 
 
@@ -92,80 +87,68 @@
     <div class="bg-light py-3">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 mb-0"><a href="index.ejs">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">About</strong></div>
+          <div class="col-md-12 mb-0"><a href="index.ejs">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Order Details</strong></div>
         </div>
       </div>
     </div>  
 
-    <div class="site-section border-bottom" data-aos="fade">
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-md-6">
-            <div class="block-16">
-              <figure>
-                <img src="/images/1700599659499-Rm 67-02.jpg" alt="Image placeholder" class="img-fluid rounded">
-                
-              </figure>
-            </div>
-          </div>
-          <div class="col-md-1"></div>
-          <div class="col-md-5">
-            
-            
-            <div class="site-section-heading pt-3 mb-4">
-              <h2 class="text-black">Order Summary</h2>
-            </div>
-             <div class="order-summary">
-             
-              <!-- Product List -->
-              <ul class="product-list">
-                  <!-- Example product item, repeat this for each product in the order -->
-                  
-                      <div class="product-details">
-                          <h5>Product Name :  </h5>
-                          <h5>Quantity: <%= orderData.items ? orderData.items.quantity : 0 %></h5>
-
-                          <h5>Price: $20.00</h5>
-                      </div>
-                 </ul>
-  
-              <!-- Order Total -->
-              <div class="order-total">
-                  <h5><strong>Total:</strong> $40.00</h5>
-              </div>
-          </div>
-  
-          <!-- Customer Information -->
-          <div class="customer-info">
-              <h2>Customer Information</h2>
-  
-              <!-- Display customer information here -->
-              <h5><strong>Name:</strong> John Doe</h5>
-              <h5><strong>Email:</strong> john@example.com</h5>
-              <h5><strong>Phone:</strong> +1 (555) 123-4567</h5>
-  
-              <!-- Add more customer information as needed -->
-          </div>
-  
-          <!-- Shipping Address -->
-          <div class="shipping-address">
-              <h2>Shipping Address</h2>
-  
-              <!-- Display shipping address here -->
-              <h5><strong>Street:</strong> 123 Main St</h5>
-              <h5><strong>City:</strong> Cityville</h5>
-              <h5><strong>State:</strong> CA</h5>
-              <h5><strong>ZIP Code:</strong> 12345</h5>
-  
-              <!-- Add more shipping address information as needed -->
-          </div>
-      </div>
-
-
-          </div>
+    
+    
+    <div class="container mt-5" style=" box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; " >
+      <div class="row">
+        <div class="col-12 text-black">
+          <h1 class="text-center">Order Details</h1>
         </div>
       </div>
+      
+        
+        
+       <div class="row mt-4 text-black"  style="display: flex; justify-content: space-around;">
+        <div class="col-6"    >
+          <h4>Order ID:  <%= orderData._id %></h4>
+          <p style="color: red;">Status: DONE</p>
+          <p>Total Price: <%= orderData.orderTotal %></p>
+          <p>Coupon Discount Price: </p>
+          <h6>Payment Method : <%= orderData.paymentMethod %></h6>
+          <p>Order Date:  <%= orderData.orderTime %></p>  
+        </div>
+        <div class="col-6"   >
+          <h4>Shipping Address:<%= orderData.selectedAddress %></h4>
+          <p>  </p>
+        </div>
+      </div>      
+      <div class="row mt-4">
+        <div class="col-12">
+            <div class="scrollable-div" style="max-height: 300px; overflow-y: auto; box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">
+                <ul class="list-group">
+                    <% orderData.items.forEach(item => { %>
+                        <li class="list-group-item">
+                            <div class="row text-black">
+                                <div class="col-3">
+                                  <img style="height: 100px; width: 100px;" src="/uploads/<%= orderProducts[item.productId].mainProductImage %>" alt="<%= orderProducts[item.productId].productName %>" class="img-fluid">
+
+                                </div>
+                                <div class="col-6">
+                                    <h5><%= orderProducts[item.productId].productName %></h5>
+                                    <p>Price: $<%= orderProducts[item.productId].productPrice %></p>
+                                </div>
+                                <div class="col-3">
+                                    <p>Quantity: <%= item.quantity %></p>
+                                </div>
+                            </div>
+                        </li>
+                    <% }); %>
+                </ul>
+            </div>
+        </div>
     </div>
+
+      
+    
+ 
+    </div>
+    
+ 
 
      
   
@@ -208,7 +191,7 @@
           <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
             <h3 class="footer-heading mb-4">Promo</h3>
             <a href="#" class="block-6">
-              <img src="/images/hero_1.jpg" alt="Image placeholder" class="img-fluid rounded mb-4">
+              <img src="" alt="Image placeholder" class="img-fluid rounded mb-4">
               <h3 class="font-weight-light  mb-0">Finding Your Perfect Shoes</h3>
               <h5>Promo from  nuary 15 &mdash; 25, 2019</h5>
             </a>

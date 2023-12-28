@@ -197,11 +197,11 @@
                             <td>Cash On Delivery</td>
                             <td>$<%=odr.orderTotal%></td>
                             <td>
-                                <select class="form-select">
-                                    <option value="pending">Pending</option>
-                                    <option value="processing">Processing</option>
-                                    <option value="completed">Completed</option>
-                                    <option value="cancelled">Cancelled</option>
+                                <select class="form-select" id="orderStatus_<%= odr._id %>" onchange="updateOrderStatus('<%= odr._id %>')">
+                                    <option value="pending" <% if (odr.status === 'pending') { %>selected<% } %>>Pending</option>
+                                    <option value="processing" <% if (odr.status === 'processing') { %>selected<% } %>>Processing</option>
+                                    <option value="Delivered" <% if (odr.status === 'Delivered') { %>selected<% } %>>Delivered</option>
+                                    <option value="cancelled" <% if (odr.status === 'cancelled') { %>selected<% } %>>Cancelled</option>
                                 </select>
                             </td>
                             <td>
@@ -257,5 +257,34 @@
     <!-- Template Javascript -->
     <script src="/javascripts/adminmain.js"></script>
 </body>
+
+<script>
+    async function updateOrderStatus(orderId) {
+        event.preventDefault();
+      const statusSelect = document.getElementById(`orderStatus_${orderId}`);
+      const newStatus = statusSelect.value;
+  
+      try {
+        const response = await fetch(`/api/updateOrderStatus/${orderId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ status: newStatus }),
+        });
+  
+        const result = await response.json();
+  
+        if (result.success) {
+          // Optional: Update the UI or show a success message
+          console.log('Order status updated successfully');
+        } else {
+          console.error('Failed to update order status');
+        }
+      } catch (error) {
+        console.error('Error updating order status:', error);
+      }
+    }
+  </script>
 
 </html>

@@ -6,23 +6,42 @@ const logger = require('morgan');
 const session = require('express-session')
 const flash = require('express-flash')
 const nocache = require('nocache');
+require('dotenv').config();
+const mongoose = require('mongoose');
+var MongoDBStore = require('connect-mongodb-session')(session);
 //Routes
 
 const indexRouter = require('./routes/admin');
 const usersRouter = require('./routes/users');
- 
+
+
+mongoose.connect(process.env.MONGO_URI, {
+  user: process.env.MONGO_USER,
+  pass: process.env.MONGO_PASS,
+},)
+  .then(() => {
+    console.log('MongoDB Connected!!')
+  }).catch((err) => {
+    console.log("MongoConnectionError:", err)
+    console.log("Failed to Connect!!")
+  })
 
 const app = express()
-
+var store = new MongoDBStore({
+  uri: `mongodb://${encodeURIComponent(process.env.MONGO_USER)}:${encodeURIComponent(process.env.MONGO_PASS)}@localhost:27017/CHRONOCOVE`,
+  collection: 'sessions',
+  expires: 1000 * 60 * 60 * 24 * 30, // 30 days in milliseconds
+}, err => console.error(err))
 
 //session
 require('dotenv').config();
 
-const oneday=1000*60*60*24
+const oneday = 1000 * 60 * 60 * 24
 app.use(session({
-  secret:process.env.SESSION_SECRET ,  
+  secret: process.env.SESSION_SECRET,
   resave: false,
-  cookie:{maxAge:oneday},
+  store: store,
+  cookie: { maxAge: oneday },
   saveUninitialized: true
 }));
 
@@ -46,12 +65,12 @@ app.use('/admin', indexRouter);
 app.use('/', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -62,5 +81,12 @@ app.use(function(err, req, res, next) {
 });
 
 app.listen(7000, () => {
-  console.log("Server started listening on http://localhost:7000");
+
+  console.log("  ██████╗██╗  ██╗██████╗  ██████╗ ███╗   ██╗ ██████╗  ██████╗ ██████╗ ██╗   ██╗███████╗");
+  console.log(" ██╔════╝██║  ██║██╔══██╗██╔═══██╗████╗  ██║██╔═══██╗██╔════╝██╔═══██╗██║   ██║██╔════╝");
+  console.log(" ██║     ███████║██████╔╝██║   ██║██╔██╗ ██║██║   ██║██║     ██║   ██║██║   ██║█████╗  ");
+  console.log(" ██║     ██╔══██║██╔══██╗██║   ██║██║╚██╗██║██║   ██║██║     ██║   ██║╚██╗ ██╔╝██╔══╝  ");
+  console.log(" ╚██████╗██║  ██║██║  ██║╚██████╔╝██║ ╚████║╚██████╔╝╚██████╗╚██████╔╝ ╚████╔╝ ███████╗");
+  console.log("  ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝  ╚═════╝ ╚═════╝   ╚═══╝  ╚══════╝");
+  console.log(" :: Server started listening on http://localhost:7000");
 });

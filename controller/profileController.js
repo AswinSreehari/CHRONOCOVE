@@ -138,19 +138,51 @@ const myOrders = async(req,res) => {
   const userData = await collection.findOne({emailId:req.session.email})
   const userId = userData._id  
   const populatedOrders = await orderCollection.aggregate([{ $match: { userId: userId } }, { $unwind: "$items" }, { $lookup: { from: "productdatas", localField: "items.productId", foreignField: "_id", as: "items.productData" } }]);
-  console.log("populatedOrders:", JSON.stringify(populatedOrders[0].items, null, 2));
+  if (populatedOrders.length < 1) {
+    //console.log("populatedOrders:", JSON.stringify(populatedOrders[0].items, null, 2));
+  }
   res.render('User/myOrders',{orderData : populatedOrders})
 }
 //<!--------------------------Orders_Details----------------------------------------------->
 
-const orderDetails = async(req,res) => {
-  const userData = await collection.findOne({emailId:req.session.email})
-  const userId = userData._id  
-  const populatedOrders = await orderCollection.aggregate([{ $match: { userId: userId } }, { $unwind: "$items" }, { $lookup: { from: "productdatas", localField: "items.productId", foreignField: "_id", as: "items.productData" } }]);
-  console.log("OrderDetails data:",populatedOrders)
-  console.log("OrderDetailsss:", JSON.stringify(populatedOrders[0].items, null, 2));
-  res.render('User/orderDetails',{orderData : populatedOrders})
-}
+const orderDetails = async (req, res) => {
+  const orderId = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(orderId)) {
+    return res.status(400).send("You tried to mess with me. But I am not messable");
+  }
+
+  const orderData = await orderCollection.findById(orderId);
+  if (!orderData) {
+    return res.status(404).send("Order not found.");
+  }
+
+  console.log(req.params);
+  console.log("This is orderId : ", orderId);
+
+  const userData = await collection.findOne({ emailId: req.session.email });
+  const userId = userData._id;
+
+  const orderProducts = await getProductDetails(orderData.items);
+  res.render('User/orderDetails', { orderData, orderProducts });
+};
+
+const getProductDetails = async (items) => {
+  const productIds = items.map(item => item.productId);
+
+  try {
+    const products = await productCollection.find({ _id: { $in: productIds } });
+    const productDetails = {};
+
+    products.forEach(product => {
+      productDetails[product._id] = product;
+    });
+
+    return productDetails;
+  } catch (error) {
+    console.error('Error fetching product details:', error);
+    return null;
+  }
+};
 
 
 module.exports = { 

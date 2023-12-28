@@ -4,6 +4,7 @@ const orderCollection = require('../models/order');
 const collection = require('../models/user')
 const cartCollection = require('../models/cart')
 const addressCollection = require('../models/address')
+const productCollection = require('../models/product')
 
 const checkoutPost = async (req, res) => {
   try {
@@ -37,6 +38,19 @@ const checkoutPost = async (req, res) => {
     });
     
     await order.save();
+    
+    //updating Quantity
+    for (const productId of productName) {
+      const product = await productCollection.findById(productId);
+      if (product.productQuantity >= quantity[productName.indexOf(productId)]) {
+        product.productQuantity -= quantity[productName.indexOf(productId)];
+        await product.save();
+      } else {
+        return res.status(400).send(`Not enough quantity available for product with ID ${productId}`);
+      }
+    }
+    
+    
     console.log("Order Data",order)
     await cartCollection.updateOne({ userId }, { $set: { items: [] } });
     res.redirect('/thankyou'); 
@@ -53,6 +67,20 @@ const orderManagement = async(req,res)=>{
   res.render('admin/orderManagement',{orderDetails})
 }
 
+const updateOrderStatus = async(req,res) => {
+const orderId = req.params.orderId
+const {status} = req.body
+try{
+  await orderCollection.findByIdAndUpdate(orderId, { status });
+
+  res.json({ success: true, message: 'Order status updated successfully' });
+} catch (error) {
+  console.error('Error updating order status:', error);
+  res.status(500).json({ success: false, message: 'Failed to update order status' });
+}
+};
+
+
 const AdminViewOrderDetails = (req,res) => {
   res.render('admin/viewOrderDetails')
 }
@@ -60,7 +88,8 @@ const AdminViewOrderDetails = (req,res) => {
 module.exports = {
   checkoutPost,
   orderManagement,
-  AdminViewOrderDetails
+  AdminViewOrderDetails,
+  updateOrderStatus
 };
 
  

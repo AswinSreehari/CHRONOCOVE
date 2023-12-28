@@ -63,7 +63,7 @@ router.delete('/deleteAddress/:id',userAuthentication.userAuthentication,profile
 router.get('/editAddress/:id',userAuthentication.userAuthentication,profileController.editAddress)
 router.post('/editAddressPost/:id',userAuthentication.userAuthentication,profileController.editAddressPost)
 router.get('/myOrders',userAuthentication.userAuthentication,profileController.myOrders)
-router.get('/orderDetails',userAuthentication.userAuthentication,profileController.orderDetails)
+router.get('/orderDetails/:id',userAuthentication.userAuthentication,profileController.orderDetails)
 
 //<---------------------------------User_Profile----------------------------------------->
 
