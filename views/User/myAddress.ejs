@@ -145,7 +145,7 @@
     <% address.forEach(addr => { %>
       <% addr.Address.forEach(ad => { %>
         <div id="addressCard-<%= ad._id %>" class="col-md-4 ">
-          <div class="address-card border border-dark p-4 rounded">
+          <div class="address-card  p-4 rounded" style=" box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;">
             <div class="address-title h4 font-weight-bold">Address</div>
 
             <strong><%=ad.firstName %> <%=ad.lastName%><br></strong>

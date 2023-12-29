@@ -19,7 +19,6 @@ const myAddress = async(req,res) => {
     const address  = await addressCollection.find({ userId: userData._id });
     console.log("address:",address)
     res.render('User/myAddress',{address})
-
 }
 
 const addAddress = (req,res) =>{

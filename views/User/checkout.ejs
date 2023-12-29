@@ -223,9 +223,9 @@
             <div class="row">
               <% userAddress.forEach((addr, index)=> { %>
                 <% addr.Address.forEach(ad=> { %>
-                  <div class="col-md-6 mb-4">
-                    <div class="address-card border  border-dark p-3 rounded text-black"
-                      onclick="selectAddress('<%= ad._id %>')">
+                  <div class="col-md-6 mb-4"   >
+                    <div class="address-card   p-3 rounded text-black "
+                      onclick="selectAddress('<%= ad._id %>')" style="  box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;">
                       <div class="address-title font-weight-bold ">Address</div>
 
                       <strong>

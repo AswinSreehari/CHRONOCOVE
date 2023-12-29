@@ -6,6 +6,9 @@ const logger = require('morgan');
 const session = require('express-session')
 const flash = require('express-flash')
 const nocache = require('nocache');
+const {rateLimit} = require('express-rate-limit');
+const hpp = require('hpp');
+const helmet = require('helmet')
 require('dotenv').config();
 const mongoose = require('mongoose');
 var MongoDBStore = require('connect-mongodb-session')(session);
@@ -27,11 +30,22 @@ mongoose.connect(process.env.MONGO_URI, {
   })
 
 const app = express()
+app.disable('x-powered-by');
 var store = new MongoDBStore({
   uri: `mongodb://${encodeURIComponent(process.env.MONGO_USER)}:${encodeURIComponent(process.env.MONGO_PASS)}@localhost:27017/CHRONOCOVE`,
   collection: 'sessions',
   expires: 1000 * 60 * 60 * 24 * 30, // 30 days in milliseconds
 }, err => console.error(err))
+
+const limiter = rateLimit({
+	windowMs: 10 * 60 * 1000, // 15 minutes
+	limit: 150, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+})
+
+app.use(limiter);
+app.use(helmet())
 
 //session
 require('dotenv').config();
@@ -42,7 +56,8 @@ app.use(session({
   resave: false,
   store: store,
   cookie: { maxAge: oneday },
-  saveUninitialized: true
+  saveUninitialized: true,
+  name: process.env.SESSION_NAME,
 }));
 
 app.use(nocache());
@@ -58,8 +73,11 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(hpp());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
 
 app.use('/admin', indexRouter);
 app.use('/', usersRouter);

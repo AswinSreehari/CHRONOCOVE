@@ -120,56 +120,33 @@
                   <th class="product-thumbnail">IMAGE</th>
                   <th class="product-name">PRODUCT</th>
                   <th class="product-price">PRICE</th>
-                  <th class="product-quantity">QUANTITY</th>
-                  <th class="product-total">TOTAL</th>
+                  <th class="product-addtoCart">ADD TO CART</th>
                   <th class="product-remove">REMOVE</th>
                 </tr>
               </thead>
               <tbody>
-                <% if (populatedCart.items.length > 0) { %>
-                  <% populatedCart.items.forEach(item => { %>
+               
                     <tr>
                       <td class="product-thumbnail">
-                        <img src="/uploads/<%= item.mainProductImage %>" alt="Image" class="img-fluid">
+                        <img src=" " alt="Image" class="img-fluid">
                       </td>
                       <td class="product-name">
                         <h2 class="h5 text-black">
-                          <%= item.productName %>
+                          <h6>item.productName</h6>
                         </h2>
                       </td>
                       <td>
-                        $<%= item.productPrice %>
+                        <h6>item.productPrice></h6>
                       </td>
-                      <td>
-                        <div class="input-group mb-3" style="max-width: 120px;">
-                          <div class="input-group-prepend">
-                            <button class="btn btn-outline-primary" onclick="updateProductQuantity('<%= item.productId %>', -1)" type="button">&minus;</button>
-                          </div>
-                          <input type="text" class="form-control text-center" id="quantity-<%= item.productId %>" value="<%= item.quantity %>" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                          <div class="input-group-append">
-                            <button class="btn btn-outline-primary" onclick="updateProductQuantity('<%= item.productId %>', 1)" type="button">&plus;</button>
-                          </div>
-                        </div>
-                      </td>
-                      <td >
-                        <% totalPrice.forEach(price => { %>
-                         
-                          <% if (price._id.equals(item.productId)) { %>
-                            $<%= price.totalPrice %>
-                          <% } %>
-                        <% }); %>
-                    
-                      </td>
-                      <td id="populatedCart-<%= item.productId %>">
-                        <a href="/cartGet" class="btn btn-primary btn-sm" onclick="deleteCartProduct('<%= item.productId %>')">X</a>
-                      </td>
+                       
+                       
+                      
                     </tr>
-                  <% }); %>
-                <% } else { %>
+                   
                   <tr>
                     <td colspan="6">No product in the cart</td>
                   </tr>
-                <% } %>
+                 
               </tbody>
               
 
@@ -189,53 +166,9 @@
                 Shopping</button>
             </div>
           </div>
-          <!-- <div class="row">
-              <div class="col-md-12">
-                <label class="text-black h4" for="coupon">Coupon</label>
-                <p>Enter your coupon code if you have one.</p>
-              </div>
-              <div class="col-md-8 mb-3 mb-md-0">
-                <input type="text" class="form-control py-3" id="coupon" placeholder="Coupon Code">
-              </div>
-              <div class="col-md-4">
-                <button class="btn btn-primary btn-sm">Apply Coupon</button>
-              </div>
-            </div> -->
+           
         </div>
-        <div class="col-md-6 pl-5">
-          <div class="row justify-content-end">
-            <div class="col-md-7">
-              <div class="row">
-                <div class="col-md-12 text-right border-bottom mb-5">
-                  <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <span class="text-black">Subtotal</span>
-                </div>
-                <div class="col-md-6 text-right">
-                  <strong class="text-black">$<%=total%></strong>
-                </div>
-              </div>
-              <div class="row mb-5">
-                <div class="col-md-6">
-                  <span class="text-black">Total</span>
-                </div>
-                <div class="col-md-6 text-right">
-                  <strong class="text-black">$<%=total%></strong>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-12">
-                  <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='/checkout'">Proceed To
-                    Checkout</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+         
       </div>
     </div>
   </div>
@@ -332,12 +265,12 @@
 
 </html>
 
-<script>
+<!-- <script>
   const updateProductQuantity = (productId, quantity) => {
     const productQtyInput = document.getElementById('quantity-' + productId);
     const productQty = parseInt(productQtyInput.value);
     const newQuantity = productQty + quantity;
-    if (newQuantity < 1) return alert("Out of stock!!");
+    if (newQuantity < 1) return;
     if (newQuantity > 100) return alert("Can't add this much quantity!!");
 
     fetch(`/cart/${productId}`, {
@@ -349,15 +282,7 @@
       .then(data => {
         if (data.success) {
           productQtyInput.value = newQuantity;
-        //   const newTotal = data.totalPrice
-        //   console.log('newTotalll:',newTotal)
-
-        //   const totalPriceElement = document.getElementById('total-price-' + productId);
-        // if (totalPriceElement) {
-        //   console.log('newTotal:',newTotal)
-        //   totalPriceElement.textContent = '$' + newTotal;
-        // }
-         }
+        }
       })
       .catch(err => alert(err.message));
   }
@@ -397,4 +322,4 @@
       });
 
   }
-</script>
+</script> -->

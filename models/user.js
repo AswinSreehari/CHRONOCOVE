@@ -21,6 +21,10 @@ const LoginSchema = new mongoose.Schema({
         type : Boolean,
         default : false
     },
+    sessionId: {
+        type: String,
+        required: false
+    }
 })
 
 const collection = new mongoose.model('user',LoginSchema)

@@ -8,6 +8,7 @@ const checkoutController = require('../controller/checkoutController');
 const profileController = require('../controller/profileController')
 const orderController = require('../controller/orderController')
 const cartCollection = require('../models/cart');
+const wishlistController = require('../controller/wishlistController')
 
 
 /* GET users listing. */
@@ -65,7 +66,12 @@ router.post('/editAddressPost/:id',userAuthentication.userAuthentication,profile
 router.get('/myOrders',userAuthentication.userAuthentication,profileController.myOrders)
 router.get('/orderDetails/:id',userAuthentication.userAuthentication,profileController.orderDetails)
 
-//<---------------------------------User_Profile----------------------------------------->
+//<---------------------------------Wishlist----------------------------------------->
+router.get('/wishlist', userAuthentication.userAuthentication,wishlistController.wishlist);
+router.post('/addWish/:id',userAuthentication.userAuthentication,wishlistController.addWish)
+
+
+ 
 
 
 module.exports = router;

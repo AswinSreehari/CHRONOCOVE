@@ -160,7 +160,10 @@ const signInPost = async (req, res) => {
           if (isPasswordmatch) {
               req.session.email = check.emailId;
               req.session.user= req.session.email
-              console.log(req.session.email);
+              req.session.isBlocked = false;
+            //   console.log("The SID is: ", req.session.id);
+              check.sessionId = req.session.id;
+              await check.save();
               return res.redirect("/");
           } else {
               const error = "Invalid Details";
@@ -272,9 +275,6 @@ const forgotPassword = (req,res) => {
     res.render('User/forgotPassword')
 }
 
-
-
-
 //About
 
 const about = ((req,res)=>{
@@ -306,5 +306,6 @@ module.exports={
     productDetails,
     generateOTPWithExpiry,
     contact,
-    forgotPassword
+    forgotPassword,
+    
 }

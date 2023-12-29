@@ -6,6 +6,27 @@ body {
   font-size: 16px; }
 
 
+  /* wishlist button */
+    
+  #wishlist-container {
+    display: inline-block;
+  }
+  
+  .icon-heart-o #heart-path {
+    fill: white; /* Default fill color */
+    stroke: black; /* Default stroke color (outer line) */
+    stroke-width: 1; /* Default stroke width */
+  }
+  
+  .icon-heart #heart-path {
+    fill: red; /* Toggled fill color */
+    stroke: red;
+    stroke-width: 2;
+  }
+  
+  
+ 
+  
   
 
 

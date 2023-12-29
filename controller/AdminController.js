@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose')
 const collection = require('../models/user')
 
 const multer = require('multer')
@@ -99,6 +100,9 @@ const blockUser = async (req, res) => {
       } else {
         userData.isBlocked = true
         await userData.save()
+        // todo: try catch
+        // if the user has an active session, we will set isBlocked to true there as well
+        const session = await mongoose.connection.db.collection('sessions').findOneAndUpdate({ _id: userData.sessionId }, { $set: {"session.isBlocked": true} });
         //res.status(500).json({ error: 'cannot login in' });
         res.redirect('/admin/usermanagement')
       }
@@ -117,11 +121,15 @@ const blockUser = async (req, res) => {
     try {
       const userData = await  collection.findById(userid)
       if (!userData) {
-        res.redirect("/admin/error")
+        res.redirect("/admin/error")   
   
-      } else {
+      } else { 
         userData.isBlocked = false
-        await userData.save()
+        await userData.save();
+        
+        // todo: try catch!
+        await mongoose.connection.db.collection('sessions').findOneAndUpdate({ _id: userData.sessionId }, { $set: {"session.isBlocked": false} });
+
         console.log("user can now login");
         const msg = "unblocked  the specified user"
         //res.send("user can now login")
