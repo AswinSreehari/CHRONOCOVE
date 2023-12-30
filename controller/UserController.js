@@ -154,7 +154,6 @@ const signInPost = async (req, res) => {
           if (check.isBlocked) {
               return res.render('User/signin', { error: "You are blocked by admin" });
           }
-
           const isPasswordmatch = await bcrypt.compare(req.body.password, check.password);
 
           if (isPasswordmatch) {
@@ -211,12 +210,12 @@ const verifyOTP = async (req, res) => {
             return res.json({ isValid: false, msg: "User not found" });
         }
 
-        if (user.isBlocked) {
-            return res.json({
-                isValid: false,
-                msg: "Your account has been blocked. Please contact support.",
-            });
-        }
+        // if (user.isBlocked) {
+        //     return res.json({
+        //         isValid: false,
+        //         msg: "Your account has been blocked. Please contact support.",
+        //     });
+        // }
 
         if (enteredOTP === storedOTP) {
             return res.json({ isValid: true });

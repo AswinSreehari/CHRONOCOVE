@@ -11,7 +11,7 @@ const hpp = require('hpp');
 const helmet = require('helmet')
 require('dotenv').config();
 const mongoose = require('mongoose');
-var MongoDBStore = require('connect-mongodb-session')(session);
+const MongoDBStore = require('connect-mongodb-session')(session);
 //Routes
 
 const indexRouter = require('./routes/admin');
@@ -44,9 +44,15 @@ const limiter = rateLimit({
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
 })
 
-app.use(limiter);
-app.use(helmet())
-
+//app.use(limiter);
+app.use(helmet({
+  contentSecurityPolicy: false,
+}));
+// directives: {
+//   defaultSrc: ["'self'"],
+//   scriptSrc: ["'self'", "cdn.jsdelivr.net", "code.jquery.com"],
+//   styleSrc: ["'self'", "cdn.jsdeliver.net", "code.jquery.com"]
+// }
 //session
 require('dotenv').config();
 

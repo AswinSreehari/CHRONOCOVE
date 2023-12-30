@@ -1,15 +1,23 @@
 const userAuthentication = (async(req,res,next)=>{
     
     if (req.session && req.session.isBlocked) {
-        res.redirect('/logout');
+        
+            // return res.json({
+            //     isValid: false,
+            // });
+            // return
+            const  error = "Your account has been blocked. Please contact support."
+            res.render('User/signin',{error})
+        }
+       
         // todo: block logic
-        return;
-    }
+    
     
     if(req.session && req.session.email){
         next()
     }else{
         res.redirect('/signin')
+        // res.render('User/signin',{msg})
     }
 })
 

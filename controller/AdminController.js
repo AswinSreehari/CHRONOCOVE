@@ -11,14 +11,18 @@ const upload = multer({dest:"public/uploads"})
 //Admin_SignIn
 
 const signin = ((req,res)=>{
-    try{
-        if(req.session.admin){
-        res.redirect('/admin/dashboard')
-        }else{
-            res.render('admin/admin_signin')
-
+  console.log("[admin signin]")
+  try{
+    if(req.session.admin){
+      console.log("[if true]")
+      res.redirect('/admin/dashboard')
+    }else{
+          console.log("[if else]")
+          res.render('admin/admin_signin')
+          
         }
-    }catch(error){
+      }catch(error){
+      console.log("[error]")
         console.log(error)
         res.redirect('/error')
     }
@@ -92,7 +96,6 @@ const blockUser = async (req, res) => {
     const userId = req.params.id;
   
     try {
-      console.log("inside the try hai")
       const userData = await collection.findOne({ _id: userId })
       if (!userData) {
         res.status(404).json({ error: 'User not found' });
@@ -100,11 +103,16 @@ const blockUser = async (req, res) => {
       } else {
         userData.isBlocked = true
         await userData.save()
-        // todo: try catch
-        // if the user has an active session, we will set isBlocked to true there as well
-        const session = await mongoose.connection.db.collection('sessions').findOneAndUpdate({ _id: userData.sessionId }, { $set: {"session.isBlocked": true} });
-        //res.status(500).json({ error: 'cannot login in' });
-        res.redirect('/admin/usermanagement')
+        try{
+          // if the user has an active session, we will set isBlocked to true there as well
+          const session = await mongoose.connection.db.collection('sessions').findOneAndUpdate({ _id: userData.sessionId }, { $set: {"session.isBlocked": true} });
+         
+          //res.status(500).json({ error: 'cannot login in' });
+          res.redirect('/admin/usermanagement')
+        }catch(err){
+          console.log("Error blocking userr:",err)
+          res.redirect('admin/error')
+        }
       }
     }
     catch (err) {

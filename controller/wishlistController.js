@@ -9,8 +9,13 @@ const wishlist = async(req,res) => {
     try{
         const userData = await userCollection.find({emailId:req.session.email})
         console.log("This is the user: ",userData)
+        const wishData = await wishlistCollection.find(userData._id)
+        console.log("wishData:",wishData) 
+        const product = await productCollection.findOne({_id:wishData.productId})
+        console.log("product:",product)
+       
         
-        res.render('User/wishlist')
+        res.render('User/wishlist',{wishData})
     }catch(error){
         console.log('Error : ',error)
         res.redirect('User/error')
