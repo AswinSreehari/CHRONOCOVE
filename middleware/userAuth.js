@@ -10,7 +10,7 @@ const userAuthentication = (async(req,res,next)=>{
             res.render('User/signin',{error})
         }
        
-        // todo: block logic
+         
     
     
     if(req.session && req.session.email){

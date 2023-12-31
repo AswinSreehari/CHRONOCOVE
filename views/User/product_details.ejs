@@ -44,7 +44,7 @@
               <div class="site-top-icons">
                 <ul>
                   <li><a href="/profile"><span class="icon icon-person"></span></a></li>
-                  <li><a href="#"><span class="icon icon-heart-o"></span></a></li>
+                  <li><a href="/wishlist"><span class="icon icon-heart-o"></span></a></li>
                   <li>
                     <a href="/cartGet" class="site-cart">
                       <span class="icon icon-shopping_cart"></span>
@@ -354,22 +354,14 @@
 <script src="/javascripts/zoom.js"></script>
 <script src="/javascripts/zoomsl.js"></script>
 
-<!-- Add this script block after including jQuery -->
+ 
 <script>
     $(document).ready(function() {
-        // Handle click event on both main and additional images
-        $('.img-fluid, .additional-images img').click(function() {
-            // Get the source of the main image
-            var mainImageSrc = $('.img-fluid').attr('src');
-
-            // Get the source of the clicked image (either main or additional)
-            var clickedImageSrc = $(this).attr('src');
-
-            // Set the main image source to the clicked image source
-            $('.img-fluid').attr('src', clickedImageSrc);
-
-            // Set the clicked image source to the main image source
-            $(this).attr('src', mainImageSrc);
+         $('.img-fluid, .additional-images img').click(function() {
+             var mainImageSrc = $('.img-fluid').attr('src');
+              var clickedImageSrc = $(this).attr('src');
+              $('.img-fluid').attr('src', clickedImageSrc);
+             $(this).attr('src', mainImageSrc);
         });
     });
 

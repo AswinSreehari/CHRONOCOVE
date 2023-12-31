@@ -18,14 +18,14 @@ const wishlistController = require('../controller/wishlistController')
 
 //<---------------------------User_Route------------------------------>
 
-router.get('/',userController.home),
-router.get('/signup',userController.signup),
-router.get('/signin',userController.signIn),
-router.post('/signup',userController.signupPost),
-router.post('/signin',userController.signInPost),
-router.get('/signout',userController.signOut),
-router.get('/about',userController.about),
-router.get('/error',userController.error),
+router.get('/',userController.home)
+router.post('/signup',userController.signupPost)
+router.get('/signup',userController.signup)
+router.get('/signin',userController.signIn)
+router.post('/signin',userController.signInPost)
+router.get('/signout',userController.signOut)
+router.get('/about',userController.about)
+router.get('/error',userController.error)
 router.post('/verifyOTP',userController.verifyOTP)
 router.post("/resendOTP",userController.resendOTP)
 router.get("/productDetails/:id",userController.productDetails)
@@ -69,9 +69,13 @@ router.get('/orderDetails/:id',userAuthentication.userAuthentication,profileCont
 //<---------------------------------Wishlist----------------------------------------->
 router.get('/wishlist', userAuthentication.userAuthentication,wishlistController.wishlist);
 router.post('/addWish/:id',userAuthentication.userAuthentication,wishlistController.addWish)
+router.delete('/wishlist/:productId',userAuthentication.userAuthentication,wishlistController.deleteWishlistProduct)
 
 
- 
+
+
+
+
 
 
 module.exports = router;

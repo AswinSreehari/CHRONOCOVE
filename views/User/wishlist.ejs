@@ -62,7 +62,7 @@
               <div class="site-top-icons">
                 <ul>
                   <li><a href="/profile"><span class="icon icon-person"></span></a></li>
-                  <li><a href="#"><span class="icon icon-heart-o"></span></a></li>
+                  <li><a href="/wishlist"><span class="icon icon-heart-o"></span></a></li>
                   <li>
                     <a href="/cartGet" class="site-cart">
                       <span class="icon icon-shopping_cart"></span>
@@ -115,6 +115,7 @@
         <form class="col-md-12" method="post">
           <div class="site-blocks-table">
             <table class="table table-bordered">
+              <% if(products.length > 0){ %>
               <thead>
                 <tr>
                   <th class="product-thumbnail">IMAGE</th>
@@ -125,29 +126,35 @@
                 </tr>
               </thead>
               <tbody>
-                <% wishData.forEach(data => { %>
+                <% products.forEach(data => { %>
                     <tr>
                       <td class="product-thumbnail">
-                        <img src=" " alt="Image" class="img-fluid">
+                        <img src="/uploads/<%=data.mainProductImage%>" alt="Image" class="img-fluid">
                       </td>
                       <td class="product-name">
                         <h2 class="h5 text-black">
-                          <h6>item.productName</h6>
+                          <h6><%=data.productName%></h6>
                         </h2>
                       </td>
                       <td>
-                        <h6>item.productPrice></h6>
+                        <h6><%=data.productPrice%></h6>
+                      </td>       
+                      <td>
+                          <button type="submit" class="buy-now btn btn-sm btn-primary "onclick="window.location('/wishlist/<%=data._id%>')" <% if (data.productQuantity <= 0) { %>disabled<% } %>>
+                              Add to Cart <i class="fa-solid fa-cart-shopping"></i>
+                          </button>
+                      </td>       
+                      <td id="wishlist-<%=data._id %>">
+                        <a href="/wishlist" class="btn btn-primary btn-sm" onclick="deleteWishlistProduct('<%= data._id %>')">X</a>
                       </td>
-                       
-                       
-                      
                     </tr>
-                   
-                  <tr>
-                    <td colspan="6">No product in the cart</td>
-                  </tr>
-                  <% }); %>
-              </tbody>
+                    <% }); %>
+                    <% }else{ %>
+                      <tr>
+                        <h1 style="color: red;" >uh! Wishlist is empty!</h1>
+                      </tr>
+                      <% }; %>
+                    </tbody>
               
 
             </table>
@@ -265,34 +272,14 @@
 
 </html>
 
-<!-- <script>
-  const updateProductQuantity = (productId, quantity) => {
-    const productQtyInput = document.getElementById('quantity-' + productId);
-    const productQty = parseInt(productQtyInput.value);
-    const newQuantity = productQty + quantity;
-    if (newQuantity < 1) return;
-    if (newQuantity > 100) return alert("Can't add this much quantity!!");
-
-    fetch(`/cart/${productId}`, {
-      method: "PUT",
-      body: JSON.stringify({ quantity: newQuantity }),
-      headers: { "Content-Type": "application/json" }
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          productQtyInput.value = newQuantity;
-        }
-      })
-      .catch(err => alert(err.message));
-  }
+<script>
+  
 
 
+ //Close Button 
 
-  //Close Button 
-
-  const deleteCartProduct = (productId) => {
-    fetch(`/cart/${productId}`, {
+ const deleteWishlistProduct = (productId) => {
+    fetch(`/wishlist/${productId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"
@@ -307,7 +294,7 @@
       .then(data => {
         console.log('Data:', data)
         if (data.success) {
-          const productRow = document.getElementById(`populatedCart-${productId}`)
+          const productRow = document.getElementById(`wishlist-${productId}`)
           
           if (productRow) {
             productRow.remove();
@@ -321,5 +308,15 @@
         alert("An error occurred. Please try again!!");
       });
 
-  }
-</script> -->
+    }
+    //<!----------Add to cart--------------------->
+     
+//     const addToCart = (productId) => {
+//   console.log(`Adding product to cart: ${productId}`);
+//   const url = `/cart/${productId}`;
+//   console.log(`Redirecting to: ${url}`);
+//   window.location.href = url;
+// }
+
+ 
+</script>
