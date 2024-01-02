@@ -8,7 +8,8 @@ const checkoutController = require('../controller/checkoutController');
 const profileController = require('../controller/profileController')
 const orderController = require('../controller/orderController')
 const cartCollection = require('../models/cart');
-const wishlistController = require('../controller/wishlistController')
+const wishlistController = require('../controller/wishlistController');
+const hpp = require('hpp');
 
 
 /* GET users listing. */
@@ -31,6 +32,7 @@ router.post("/resendOTP",userController.resendOTP)
 router.get("/productDetails/:id",userController.productDetails)
 router.get('/contact',userController.contact)
 router.get('/forgotPassword',userController.forgotPassword)
+router.post('/forgotPasswordPost',userController.forgotPasswordPost)
 
 
 //<-------------------------Product_Route-------------------------->
@@ -47,8 +49,8 @@ router.delete('/cart/:productId',userAuthentication.userAuthentication,cartContr
 
 
 //<------------------------------Checkout_Address_Route------------------------------------------>
-
-router.get('/checkout',userAuthentication.userAuthentication,checkoutController.checkout)
+// hpp({ whitelist: ['productId']})
+router.get('/checkout',  userAuthentication.userAuthentication,checkoutController.checkout)
 router.post('/checkoutPost',userAuthentication.userAuthentication,orderController.checkoutPost)
 router.post('/addAddressPost',userAuthentication.userAuthentication ,checkoutController.addAddressPost)
 router.get('/thankyou',userAuthentication.userAuthentication,checkoutController.thankyou)
@@ -70,7 +72,7 @@ router.get('/orderDetails/:id',userAuthentication.userAuthentication,profileCont
 router.get('/wishlist', userAuthentication.userAuthentication,wishlistController.wishlist);
 router.post('/addWish/:id',userAuthentication.userAuthentication,wishlistController.addWish)
 router.delete('/wishlist/:productId',userAuthentication.userAuthentication,wishlistController.deleteWishlistProduct)
-
+router.post('/addtoCart/:id',userAuthentication.userAuthentication,wishlistController.addtoCart)
 
 
 

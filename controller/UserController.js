@@ -102,8 +102,7 @@ const signupPost = async (req, res) => {
             };
 //<!-------------Compare the otp here!!--------------------------------->
           
-                await collection.create(data);
-            
+            await collection.create(data);
 
             const check = await collection.findOne({ emailId: req.body.email });
 
@@ -270,9 +269,25 @@ const productDetails = (async(req,res)=>{
 })
 
 //Forgot Password
-const forgotPassword = (req,res) => {
+const forgotPassword = async(req,res) => {
+     
     res.render('User/forgotPassword')
 }
+
+const forgotPasswordPost = async(req,res) => {
+    const email = req.body
+    console.log("Email @ forgot password : ",email)
+    // try{
+    //     const userData = await collection.find({emailId:email})
+    //     console.log(("Data::",userData))
+    // }catch(err){
+    //     console.log(err)
+    //     res.redirect('/error')
+    // }
+    
+}
+
+
 
 //About
 
@@ -306,5 +321,7 @@ module.exports={
     generateOTPWithExpiry,
     contact,
     forgotPassword,
+    forgotPasswordPost 
+
     
 }

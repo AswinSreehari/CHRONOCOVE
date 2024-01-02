@@ -46,22 +46,7 @@ const orderSchema = new mongoose.Schema({
     enum: ['pending', 'processing', 'Delivered', 'cancelled'],
     default: 'pending',
   },
-  isCancelled: {
-    type: Boolean,
-    default: false,
-  },
-  isProcessing: {
-    type : Boolean,
-    default: false,
-  },
-  isPending: {
-    type: Boolean,
-    default: false,
-  },
-  isDelivered: {
-    type: Boolean,
-    default: false,
-  },
+   
 });
 
 const orderCollection = mongoose.model('orderData', orderSchema);

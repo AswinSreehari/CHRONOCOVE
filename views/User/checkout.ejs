@@ -281,6 +281,9 @@
                     <%= item.productName %><strong class="mx-2">X</strong>
                       <%= item.quantity %>
                         <input type="hidden" name="productName[]" value="<%= item.productId %>">
+                          <script>
+                            console.log('<%= item.productId%>');
+                        </script>
                         <input type="hidden" name="quantity[]" value="<%= item.quantity %>">
                   </td>
                   <td>

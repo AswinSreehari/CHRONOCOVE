@@ -63,8 +63,8 @@
             
                 <a href="/admin/usermanagement" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Users </a>
                 <a href="/admin/categorymanagement" class="nav-item nav-link "><i class="fa fa-keyboard me-2"></i>Category </a>
-                <a href="/admin/productmanagement" class="nav-item nav-link active"><i class="fa fa-table me-2"></i>Product  </a>
-                <a href="/admin/orderManagement" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Order</a>
+                <a href="/admin/productmanagement" class="nav-item nav-link "><i class="fa fa-table me-2"></i>Product  </a>
+                <a href="/admin/orderManagement" class="nav-item nav-link active"><i class="fa fa-table me-2"></i>Order</a>
                 <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a> -->
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
@@ -175,9 +175,59 @@
             <!-- Navbar End -->
 
 <!-----------------------------Content_Area------------------------------------------------>
-<div>
-    <h2 class="text-center mx-auto" >Order Details</h2>
-</div>
+<div class="container mt-5" style=" box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; " >
+    <div class="row">
+      <div class="col-12 text-black">
+        <h1 class="text-center">Order Details</h1>
+      </div>
+    </div>
+    
+      
+      
+     <div class="row mt-4 text-black"  style="display: flex; justify-content: space-around;">
+      <div class="col-6"    >
+        <h4>Order ID:  <%= orderData._id %></h4>
+        <p style="color: red;">Status: Pending</p>
+        <p>Total Price: <%= orderData.orderTotal %></p>
+        <p>Coupon Discount Price: </p>
+        <h6>Payment Method : <%= orderData.paymentMethod %></h6>
+        <p>Order Date:  <%= orderData.orderTime %></p>  
+      </div>
+      <div class="col-6"   >
+        <h4>Shipping Address:<%= orderData.selectedAddress %></h4>
+        <p>  </p>
+      </div>
+    </div>      
+    <div class="row mt-4">
+      <div class="col-12">
+          <div class="scrollable-div" style="max-height: 300px; overflow-y: auto; box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">
+              <ul class="list-group">
+                  <% orderData.items.forEach(item => { %>
+                      <li class="list-group-item">
+                          <div class="row text-black">
+                              <div class="col-3">
+                                <img style="height: 100px; width: 100px;" src="/uploads/<%= orderProducts[item.productId].mainProductImage %>" alt="<%= orderProducts[item.productId].productName %>" class="img-fluid">
+
+                              </div>
+                              <div class="col-6">
+                                  <h5 style="color: black;"><%= orderProducts[item.productId].productName %></h5>
+                                  <p>Price: $<%= orderProducts[item.productId].productPrice %></p>
+                              </div>
+                              <div class="col-3">
+                                  <p>Quantity: <%= item.quantity %></p>
+                              </div>
+                          </div>
+                      </li>
+                  <% }); %>
+              </ul>
+          </div>
+      </div>
+  </div>
+
+    
+  
+
+  </div>
 
 
 

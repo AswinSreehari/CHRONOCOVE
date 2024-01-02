@@ -114,6 +114,7 @@
       <div class="row mb-5">
         <form class="col-md-12" method="post">
           <div class="site-blocks-table">
+            <% if (populatedCart.items.length > 0) { %>
             <table class="table table-bordered">
               <thead>
                 <tr>
@@ -126,8 +127,7 @@
                 </tr>
               </thead>
               <tbody>
-                <% if (populatedCart.items.length > 0) { %>
-                  <% populatedCart.items.forEach(item => { %>
+                <% populatedCart.items.forEach(item => { %>
                     <tr>
                       <td class="product-thumbnail">
                         <img src="/uploads/<%= item.mainProductImage %>" alt="Image" class="img-fluid">
@@ -166,9 +166,7 @@
                     </tr>
                   <% }); %>
                 <% } else { %>
-                  <tr>
-                    <td colspan="6">No product in the cart</td>
-                  </tr>
+                   <h1 style="color: red; overflow: hidden;"> No products in the cart!</h1>
                 <% } %>
               </tbody>
               
@@ -229,8 +227,11 @@
 
               <div class="row">
                 <div class="col-md-12">
-                  <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='/checkout'">Proceed To
-                    Checkout</button>
+                  <% if (populatedCart.items.length > 0) { %>
+                    <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='/checkout'">Proceed To Checkout</button>
+                <% } else { %>
+                    <button class="btn btn-primary btn-lg py-3 btn-block" disabled>Proceed To Checkout</button>
+                <% } %>
                 </div>
               </div>
             </div>

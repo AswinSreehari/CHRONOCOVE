@@ -53,9 +53,8 @@ router.delete('deleteProductImage/:id/:mainProductImage',productController.delet
 //orderManagement
 
 router.get('/ordermanagement',adminauthenticaton.adminauthenticaton,orderController.orderManagement)
-router.get('/AdminViewOrderDetails',adminauthenticaton.adminauthenticaton,orderController.AdminViewOrderDetails)
-router.post('/updateOrderStatus/:orderId', adminauthenticaton.adminauthenticaton, orderController.updateOrderStatus);
-
+router.get('/AdminViewOrderDetails/:id',adminauthenticaton.adminauthenticaton,orderController.AdminViewOrderDetails)
+router.put('/orderStatus/:id',adminauthenticaton.adminauthenticaton,orderController.orderStatus)
 module.exports = router;
 
 
