@@ -24,6 +24,7 @@ router.post('/signup',userController.signupPost)
 router.get('/signup',userController.signup)
 router.get('/signin',userController.signIn)
 router.post('/signin',userController.signInPost)
+router.get('/google-signin/callback', userController.googleSignIn);
 router.get('/signout',userController.signOut)
 router.get('/about',userController.about)
 router.get('/error',userController.error)

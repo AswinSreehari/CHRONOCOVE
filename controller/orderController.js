@@ -89,7 +89,7 @@ const AdminViewOrderDetails = async (req, res) => {
   const orderId = req.params.id;
   console.log("OrderId:",orderId)
   if (!mongoose.Types.ObjectId.isValid(orderId)) {
-    return res.status(400).send("You tried to mess with me. But I am not messable");
+    return res.status(400).send("Enter Valid MongoDB ID");
   }
 
   const orderData = await orderCollection.findById(orderId);

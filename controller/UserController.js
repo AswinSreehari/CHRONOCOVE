@@ -4,7 +4,10 @@ const nodemailer = require('nodemailer');
 const productCollection = require('../models/product');
 const cartCollection = require('../models/cart')
 const addressColleciton = require('../models/address')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { getGoogleOAuthURL } = require('../utils/oauth');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
  
  
 
@@ -13,7 +16,7 @@ const passwordcrypt = async function (password) {
     return bcrptPass;
   }
 
-// function for generating otp
+
 const generateOTP = () => {
     // generating a 6 digit otp number   
     return Math.floor(1000 + Math.random() * 900000); 
@@ -100,7 +103,8 @@ const signupPost = async (req, res) => {
                 otp: otp,
                 otpExpiry: otpExpiry,
             };
-//<!-------------Compare the otp here!!--------------------------------->
+
+//todo:Compare OTP
           
             await collection.create(data);
 
@@ -133,7 +137,7 @@ const signIn = (req,res)=>{
     if(req.session.email){
         res.redirect('/')
     }else{
-         res.render('User/signIn')
+         res.render('User/signIn', { oauthURL: getGoogleOAuthURL() })
     } 
 }
 
@@ -173,6 +177,61 @@ const signInPost = async (req, res) => {
       return res.redirect('/error');
   }
 };
+
+const googleSignIn = async (req, res) => {
+    const { code } = req.query;
+    const query = new URLSearchParams();
+    query.append('code', code);
+    query.append('client_id', process.env.GOOGLE_OAUTH_CLIENT_ID);
+    query.append('client_secret', process.env.GOOGLE_OAUTH_CLIENT_SECRET);
+    query.append('redirect_uri', 'http://localhost:7000/google-signin/callback')
+    query.append('grant_type', 'authorization_code')
+    
+    let accessToken = null;
+    let idToken = null;
+    try {
+        const res = await fetch(
+            `https://oauth2.googleapis.com/token?${query.toString()}`,
+            { method: "POST", headers: { "Accept": "application/json" }}
+        );
+        const data = await res.json();
+        console.log(data);
+        accessToken = data.access_token;
+        idToken = data.id_token;
+    } catch (err) {
+        console.error(err);
+    }
+    // todo: take data.scope and validate if it has read:email
+    if (!accessToken) return null;
+    if (!idToken) return null;
+    
+    const googleUser = jwt.decode(idToken);
+    console.log(googleUser);
+
+    const existingUser = await collection.findOne({ emailId: googleUser.email });
+    if (existingUser) {
+        if (existingUser.isBlocked) {
+            return res.render('User/signin', { error: "You are blocked by admin" });
+        }
+
+        req.session.email = existingUser.emailId;
+        req.session.user= req.session.email
+        req.session.isBlocked = false;
+        existingUser.sessionId = req.session.id;
+
+        await existingUser.save();
+
+        return res.redirect("/");
+    } else {
+        // googleUser.email -> string
+        // googleUser.email_verified -> boolean
+        // googleUser.name -> string
+        // googleUser.picture -> string URL
+        const dummyPassword = crypto.randomBytes(8).toString('hex');
+        res.send("You do not have an account. First sign up using email and password.");
+    }
+
+}
 
 
 //Signout
@@ -277,6 +336,7 @@ const forgotPassword = async(req,res) => {
 const forgotPasswordPost = async(req,res) => {
     const email = req.body
     console.log("Email @ forgot password : ",email)
+    res.render('user/signin')
     // try{
     //     const userData = await collection.find({emailId:email})
     //     console.log(("Data::",userData))
@@ -312,6 +372,7 @@ module.exports={
     signupPost,
     signIn,
     signInPost,
+    googleSignIn,
     signOut,
     about,
     error,
