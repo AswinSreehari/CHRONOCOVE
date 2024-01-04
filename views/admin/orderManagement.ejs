@@ -197,7 +197,7 @@
                             <td>Cash On Delivery</td>
                             <td>$<%=odr.orderTotal%></td>
                             <td>
-                                <select class="form-select" id="orderStatus-<%= odr._id %>" onchange="updateOrderStatus('<%= odr._id %>')">
+                                <select class="form-select" id="orderStatus-<%= odr._id %>" onchange="orderStatus('<%= odr._id %>')">
                                     <option value="pending" <% if (odr.status === 'pending') { %>selected<% } %>>Pending</option>
                                     <option value="processing" <% if (odr.status === 'processing') { %>selected<% } %>>Processing</option>
                                     <option value="Delivered" <% if (odr.status === 'Delivered') { %>selected<% } %>>Delivered</option>
@@ -271,7 +271,12 @@
         },
         body: JSON.stringify({ status: newStatus }),
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Failed with status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             console.log('Order status updated successfully:', data.updatedOrder);
@@ -282,8 +287,7 @@
     .catch(error => {
         console.error('Error updating order status:', error);
     });
-}
-
-  </script>
+};
+</script>
 
 </html>

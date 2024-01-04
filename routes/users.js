@@ -36,7 +36,7 @@ router.get('/forgotPassword',userController.forgotPassword)
 router.post('/forgotPasswordPost',userController.forgotPasswordPost)
 
 
-//<-------------------------Product_Route-------------------------->
+//<-----------------------------Product_Route----------------------------->
 
 router.get('/shop',productController.shop)
 

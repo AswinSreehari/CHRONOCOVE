@@ -18,36 +18,39 @@
 		<div class="container pt-5 mt-5">
 			<div class="col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 text-center">
 				
-				<form class="rounded bg-white shadow p-5">
-					<h3 class="text-dark fw-bolder fs-4 mb-2">OTP Verification</h3>
+                <div class="rounded bg-white shadow">
 
-					<div class="fw-normal text-muted mb-4">
-						Enter the verification code  
-					</div>  
+                    <form class="p-5"action="/verifyOTP" method="post" onsubmit="return validateOTP()">
+                        <h3 class="text-dark fw-bolder fs-4 mb-2">OTP Verification</h3>
+                        
+					
+                    <p id="message" class="text-danger"><%= locals.msg %></p>
                     <p id="countdown"></p>
-
                     
-
+                    
+                    
                     <div class="otp_input text-start mb-2">
                         <label for="digit">Type your 6 digit security code</label>
                         <div class="d-flex align-items-center justify-content-between mt-2">
                             
-                            <input autofocus maxlength="1" type="text" class="form-control otp-input" placeholder="">
-                            <input maxlength="1" type="text" class="form-control otp-input" placeholder="">
-                            <input maxlength="1" type="text" class="form-control otp-input" placeholder="">
-                            <input maxlength="1" type="text" class="form-control otp-input" placeholder="">
-                            <input maxlength="1" type="text" class="form-control otp-input" placeholder="">
-                            <input maxlength="1" type="text" class="form-control otp-input" placeholder="">
+                            <input autofocus maxlength="1" type="text"name = "otp1" class="form-control otp-input" placeholder="">
+                            <input maxlength="1" type="text" name = "otp2" class="form-control otp-input" placeholder="">
+                            <input maxlength="1" type="text" name = "otp3" class="form-control otp-input" placeholder="">
+                            <input maxlength="1" type="text" name = "otp4" class="form-control otp-input" placeholder="">
+                            <input maxlength="1" type="text" name = "otp5" class="form-control otp-input" placeholder="">
+                            <input maxlength="1" type="text" name = "otp6" class="form-control otp-input" placeholder="">
                         </div>
                     </div>
-                     
-
-					<button type="submit" class="btn btn-primary submit_btn my-4">Submit</button> 
-
-                    <div class="fw-normal text-muted mb-2">
-						Didn't get the code ? <a href="#" class="text-primary fw-bold text-decoration-none">Resend</a>
-					</div>
-				</form>
+                    
+                    
+					<button type="submit" class="btn btn-primary submit_btn my-2">Submit</button> 
+                </form>
+                
+                <div class="fw-normal text-muted pb-5 mb-2 form-group">
+                    Didn't get the code ?
+                    <button type="submit" id="resendOTP" class="btn btn-secondary" disabled>Resend OTP</button>
+                 </div>
+            </div>
 			</div>
 		</div>
 	</section>
@@ -75,18 +78,11 @@
             })
         })
 
-    </script>
-</body>
-</html>
+ 
 
+      //Funciton to start the count down
 
-
-
-
-
-<script>
-    // Function to start the countdown timer
-    const startCountdown = () => {
+        const startCountdown = () => {
         let countdown = 60;
         const countdownDisplay = document.getElementById('countdown');
         const resendButton = document.getElementById('resendOTP');
@@ -133,7 +129,7 @@
             message.innerText = "OTP must contain only numeric characters.";
             return false;
         } else {
-            // Assuming the backend endpoint for OTP verification is '/verifyOTP'
+            
             fetch('/verifyOTP', {
                 method: 'POST',
                 headers: {
@@ -167,7 +163,9 @@
     }
 
     document.getElementById('resendOTP').addEventListener('click', () => {
-        const generatedOTP =  crypto.randomInt(100000, 999999)
+        console.log("Resent button clicked!!")
+        // const generatedOTP =  crypto.randomInt(100000, 999999)
+        const generatedOTP =  Math.floor(1000 + Math.random() * 900000);
         console.log(`Generated OTP: ${generatedOTP}`);
 
         // Start the countdown timer

@@ -73,6 +73,8 @@ const orderManagement = async(req,res)=>{
  const orderStatus = async(req,res) => {
   const orderId = req.params.id; 
   const { newStatus } = req.body;
+  console.log("OrderID at orderStatus:",orderId)
+  console.log("NewStatus:",{ newStatus })
 
     try {
          const updatedOrder = await orderCollection.findByIdAndUpdate(orderId, { status: newStatus }, { new: true });

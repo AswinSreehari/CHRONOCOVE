@@ -19,7 +19,8 @@ const passwordcrypt = async function (password) {
 
 const generateOTP = () => {
     // generating a 6 digit otp number   
-    return Math.floor(1000 + Math.random() * 900000); 
+    // return Math.floor(1000 + Math.random() * 900000); 
+    return crypto.randomInt(100000, 999999)
   };
   
   
@@ -223,6 +224,7 @@ const googleSignIn = async (req, res) => {
 
         return res.redirect("/");
     } else {
+        // todo: handle the signup here!
         // googleUser.email -> string
         // googleUser.email_verified -> boolean
         // googleUser.name -> string
@@ -251,11 +253,11 @@ const signOut=(req,res)=>{
 
 //function for verifying otp
 const verifyOTP = async (req, res) => {
-    const enteredOTP = parseInt(req.body.otp, 10);
+    const enteredOTP = parseInt(req.body.otp1 + req.body.otp2 + req.body.otp3 + req.body.otp4 + req.body.otp5 + req.body.otp6, 10);
     const storedOTP = parseInt(req.session.otp, 10);
     const otpExpiry = req.session.otpExpiry;
-    console.log('correct otp:',storedOTP)
-    console.log('entered otp:', enteredOTP)
+    console.log('Correct otp:',storedOTP)
+    console.log('Entered otp:', enteredOTP)
 
     if (new Date() > new Date(otpExpiry)) {
         return res.json({ isValid: false, msg: "OTP has expired. Please request a new one." });
@@ -289,7 +291,7 @@ const verifyOTP = async (req, res) => {
 
   const resendOTP = async (req, res) => {
 
-    const usermail = req.session.user
+    const usermail = req.session.email
     if (req.session.requestedOTP) {
       const {otp, otpExpiry} = generateOTPWithExpiry()
       console.log("otp generated for resend is :", otp);
