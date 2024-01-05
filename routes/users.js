@@ -68,6 +68,8 @@ router.get('/editAddress/:id',userAuthentication.userAuthentication,profileContr
 router.post('/editAddressPost/:id',userAuthentication.userAuthentication,profileController.editAddressPost)
 router.get('/myOrders',userAuthentication.userAuthentication,profileController.myOrders)
 router.get('/orderDetails/:id',userAuthentication.userAuthentication,profileController.orderDetails)
+router.get('/changePassword',userAuthentication.userAuthentication,profileController.changePassword)
+router.post('/changePasswordPost',userAuthentication.userAuthentication,profileController.changePasswordPost)
 
 //<---------------------------------Wishlist----------------------------------------->
 router.get('/wishlist', userAuthentication.userAuthentication,wishlistController.wishlist);

@@ -5,17 +5,27 @@ const collection = require('../models/user')
 const orderCollection = require('../models/order')
 const cartCollection = require('../models/cart');
 const productCollection = require('../models/product');
+const bcrypt = require('bcrypt');
  
 
+//<!-------------------------------User_Profile--------------------------------------->
 
 
-
-const profile = (req,res)=>{
-    res.render('User/profile')
+const profile = async(req,res) => {
+  try{
+    const userData = await collection.findOne({emailId:req.session.email})
+    console.log("UserData:",userData)
+    res.render('User/profile',{userData});
+  }catch(err){
+    console.log(err)
+    res.redirect('/error')
+  }
+  
 }
+//<!-------------------------------/User_Profile--------------------------------------->
 
 const myAddress = async(req,res) => {
-    const userData = await collection.findOne({ emailId: req.session.email });
+  const userData = await collection.findOne({ emailId: req.session.email });
     const address  = await addressCollection.find({ userId: userData._id });
     console.log("address:",address)
     res.render('User/myAddress',{address})
@@ -195,6 +205,43 @@ const getProductDetails = async (items) => {
   }
 };
 
+//<!-----------------------------change-Password---------------------------------->
+
+const changePassword = (req,res) => {
+  res.render('User/changePassword')
+}
+
+const changePasswordPost = async (req, res) => {
+  try {
+    const data = req.body;
+    console.log("Data:", data);
+    const userData = await collection.findOne({ emailId: req.session.email });
+    console.log("UserData in the change password :", userData);
+
+    console.log("Old password : ", data.oldPass); 
+    console.log('New Password : ', data.newPass);
+    const isValid = await bcrypt.compare(data.oldPass, userData.password); 
+
+    if (!isValid) {
+      return res.status(400).send('Old password is incorrect');
+    }
+
+    if (data.newPass !== data.confPass) {
+      return res.status(400).send('New password and Confirm password do not match!');
+    }else{
+
+    }
+
+    const hashedPassword = await bcrypt.hash(data.newPass, 10);
+    await collection.updateOne({ emailId: req.session.email }, { $set: { password: hashedPassword } });
+    console.log('Password Changed Successfully!!');
+    res.redirect('/changePassword');
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
 
 module.exports = { 
     profile,  
@@ -205,7 +252,9 @@ module.exports = {
     editAddress,
     editAddressPost,
     myOrders,
-    orderDetails
+    orderDetails,
+    changePassword,
+    changePasswordPost
     
     
 }

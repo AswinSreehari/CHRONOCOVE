@@ -71,6 +71,7 @@ const orderManagement = async(req,res)=>{
  //<!------------------------------------order Status---------------------------------------->
 
  const orderStatus = async(req,res) => {
+  console.log("helooo");
   const orderId = req.params.id; 
   const { newStatus } = req.body;
   console.log("OrderID at orderStatus:",orderId)
