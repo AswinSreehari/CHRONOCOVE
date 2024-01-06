@@ -6,6 +6,7 @@ const adminController = require('../controller/AdminController')
 const productController = require('../controller/ProductController')
 const categoryController = require('../controller/CategoryController')
 const orderController = require('../controller/orderController')
+const couponController = require('../controller/couponController')
 const storage = require('../storage/multer')
 const upload = multer({storage})
 
@@ -56,7 +57,12 @@ router.get('/ordermanagement',adminauthenticaton.adminauthenticaton,orderControl
 router.get('/AdminViewOrderDetails/:id',adminauthenticaton.adminauthenticaton,orderController.AdminViewOrderDetails)
 router.put('/orderStatus/:id',adminauthenticaton.adminauthenticaton,orderController.orderStatus)
 
+//Coupon
 
+router.get('/couponManagement',adminauthenticaton.adminauthenticaton,couponController.couponManagement);
+router.get('/addCoupons',adminauthenticaton.adminauthenticaton,couponController.addCouponGet)
+router.post('/addCoupons',adminauthenticaton.adminauthenticaton,couponController.addCoupon)
+router.patch('/delete-coupon/:couponId',adminauthenticaton.adminauthenticaton,couponController.deleteCoupon);
 
 
 module.exports = router;

@@ -27,6 +27,7 @@
     "nocache": "^4.0.0",
     "node-watch": "^0.7.4",
     "nodemailer": "^6.9.7",
+    "razorpay": "^2.9.2",
     "sweetalert": "^2.1.2"
   }
 }

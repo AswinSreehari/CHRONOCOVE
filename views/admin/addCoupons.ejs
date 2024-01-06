@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DarkPan - Bootstrap 5 Admin Template</title>
+    <title>CHRONOCOVE_Admin</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -63,7 +63,7 @@
             
                 <a href="/admin/usermanagement" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Users </a>
                 <a href="/admin/categorymanagement" class="nav-item nav-link "><i class="fa fa-keyboard me-2"></i>Category </a>
-                <a href="/admin/productmanagement" class="nav-item nav-link "><i class="fa fa-table me-2"></i>Product  </a>
+                <a href="/admin/productmanagement" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Product  </a>
                 <a href="/admin/orderManagement" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Order</a>
                 <a href="/admin/couponManagement" class="nav-item nav-link  active"><i class="fa fa-table me-2"></i>Coupon</a>
 
@@ -177,19 +177,58 @@
             <!-- Navbar End -->
 
 
-            <!-- Blank Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="row vh-100 bg-secondary rounded align-items-center justify-content-center mx-0">
-                    <div class="col-md-6 text-center">
-                        <h3>This is blank page</h3>
-                    </div>
+
+<!--------------------------------------add_Coupon--------------------------------------->
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="text-center">New Coupon</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/admin/addCoupons" method="post" id="formCoupon">
+                        <div class="mb-3">
+                            <label for="couponName" class="form-label">Coupon Name*</label>
+                            <input type="text" class="form-control" name="couponName" id="couponName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="couponValue" class="form-label">Amount*</label>
+                            <input type="text" class="form-control" name="couponValue" id="couponValue" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="maxValue" class="form-label">Max Value*</label>
+                                <input type="text" class="form-control" name="maxValue" id="maxValue" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="minValue" class="form-label">Min Value*</label>
+                                <input type="text" class="form-control" name="minValue" id="minValue" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="expiryDate" class="form-label">Expiry Date*</label>
+                                <input type="date" class="form-control" name="expiryDate" id="expiryDate" required>
+                            </div>
+                        </div>
+                        <div class="text-success mb-3"><%= locals.suMessage ? suMessage : " " %></div>
+                        <div class="text-danger mb-3"><%= locals.message ? message : " " %></div>
+                        <div class="text-center">
+                            <button class="btn btn-success" type="submit">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <!-- Blank End -->
+        </div>
+    </div>
+</div>
+               
 
+
+<!-----------------------------------/add_Coupon----------------------------------------->
 
             <!-- Footer Start -->
-            <div class="container-fluid pt-4 px-4">
+            <div class="container-fluid pt-4 px-4 fixed-bottom">
                 <div class="bg-secondary rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">
@@ -211,17 +250,6 @@
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
-
-    <!-- JavaScript Libraries -->
-    <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/chart/chart.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script> -->
     
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
