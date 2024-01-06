@@ -20,7 +20,7 @@
 				
                 <div class="rounded bg-white shadow">
 
-                    <form class="p-5"action="/verifyOTP" method="post" onsubmit="return validateOTP()">
+                    <form class="p-5" id="otpForm">
                         <h3 class="text-dark fw-bolder fs-4 mb-2">OTP Verification</h3>
                         
 					
@@ -48,7 +48,7 @@
                 
                 <div class="fw-normal text-muted pb-5 mb-2 form-group">
                     Didn't get the code ?
-                    <button type="submit" id="resendOTP" class="btn btn-secondary" disabled>Resend OTP</button>
+                    <button type="button" id="resendOTP" class="btn btn-secondary" disabled>Resend OTP</button>
                  </div>
             </div>
 			</div>
@@ -118,12 +118,20 @@
         };
     }
 
-    const  validateOTP = () => {
-        const otpInput = document.getElementById("otp");
+    const otpForm = document.getElementById('otpForm');
+    otpForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        validateOTP();
+    })
+
+    function validateOTP() {
         const message = document.getElementById("message");
         const resendButton = document.getElementById("resendOTP");
 
-        const otpValue = otpInput.value;
+        let otpValue = '';
+        inputBoxes.forEach((box, index) => {
+            otpValue += box.value;
+        });
 
         if (!otpValue.match(/^\d+$/)) {
             message.innerText = "OTP must contain only numeric characters.";
@@ -135,7 +143,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ otp: otpValue }),
+                body: JSON.stringify({ otp: parseInt(otpValue) }),
             })
             .then((res) => res.json())
             .then((data) => {
@@ -162,18 +170,15 @@
         }
     }
 
-    document.getElementById('resendOTP').addEventListener('click', () => {
-        console.log("Resent button clicked!!")
-        // const generatedOTP =  crypto.randomInt(100000, 999999)
-        const generatedOTP =  Math.floor(1000 + Math.random() * 900000);
-        console.log(`Generated OTP: ${generatedOTP}`);
+    const resendButton = document.getElementById('resendOTP');
+    resendButton.addEventListener('click', () => {
 
         // Start the countdown timer
         countdownTimer = startCountdown();
 
-        this.disabled = true;
-        this.classList.remove('btn-primary');
-        this.classList.add('btn-secondary');
+        resendButton.disabled = true;
+        resendButton.classList.remove('btn-primary');
+        resendButton.classList.add('btn-secondary');
 
         fetch('/resendOTP', { method: "POST" })
             .then(res => res.json())

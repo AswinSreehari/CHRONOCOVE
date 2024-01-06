@@ -184,7 +184,7 @@ const orderDetails = async (req, res) => {
 
 
   const orderProducts = await getProductDetails(orderData.items);
-  res.render('User/orderDetails', { orderData, orderProducts });
+  res.render('User/orderDetails', { orderData, orderProducts , userData });
 };
 
 const getProductDetails = async (items) => {

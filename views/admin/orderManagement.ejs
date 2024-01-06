@@ -264,7 +264,7 @@
      const selectElement = document.getElementById(`orderStatus-${orderId}`);
      const newStatus = selectElement.value;
  
-     fetch(`/orderStatus/${orderId}`, {
+     fetch(`/admin/orderStatus/${orderId}`, {
          method: 'PUT',
          headers: {
              'Content-Type': 'application/json',

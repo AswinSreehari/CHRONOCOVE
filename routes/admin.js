@@ -62,7 +62,7 @@ router.put('/orderStatus/:id',adminauthenticaton.adminauthenticaton,orderControl
 router.get('/couponManagement',adminauthenticaton.adminauthenticaton,couponController.couponManagement);
 router.get('/addCoupons',adminauthenticaton.adminauthenticaton,couponController.addCouponGet)
 router.post('/addCoupons',adminauthenticaton.adminauthenticaton,couponController.addCoupon)
-router.patch('/delete-coupon/:couponId',adminauthenticaton.adminauthenticaton,couponController.deleteCoupon);
+router.get('/delete-coupon/:couponId',adminauthenticaton.adminauthenticaton,couponController.deleteCoupon);
 
 
 module.exports = router;

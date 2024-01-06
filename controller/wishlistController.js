@@ -112,7 +112,7 @@ const addtoCart = async (req, res) => {
       userCart.totalPrice = total
       console.log("Tot:",userCart.totalPrice)
       await userCart.save();
-      res.render('User/cart', { populatedCart , totalPrice,total});
+      res.render('User/cart', { populatedCart: populatedCart ?? [] , totalPrice,total});
     } catch (err) {
       console.error("Error at god knows where.");
       console.error(err);

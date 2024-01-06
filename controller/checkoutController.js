@@ -41,7 +41,7 @@ const checkout = (async(req,res)=>{
       const userAddress = await addressCollection.find({userId : userData._id})
       const populatedCart = await populateProductDetails(userCart);
       console.log("populatedCart:",populatedCart)
-    res.render('User/checkout',{populatedCart , totalPrice, total , userAddress})
+    res.render('User/checkout',{populatedCart , totalPrice, total , userAddress: userAddress ?? [] })
 })
 
 const addAddressPost = async(req,res)=>{

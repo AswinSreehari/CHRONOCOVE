@@ -106,13 +106,15 @@
        <div class="row mt-4 text-black"  style="display: flex; justify-content: space-around;">
         <div class="col-6"    >
           <h4>Order ID:  <%= orderData._id %></h4>
+          <p>Username : <%=userData.username%> </p>
+          <p>Email : <%=userData.emailId%> </p>
           <p style="color: red;">Status: pending</p>
           <p>Total Price: <%= orderData.orderTotal %></p>
           <p>Coupon Discount Price: </p>
           <h6>Payment Method : <%= orderData.paymentMethod %></h6>
           <p>Order Date:  <%= orderData.orderTime %></p>  
         </div>
-        <div class="col-6"   >
+        <div class="col-6">
           <h4>Shipping Address:<%= orderData.selectedAddress %></h4>
           <p>  </p>
         </div>
@@ -142,20 +144,14 @@
             </div>
         </div>
     </div>
-
-      
+</div>
     
- 
-    </div>
-    
- 
 
+
+
+
+<!-----------------------------------------Footer------------------------------------------>
      
-  
-
-    
-
-    
     <footer class="site-footer border-top">
       <div class="container">
         <div class="row">

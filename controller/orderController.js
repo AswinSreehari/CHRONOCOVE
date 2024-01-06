@@ -92,7 +92,7 @@ const AdminViewOrderDetails = async (req, res) => {
   const orderId = req.params.id;
   console.log("OrderId:",orderId)
   if (!mongoose.Types.ObjectId.isValid(orderId)) {
-    return res.status(400).send("Enter Valid MongoDB ID");
+    return res.status(400).send("Enter a Valid Onject ID");
   }
 
   const orderData = await orderCollection.findById(orderId);
@@ -107,7 +107,7 @@ const AdminViewOrderDetails = async (req, res) => {
   const userId = userData._id;
 
   const orderProducts = await getProductDetails(orderData.items);
-  res.render('admin/viewOrderDetails', { orderData, orderProducts });
+  res.render('admin/viewOrderDetails', { orderData, orderProducts ,userData});
 };
 
 const getProductDetails = async (items) => {

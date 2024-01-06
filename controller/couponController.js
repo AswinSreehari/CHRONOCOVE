@@ -49,7 +49,7 @@ const deleteCoupon = async (req, res) => {
         const couponId = req.params.couponId;
         console.log(couponId)
         await couponCollection.findByIdAndDelete(couponId);
-        res.redirect('/admin/coupons'); 
+        res.redirect('/admin/couponManagement'); 
     } catch (error) {
         console.error(error);
         res.render('admin/404')

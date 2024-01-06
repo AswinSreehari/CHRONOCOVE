@@ -187,8 +187,10 @@
      <div class="row mt-4 text-black"  style="display: flex; justify-content: space-around;">
       <div class="col-6"    >
         <h4>Order ID:  <%= orderData._id %></h4>
+        <p>Username : <%=userData.username%> </p>
+        <p>Email : <%=userData.emailId%> </p>
         <p style="color: red;">Status: Pending</p>
-        <p>Total Price: <%= orderData.orderTotal %></p>
+        <p>Total Price: $<%= orderData.orderTotal %></p>
         <p>Coupon Discount Price: </p>
         <h6>Payment Method : <%= orderData.paymentMethod %></h6>
         <p>Order Date:  <%= orderData.orderTime %></p>  
@@ -235,7 +237,7 @@
 <!-----------------------------End_Content_Area------------------------------------------------>
          
             <!-- Footer Start -->
-            <div class="container-fluid pt-4 px-4 fixed-bottom">
+            <div class="container-fluid pt-4 px-4">
                 <div class="bg-secondary rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">
