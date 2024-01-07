@@ -108,7 +108,7 @@
           <h4>Order ID:  <%= orderData._id %></h4>
           <p>Username : <%=userData.username%> </p>
           <p>Email : <%=userData.emailId%> </p>
-          <p style="color: red;">Status: pending</p>
+          <p style="color: red;">Status: <%= orderData.status %></p>
           <p>Total Price: <%= orderData.orderTotal %></p>
           <p>Coupon Discount Price: </p>
           <h6>Payment Method : <%= orderData.paymentMethod %></h6>

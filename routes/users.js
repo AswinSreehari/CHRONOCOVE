@@ -9,6 +9,7 @@ const profileController = require('../controller/profileController')
 const orderController = require('../controller/orderController')
 const cartCollection = require('../models/cart');
 const wishlistController = require('../controller/wishlistController');
+const walletcontroller = require('../controller/walletController')
 const hpp = require('hpp');
 
 
@@ -70,6 +71,7 @@ router.get('/myOrders',userAuthentication.userAuthentication,profileController.m
 router.get('/orderDetails/:id',userAuthentication.userAuthentication,profileController.orderDetails)
 router.get('/changePassword',userAuthentication.userAuthentication,profileController.changePassword)
 router.post('/changePasswordPost',userAuthentication.userAuthentication,profileController.changePasswordPost)
+router.put('/cancelOrder/:orderId',userAuthentication.userAuthentication,profileController.cancelOrder)
 
 //<---------------------------------Wishlist----------------------------------------->
 router.get('/wishlist', userAuthentication.userAuthentication,wishlistController.wishlist);
@@ -77,7 +79,9 @@ router.post('/addWish/:id',userAuthentication.userAuthentication,wishlistControl
 router.delete('/wishlist/:productId',userAuthentication.userAuthentication,wishlistController.deleteWishlistProduct)
 router.post('/addtoCart/:id',userAuthentication.userAuthentication,wishlistController.addtoCart)
 
+//<---------------------------------Wallet----------------------------------------->
 
+ router.get('/walletHistory',userAuthentication.userAuthentication,walletcontroller.walletHistory)
 
 
 

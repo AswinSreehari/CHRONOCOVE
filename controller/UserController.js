@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const { getGoogleOAuthURL } = require('../utils/oauth');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const wallet = require('../models/wallet')
 
 
 
@@ -15,6 +16,8 @@ const passwordcrypt = async function (password) {
     const bcrptPass = await bcrypt.hash(password, 8);
     return bcrptPass;
 }
+
+
 
 
 const generateOTP = () => {
@@ -102,6 +105,8 @@ const signupPost = async (req, res) => {
                 password: await passwordcrypt(req.body.password),
                 otp: otp,
                 otpExpiry: otpExpiry,
+                wallet : new wallet()
+
             };
 
             //todo:Compare OTP

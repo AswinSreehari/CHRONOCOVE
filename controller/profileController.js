@@ -243,6 +243,23 @@ const changePasswordPost = async (req, res) => {
 };
 
 
+const cancelOrder = async(req,res) => {
+  const orderId = req.params.orderId;
+
+    try {
+        const updatedOrder = await orderCollection.findByIdAndUpdate(
+            orderId,
+            { status: 'Cancelled' },
+            { new: true }
+        );
+
+        res.json({ success: true, updatedOrder });
+    } catch (error) {
+        console.error('Error cancelling order:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+}
+
 module.exports = { 
     profile,  
     myAddress,
@@ -254,7 +271,8 @@ module.exports = {
     myOrders,
     orderDetails,
     changePassword,
-    changePasswordPost
+    changePasswordPost,
+    cancelOrder
     
     
 }

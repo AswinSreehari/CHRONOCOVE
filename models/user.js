@@ -21,6 +21,10 @@ const LoginSchema = new mongoose.Schema({
         type : Boolean,
         default : false
     },
+    wallet: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Wallet'
+    },
     sessionId: {
         type: String,
         required: false

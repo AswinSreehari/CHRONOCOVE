@@ -110,6 +110,7 @@
         <th scope="col">price</th>
         <th scope="col">status</th>
         <th scope="col">Action</th>
+        <th scope="col">Cancel Order</th>
       </tr>
     </thead>
     <tbody>
@@ -120,8 +121,9 @@
             <td><%= order.items.productData[0]?.productName %></td>
             <td><%= order.items.quantity %></td>
             <td><%= order.items.total %></td>
-            <td>Pending</td>
-            <td><a href="/orderDetails/<%= order._id %>" class="btn btn-primary">View Details</a></td>
+            <td><%= order.status %></td>
+            <td><a href="/orderDetails/<%= order._id %>" class="btn btn-primary">View  </a></td>
+            <td><a href="#" class="btn btn-primary" id="cancelBtn-<%= order._id %>" onclick="cancelOrder('<%= order._id %>')" disabled>Cancel</a></td>
           </tr>
         <% }); %>
       <% } else { %>
@@ -148,6 +150,39 @@
   <script src="/javascripts/jquery.magnific-popup.min.js"></script>
   <script src="/javascripts/aos.js"></script>
   <script src="/javascripts/main.js"></script>
+
+  <!-- Add a script to handle the cancellation -->
+  <script>
+    const cancelOrder = async (orderId) => {
+        try {
+            const response = await fetch(`/cancelOrder/${orderId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed with status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                console.log('Order cancelled successfully:', data.updatedOrder);
+                // Disable the button after successful cancellation
+                const cancelButton = document.querySelector(`.cancel-btn[data-order-id="${orderId}"]`);
+                if (cancelButton) {
+                    cancelButton.disabled = true;
+                }
+            } else {
+                console.error('Failed to cancel order:', data.error);
+            }
+        } catch (error) {
+            console.error('Error cancelling order:', error);
+        }
+    };
+</script>
+
 
 </body>
 
