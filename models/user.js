@@ -23,7 +23,7 @@ const LoginSchema = new mongoose.Schema({
     },
     wallet: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Wallet'
+        ref: 'wallet'
     },
     sessionId: {
         type: String,

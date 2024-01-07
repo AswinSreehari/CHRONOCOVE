@@ -6,6 +6,7 @@ const orderCollection = require('../models/order')
 const cartCollection = require('../models/cart');
 const productCollection = require('../models/product');
 const bcrypt = require('bcrypt');
+const referenceColleciton = require('../models/reference');
  
 
 //<!-------------------------------User_Profile--------------------------------------->
@@ -14,8 +15,10 @@ const bcrypt = require('bcrypt');
 const profile = async(req,res) => {
   try{
     const userData = await collection.findOne({emailId:req.session.email})
+    const reference = await referenceColleciton.findOne({ userId: userData._id });
+
     console.log("UserData:",userData)
-    res.render('User/profile',{userData});
+    res.render('User/profile',{userData,reference});
   }catch(err){
     console.log(err)
     res.redirect('/error')

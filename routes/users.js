@@ -10,6 +10,7 @@ const orderController = require('../controller/orderController')
 const cartCollection = require('../models/cart');
 const wishlistController = require('../controller/wishlistController');
 const walletcontroller = require('../controller/walletController')
+const referenceController = require('../controller/referenceController')
 const hpp = require('hpp');
 
 
@@ -56,7 +57,7 @@ router.get('/checkout',  userAuthentication.userAuthentication,checkoutControlle
 router.post('/checkoutPost',userAuthentication.userAuthentication,orderController.checkoutPost)
 router.post('/addAddressPost',userAuthentication.userAuthentication ,checkoutController.addAddressPost)
 router.get('/thankyou',userAuthentication.userAuthentication,checkoutController.thankyou)
-
+router.post('/saveOrder',userAuthentication.userAuthentication,orderController.saveOrder)
 
 //<---------------------------------User_Profile----------------------------------------->
 
@@ -81,9 +82,11 @@ router.post('/addtoCart/:id',userAuthentication.userAuthentication,wishlistContr
 
 //<---------------------------------Wallet----------------------------------------->
 
- router.get('/walletHistory',userAuthentication.userAuthentication,walletcontroller.walletHistory)
+router.get('/walletHistory',userAuthentication.userAuthentication,walletcontroller.walletHistory)
 
+//<---------------------------------Reference----------------------------------------->
 
+router.post('/claimReference',userAuthentication.userAuthentication,referenceController.claimReferenceCode)
 
 
 
