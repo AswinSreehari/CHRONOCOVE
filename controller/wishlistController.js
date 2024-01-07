@@ -58,6 +58,8 @@ const deleteWishlistProduct = async (req, res) => {
   };
 
 
+
+
 //<!-------------------------Add to Cart--------------------------------------->
 
 const addtoCart = async (req, res) => {

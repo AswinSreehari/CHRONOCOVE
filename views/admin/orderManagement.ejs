@@ -197,12 +197,13 @@
                             <td>Cash On Delivery</td>
                             <td>$<%= odr.orderTotal %></td>
                             <td>
-                                <select class="form-select" id="orderStatus-<%= odr._id %>" onchange="updateOrderStatus('<%= odr._id %>')">
-                                    <option value="pending" <% if (odr.status === 'pending') { %>selected<% } %>>Pending</option>
-                                    <option value="processing" <% if (odr.status === 'processing') { %>selected<% } %>>Processing</option>
+                                <select class="form-select" id="orderStatus-<%= odr._id %>" onchange="updateOrderStatus('<%= odr._id %>', this.value)">
+                                    <option value="Pending" <% if (odr.status === 'Pending') { %>selected<% } %>>Pending</option>
+                                    <option value="Processing" <% if (odr.status === 'Processing') { %>selected<% } %>>Processing</option>
                                     <option value="Delivered" <% if (odr.status === 'Delivered') { %>selected<% } %>>Delivered</option>
-                                    <option value="cancelled" <% if (odr.status === 'cancelled') { %>selected<% } %>>Cancelled</option>
+                                    <option value="Cancelled" <% if (odr.status === 'Cancelled') { %>selected<% } %>>Cancelled</option>
                                 </select>
+                                
                             </td>
                             
                             <td>
@@ -257,37 +258,52 @@
 
     <!-- Template Javascript -->
     <script src="/javascripts/adminmain.js"></script>
+    
+ <script>
+   document.addEventListener('DOMContentLoaded', () => {
+    const selectElements = document.querySelectorAll('[id^="orderStatus-"]');
+    selectElements.forEach(selectElement => {
+        selectElement.addEventListener('change', async (event) => {
+            // Disable the select element to prevent further changes
+            selectElement.disabled = true;
+
+            const orderId = selectElement.id.split('-')[1];
+            const newStatus = selectElement.value;
+
+            try {
+                const response = await fetch(`/admin/orderStatus/${orderId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status: newStatus }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed with status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    console.log('Order status updated successfully:', data.updatedOrder);
+                } else {
+                    console.error('Failed to update order status:', data.error);
+                }
+            } catch (error) {
+                console.error('Error updating order status:', error);
+            } finally {
+                // Enable the select element after the update is completed
+                selectElement.disabled = false;
+            }
+        });
+    });
+});
+
+
+
+
+</script>
+
+
 </body>
-
-<script>
-    const updateOrderStatus = (orderId) => {
-     const selectElement = document.getElementById(`orderStatus-${orderId}`);
-     const newStatus = selectElement.value;
- 
-     fetch(`/admin/orderStatus/${orderId}`, {
-         method: 'PUT',
-         headers: {
-             'Content-Type': 'application/json',
-         },
-         body: JSON.stringify({ status: newStatus }),
-     })
-     .then(response => {
-         if (!response.ok) {
-             throw new Error(`Failed with status: ${response.status}`);
-         }
-         return response.json();
-     })
-     .then(data => {
-         if (data.success) {
-             console.log('Order status updated successfully:', data.updatedOrder);
-         } else {
-             console.error('Failed to update order status:', data.error);
-         }
-     })
-     .catch(error => {
-         console.error('Error updating order status:', error);
-     });
- };
- </script>
-
 </html>

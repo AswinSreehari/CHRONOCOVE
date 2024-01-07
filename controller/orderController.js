@@ -70,21 +70,20 @@ const orderManagement = async(req,res)=>{
 
  //<!------------------------------------order Status---------------------------------------->
 
- const orderStatus = async(req,res) => {
-  console.log("helooo");
-  const orderId = req.params.id; 
-  const { newStatus } = req.body;
-  console.log("OrderID at orderStatus:",orderId)
-  console.log("NewStatus:",{ newStatus })
+ const orderStatus = async (req, res) => {
+  const orderId = req.params.id;
+  const  newStatus  = req.body;
+  console.log("req.body:", newStatus.status  )
 
-    try {
-         const updatedOrder = await orderCollection.findByIdAndUpdate(orderId, { status: newStatus }, { new: true });
-        res.json({ success: true, updatedOrder });
-    } catch (error) {
-        console.error('Error updating order status:', error);
+  try {
+      const updatedOrder = await orderCollection.findByIdAndUpdate(orderId, { status: newStatus.status }, { new: true });
+      res.json({ success: true, updatedOrder });
+  } catch (error) {
+      console.error('Error updating order status:', error);
       res.status(500).json({ success: false, error: 'Internal Server Error' });
-    }
- }
+  }
+};
+
 
  //<!--------------------------------Admin Oder Details-------------------------------------->
 

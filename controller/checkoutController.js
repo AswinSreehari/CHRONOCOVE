@@ -85,7 +85,6 @@ const addAddressPost = async(req,res)=>{
         })
         userAddress.save()
     }
-    console.log("Its the addresssh:",req.body)
 
         const userAddresss = await addressCollection.find({userId : userData._id}) 
        console.log("UserAddress",userAddresss)
@@ -119,9 +118,7 @@ const addAddressPost = async(req,res)=>{
           items: populatedItems,
         };
       };
-       
-       
-      console.log("This is the address in the cart:",userAddress)
+      
       const populatedCart = await populateProductDetails(userCart);
         res.render('User/checkout',{populatedCart , totalPrice, total , userAddress});
 

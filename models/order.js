@@ -37,14 +37,19 @@ const orderSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
+  isCancelled:{
+    type:Boolean,
+    default:false,
+    required:true
+  },
   orderTime: {
     type: Date,
     default: Date.now,
   },
   status: {
     type: String,
-    enum: ['pending', 'processing', 'Delivered', 'cancelled'],
-    default: 'pending',
+    enum: ['Pending', 'Processing', 'Delivered', 'Cancelled'],
+    default: 'Pending',
   },
    
 });

@@ -145,7 +145,10 @@
                           </button>
                       </td>       
                       <td id="wishlist-<%=data._id %>">
-                        <a href="/wishlist" class="btn btn-primary btn-sm" onclick="deleteWishlistProduct('<%= data._id %>')">X</a>
+                        <a href="/wishlist" class="btn btn-primary btn-sm" onclick="deleteWishlistProduct('<%= data._id %>',event)">X</a>
+                        <!-- Example usage in HTML -->
+<!-- <button onclick="deleteWishlistProduct('productId', event)">Delete</button> -->
+
                       </td>
                                 
                     </tr>
@@ -270,7 +273,8 @@
 
 </html>
 
-<script>
+
+<!-- <script>
   //Close Button 
  
   const deleteWishlistProduct = (productId) => {
@@ -307,4 +311,61 @@
   
  
   
+ </script> -->
+
+  
+
+
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+ <script>
+   // Close Button
+   const deleteWishlistProduct = (productId, event) => {
+     event.preventDefault();
+     Swal.fire({
+       title: 'Are you sure?',
+       text: 'You will not be able to recover this product!',
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#d33',
+       cancelButtonColor: '#3085d6',
+       confirmButtonText: 'Yes, delete it!'
+     }).then((result) => {
+       if (result.isConfirmed) {
+         fetch(`/wishlist/${productId}`, {
+           method: 'DELETE',
+           headers: {
+             'Content-Type': 'application/json'
+           },
+         })
+           .then(res => {
+             if (!res.ok) {
+               throw new Error(`HTTP error! Status: ${res.status}`);
+             }
+             return res.json();
+           })
+           .then(data => {
+             console.log('Data:', data)
+             if (data.success) {
+               const productRow = document.getElementById(`wishlist-${productId}`);
+               if (productRow) {
+                 productRow.remove();
+               }
+
+              //  Swal.fire('Deleted!', 'Your product has been deleted.', 'success');
+              //  setTimeout(() => {
+                // }, 1000);
+               location.reload();
+             } else {
+               alert(`Failed to delete product.`);
+             }
+           })
+           .catch(err => {
+             console.error('Error deleting product:', err);
+             alert('An error occurred. Please try again!!');
+           });
+       }
+     });
+   }
  </script>
+ 
