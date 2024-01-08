@@ -253,7 +253,7 @@
                       </strong><br>
 
                       <!-- Radio button for each address -->
-                      <input type="radio" name="selectedAddress" value="<%= ad._id %>">
+                      <input type="radio" name="selectedAddress" value="<%=ad._id %>">
                     </div>
                   </div>
                   <% }) %>
@@ -323,7 +323,7 @@
                   </div>
                 </div>
                 <div class="form-group" style="margin-top: 50px;">
-                  <button type="submit" class="btn btn-primary btn-lg py-3 btn-block" id="placeOrderBtn">Place
+                  <button type="button" class="btn btn-primary btn-lg py-3 btn-block" id="placeOrderBtn">Place
                     Order</button>
                 </div>
               </div>
@@ -473,9 +473,9 @@
 
   <script>
     //place order Button
-    document.getElementById('placeOrderBtn').addEventListener('click', () => {
-      document.getElementById('addressForm').submit();
-    });
+    // document.getElementById('placeOrderBtn').addEventListener('click', () => {
+    //   document.getElementById('addressForm').submit();
+    // });
 
     //Selcted address
     document.addEventListener('DOMContentLoaded', () => {
@@ -493,7 +493,7 @@
           let formData = new FormData(form);
           formData.set('selectedAddress', this.value);
 
-
+          
           console.log('Selected Address:', this.value);
 
         });
@@ -507,14 +507,14 @@
       });
     });
 
-
+    var selectedMethod
     //payment method
     document.addEventListener('DOMContentLoaded', function () {
       var paymentMethodButtons = document.querySelectorAll('.list-group-item');
 
       paymentMethodButtons.forEach(function (button) {
         button.addEventListener('click', function () {
-          var selectedMethod = this.getAttribute('data-method');
+          selectedMethod = this.getAttribute('data-method');
           document.getElementById('paymentMethod').value = selectedMethod;
 
           // Log to console for checking
@@ -523,11 +523,8 @@
         });
       });
     });
-    //<!------------------------------------------Highlight_Cards--------------------------------------------->
-
-    const highlight = (card) => {
-      card.classList.toggle('active')
-    }
+ 
+    
 
   </script>
 
@@ -536,23 +533,26 @@
   <!-- Add this script at the end of your HTML file or in a separate script file -->
   <script>
     document.getElementById('placeOrderBtn').addEventListener('click', function () {
+
       placeOrder();
     });
 
     function placeOrder() {
+     
       // Gather data from the selected address and payment method
-      const selectedAddress = document.querySelector('input[name="selectedAddress"]:checked');
-      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+      const selectedAddress = document.querySelector('input[name="selectedAddress"]:checked').value;
+      const paymentMethod = selectedMethod
       const total = document.querySelector('input[name="total[]"]').value;
-
+      console.log(paymentMethod,selectedAddress,"ceck 2");
       // Check if both address and payment method are selected
       if (selectedAddress && paymentMethod) {
         // Prepare data to be sent in the fetch request
         const data = {
-          selectedAddress: selectedAddress.value,
-          paymentMethod: paymentMethod.value,
-          total: total
+          selectedAddress: selectedAddress,
+          paymentMethod: paymentMethod,
+          total: '100'
         };
+        console.log(data);
 
         // Make a fetch request
         fetch('/checkoutPost', {
@@ -564,12 +564,13 @@
         })
           .then(response => response.json())
           .then(data => {
+            console.log(data);
             if (data.id) {
               var options = {
-                key: "rzp_test_rII4CJ8DT2Ox30", // Replace with your actual key_id
+                key: "rzp_test_rII4CJ8DT2Ox30",  
                 amount: data.amount,
                 currency: data.currency,
-                name: "BE FIT",
+                name: "CHRONOCOVE",
                 description: "Test Transaction",
                 image: "https://example.com/your_logo",
                 order_id: data.id,

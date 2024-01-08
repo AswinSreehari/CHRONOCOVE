@@ -60,6 +60,7 @@ const sendOTPByEmail = async (email, otp) => {
     }
 }
 
+
 //Generating Reference Code
 
 const generateRandomReferenceCode = (length) => {
@@ -113,6 +114,9 @@ const signupPost = async (req, res) => {
         try {
             const { otp, otpExpiry } = generateOTPWithExpiry();
             console.log(otp);
+
+             
+
 
             const data = {
                 username: req.body.name,
@@ -359,25 +363,48 @@ const signupPost = async (req, res) => {
         }
     })
 
-    //Forgot Password
-    const forgotPassword = async (req, res) => {
+   
+// Forgot Password
+const forgotPassword = async (req, res) => {
+    res.render('User/forgotPassword');
+}
 
-        res.render('User/forgotPassword')
+const forgotPasswordPost = async (req, res) => {
+    try {
+        const email = req.body.email;
+
+        const user = await collection.findOne({ emailId: email });
+
+        if (!user) {
+            return res.render('User/forgotPassword', { error: 'User not found' });
+        }
+
+        // Generate OTP and OTP expiry
+        const { otp, otpExpiry } = generateOTPWithExpiry();
+
+        // Update user's OTP and OTP expiry in the database
+        user.otp = otp;
+        user.otpExpiry = otpExpiry;
+        await user.save();
+
+         console.log("Generated OTP:", otp);
+ 
+        // Send OTP to the  's email
+        await sendOTPByEmail(email, otp);
+
+        // Render the page where the user can enter the OTP
+        res.render('User/otp', { email, message: 'Please enter the OTP sent to your email' });
+        
+    } catch (error) {
+        console.error(error);
+        res.redirect('/error');
     }
+};
 
-    const forgotPasswordPost = async (req, res) => {
-        const email = req.body
-        console.log("Email @ forgot password : ", email)
-        res.render('user/signin')
-        // try{
-        //     const userData = await collection.find({emailId:email})
-        //     console.log(("Data::",userData))
-        // }catch(err){
-        //     console.log(err)
-        //     res.redirect('/error')
-        // }
 
-    }
+
+
+ 
 
 
 

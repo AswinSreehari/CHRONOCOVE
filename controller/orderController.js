@@ -94,6 +94,8 @@ const Razorpay = require('razorpay')
 // };
 let order;
 const checkoutPost = async (req, res) => {
+
+  console.log('check out post called')
   try {
     const {
       selectedAddress, paymentMethod, productName, quantity, totalPrice, total
@@ -103,6 +105,7 @@ const checkoutPost = async (req, res) => {
     console.log("Product ID is here! :", productName);
 
     if (!productName || !quantity || !totalPrice || !total || !paymentMethod) {
+      console.log(productName , quantity , totalPrice , total , paymentMethod)
       return res.status(400).send('Invalid request. Missing required fields.');
     }
 
@@ -152,7 +155,7 @@ const checkoutPost = async (req, res) => {
         quantity: quantity[index],
         total: productTotalPrice.find(item => item._id.equals(name)).totalPrice,
       })),
-      orderTotal: parseFloat(total),
+      orderTotal: Number(total[0].slice(1)),
       paymentMethod: paymentMethod
     });
 
@@ -189,20 +192,20 @@ const checkoutPost = async (req, res) => {
       });
       console.log("instance created!!!")
       var options = {
-        amount: Math.round(total * 100), // amount in paise (smallest currency unit)
+        amount: Math.round(Number(total[0].slice(1)) * 100),  
         currency: "INR",
         receipt: "order_rcptid_11",
       };
+
+      console.log("Options:",options)
 
       instance.orders.create(options, function (err, order) {
         if (err) {
           console.error('Razorpay order creation error:', err);
           res.status(500).send('Error creating Razorpay order');
         } else {
-          
-              res.json({ id: order.id, amount: order.amount, currency: order.currency });
+              res.json({ id: order.id, amount: order.amount, currency: order.currency  });
         
-          
         }
       });
     } else {

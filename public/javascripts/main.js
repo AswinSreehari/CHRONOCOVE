@@ -4,6 +4,20 @@
  	once: true
  });
 
+ function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		clearTimeout(timeout);
+		if (immediate && !timeout) func.apply(context, args);
+		timeout = setTimeout(function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		}, wait);
+	};
+  }
+  
+
 jQuery(document).ready(function($) {
 
 	"use strict";
@@ -137,11 +151,20 @@ jQuery(document).ready(function($) {
 	var siteSliderRange = function() {
     $( "#slider-range" ).slider({
       range: true,
-      min: 0,
-      max: 500,
-      values: [ 75, 300 ],
+      min: 50000,
+      max: 1000000,
+      values: [ 50000, 1000000 ],
       slide: function( event, ui ) {
         $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+		const filterByPrice = () => {
+			console.log("Hello");
+			fetch(`/filter-products?minPrice=${ui.values[0]}&maxPrice=${ui.values[1]}`)
+			.then(res => res.text())
+			.then(data => {document.getElementById('productsContainer').innerHTML = data});
+		}
+		
+		filterByPrice();
+		// debounce(filterByPrice, 150);
       }
     });
     $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +

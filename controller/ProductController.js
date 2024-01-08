@@ -1,5 +1,6 @@
 const productCollection  = require('../models/product')
 const categoryCollection = require('../models/category')
+const ejs = require('ejs');
 
 
 //Product_Management
@@ -160,6 +161,18 @@ const shop = (async(req,res)=>{
 })
 
 
+const filter = async (req, res) => {
+    const minPrice = parseInt(req.query.minPrice ?? '50000');
+    const maxPrice = parseInt(req.query.maxPrice ?? '20000000');
+const query = { productPrice: {$gt: minPrice, $lt: maxPrice} };
+// console.log(query);
+    const products = await productCollection.find(query)
+    // console.log(products);
+    const html = await ejs.renderFile('./views/User/_products-container.ejs', { products })
+    // console.log(html);
+    res.send(html);
+}
+
 //Image_Delete
 
 const deleteProductImage = async (req, res) => {
@@ -179,5 +192,6 @@ module.exports={
     editProductPost,
     deleteProduct,
     shop,
+    filter,
     deleteProductImage,
 }

@@ -11,6 +11,7 @@ const cartCollection = require('../models/cart');
 const wishlistController = require('../controller/wishlistController');
 const walletcontroller = require('../controller/walletController')
 const referenceController = require('../controller/referenceController')
+const couponController = require('../controller/couponController')
 const hpp = require('hpp');
 
 
@@ -41,6 +42,7 @@ router.post('/forgotPasswordPost',userController.forgotPasswordPost)
 //<-----------------------------Product_Route----------------------------->
 
 router.get('/shop',productController.shop)
+router.get('/filter-products', productController.filter);
 
 
 //<------------------------------Cart_Route--------------------------------------------->
@@ -88,6 +90,9 @@ router.get('/walletHistory',userAuthentication.userAuthentication,walletcontroll
 
 router.post('/claimReference',userAuthentication.userAuthentication,referenceController.claimReferenceCode)
 
+//<---------------------------------Coupon----------------------------------------->
 
+router.post('/applyCoupon',userAuthentication.userAuthentication,couponController.applyCoupon)
+router.post('/removeCoupon',userAuthentication.userAuthentication,couponController.removeCoupon)
 
 module.exports = router;
