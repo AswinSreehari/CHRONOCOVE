@@ -221,12 +221,11 @@
             <h2 class="h3 mb-3 mt-5 text-black">Address Card</h2>
 
             <div class="row">
-
               <% userAddress.forEach((addr, index)=> { %>
                 <% addr.Address.forEach(ad=> { %>
-                  <div class="col-md-6 mb-4">
-                    <div class="address-card   p-3 rounded text-black " onclick="selectAddress('<%= ad._id %>')"
-                      style="  box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;">
+                  <div class="col-md-6 mb-4"   >
+                    <div class="address-card   p-3 rounded text-black "
+                      onclick="selectAddress('<%= ad._id %>')" style="  box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;">
                       <div class="address-title font-weight-bold ">Address</div>
 
                       <strong>
@@ -253,87 +252,87 @@
                       </strong><br>
 
                       <!-- Radio button for each address -->
-                      <input type="radio" name="selectedAddress" value="<%=ad._id %>">
+                      <input type="radio" name="selectedAddress" value="<%= ad._id %>">
                     </div>
                   </div>
                   <% }) %>
                     <% }); %>
-
             </div>
-            <!-- </form> -->
-          </div>
-
-        </div>
-        <!-- <div class="site-section d-flex justify-content-center align-items-start "> -->
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12 ">
-              <h2 class="h3 mb-3 text-black">Your Order</h2>
-              <!-- <form action="/checkoutPost" method="post"> -->
-              <div class="p-3 p-lg-5 border">
-                <table class="table site-block-order-table mb-5">
-                  <thead>
-                    <th>Product</th>
-                    <th>Total</th>
-                  </thead>
-                  <% populatedCart.items.forEach(item=> { %>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <%= item.productName %><strong class="mx-2">X</strong>
-                            <%= item.quantity %>
-                              <input type="hidden" name="productName[]" value="<%= item.productId %>">
-                              <script>
-                                console.log('<%= item.productId%>');
-                              </script>
-                              <input type="hidden" name="quantity[]" value="<%= item.quantity %>">
-                        </td>
-                        <td>
-                          <% totalPrice.forEach(price=> { %>
-                            <% if (price._id.equals(item.productId)) { %>
-                              $<%= price.totalPrice %>
-                                <input type="hidden" name="totalPrice[]" value="<%= price.totalPrice %>">
-                                <% } %>
-                                  <% }); %>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <% }); %>
-
-                      <tr>
-                        <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-                        <td class="text-black font-weight-bold"><strong>$<%= total %></strong>
-                          <input type="hidden" name="total[]" value="<%= total %>">
-                        </td>
-                      </tr>
-                </table>
-
-                <input type="hidden" name="paymentMethod" id="paymentMethod" value="">
-
-                <div class="row" style="width:100%;">
-                  <div class="col-12">
-                    <div class="list-group" id="list-tab" role="tablist">
-                      <a class="list-group-item list-group-item-action  " id="list-home-list"
-                        data-method="cashOnDelivery" data-toggle="list" href="#" role="tab" aria-controls="home">cashOnDelivery</a>
-                      <a class="list-group-item list-group-item-action" id="list-profile-list" data-method="netBanking"
-                        data-toggle="list" href="#" role="tab" aria-controls="profile">netBanking</a>
-                      <a class="list-group-item list-group-item-action" id="list-profile-list" data-method="Credit Card"
-                        data-toggle="list" href="#" role="tab" aria-controls="profile">Credit Card</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group" style="margin-top: 50px;">
-                  <button type="button" class="btn btn-primary btn-lg py-3 btn-block" id="placeOrderBtn">Place
-                    Order</button>
-                </div>
-              </div>
-              <!-- </form> -->
-            </div>
-          </div>
-        </div>
-        <!-- </div> -->
+      <!-- </form> -->
     </div>
-    </form>
+
+  </div>
+  <!-- <div class="site-section d-flex justify-content-center align-items-start "> -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 ">
+        <h2 class="h3 mb-3 text-black">Your Order</h2>
+        <!-- <form action="/checkoutPost" method="post"> -->
+        <div class="p-3 p-lg-5 border">
+          <table class="table site-block-order-table mb-5">
+            <thead>
+              <th>Product</th>
+              <th>Total</th>
+            </thead>
+            <% populatedCart.items.forEach(item=> { %>
+              <tbody>
+                <tr>
+                  <td>
+                    <%= item.productName %><strong class="mx-2">X</strong>
+                      <%= item.quantity %>
+                        <input type="hidden" name="productName[]" value="<%= item.productId %>">
+                          <script>
+                            console.log('<%= item.productId%>');
+                        </script>
+                        <input type="hidden" name="quantity[]" value="<%= item.quantity %>">
+                  </td>
+                  <td>
+                    <% totalPrice.forEach(price=> { %>
+                      <% if (price._id.equals(item.productId)) { %>
+                        $<%= price.totalPrice %>
+                          <input type="hidden" name="totalPrice[]" value="<%= price.totalPrice %>">
+                          <% } %>
+                            <% }); %>
+                  </td>
+                </tr>
+              </tbody>
+              <% }); %>
+
+                <tr>
+                  <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
+                  <td class="text-black font-weight-bold"><strong>$<%= total %></strong>
+                    <input type="hidden" name="total[]" value="<%= total %>">
+                  </td>
+                </tr>
+          </table>
+
+          <input type="hidden" name="paymentMethod" id="paymentMethod" value="">
+
+          <div class="row" style="width:100%;">
+            <div class="col-12">
+              <div class="list-group" id="list-tab" role="tablist">
+                <a class="list-group-item list-group-item-action  " id="list-home-list" data-method="Cash On Delivery"
+                  data-toggle="list" href="#" role="tab" aria-controls="home">Cash On
+                  Delivery</a>
+                <a class="list-group-item list-group-item-action" id="list-profile-list" data-method="UPI"
+                  data-toggle="list" href="#" role="tab" aria-controls="profile">UPI</a>
+                <a class="list-group-item list-group-item-action" id="list-profile-list" data-method="Credit Card"
+                  data-toggle="list" href="#" role="tab" aria-controls="profile">Credit Card</a>
+              </div>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top: 50px;">
+            <button type="submit" class="btn btn-primary btn-lg py-3 btn-block" id="placeOrderBtn">Place
+              Order</button>
+          </div>
+        </div>
+        <!-- </form> -->
+      </div>
+    </div>
+  </div>
+  <!-- </div> -->
+  </div>
+  </form>
   </div>
   <!----------------------------------Default_Address--------------------------------------->
 
@@ -473,9 +472,9 @@
 
   <script>
     //place order Button
-    // document.getElementById('placeOrderBtn').addEventListener('click', () => {
-    //   document.getElementById('addressForm').submit();
-    // });
+    document.getElementById('placeOrderBtn').addEventListener('click', () => {
+      document.getElementById('addressForm').submit();
+    });
 
     //Selcted address
     document.addEventListener('DOMContentLoaded', () => {
@@ -493,7 +492,7 @@
           let formData = new FormData(form);
           formData.set('selectedAddress', this.value);
 
-          
+
           console.log('Selected Address:', this.value);
 
         });
@@ -507,14 +506,14 @@
       });
     });
 
-    var selectedMethod
+
     //payment method
     document.addEventListener('DOMContentLoaded', function () {
       var paymentMethodButtons = document.querySelectorAll('.list-group-item');
 
       paymentMethodButtons.forEach(function (button) {
         button.addEventListener('click', function () {
-          selectedMethod = this.getAttribute('data-method');
+          var selectedMethod = this.getAttribute('data-method');
           document.getElementById('paymentMethod').value = selectedMethod;
 
           // Log to console for checking
@@ -523,134 +522,74 @@
         });
       });
     });
- 
-    
+     
 
-  </script>
+    //<!----------------------------RazorPay------------------------------------->
 
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    document.querySelector('#checkOutForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      var paymentType = document.querySelector('input[name="paymentType"]:checked').value;
+      console.log("payment ",paymentType);
+      
+      // Get the selected payment method
+      if (paymentType == 'NetBanking') {
+        console.log("inside net");
+        var razorpayKey = 'rzp_test_Jbmx59qoOc1tKj';
+        
+        // Fetch other necessary details for the payment
+        var totalPriceInRupees = document.querySelector('input[name="totalPrice"]').value;
+            var totalPriceInPaisa = Math.round(parseFloat(totalPriceInRupees) * 100);
 
-  <!-- Add this script at the end of your HTML file or in a separate script file -->
-  <script>
-    document.getElementById('placeOrderBtn').addEventListener('click', function () {
+            fetch('/checkoutPost', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ totalPrice: totalPriceInPaisa }),
+            })
 
-      placeOrder();
+          .then(response => response.json())
+
+          .then(order => {
+            console.log(order);
+            //  her iam  Initialize Razorpay
+            const  options = {
+            key: 'rzp_test_Jbmx59qoOc1tKj',
+            amount: order.amount,
+            currency: order.currency,
+            order_id: order.id,
+            name: 'ShopCartify',
+            description: 'Payment for your orders',
+            theme:{
+                color:"#FFD333"
+            },
+            handler: function (response) {
+                // here handling the success response
+                console.log('Payment success:', response);
+  
+                document.querySelector('#checkOutForm').submit();
+              },
+              prefill: {
+                name: 'User Name',
+                email: 'user@example.com',
+              },
+            };
+  
+            var rzp = new Razorpay(options);
+            rzp.open();
+          })
+          .catch(error => {
+            console.error('Error creating Razorpay order:', error);
+          });
+      } else if (selectedPaymentMethod === 'CashOnDelivery') {
+        document.querySelector('#checkOutForm').submit();
+      } else {
+        alert('Invalid payment method selected.');
+      }
     });
 
-    function placeOrder() {
-     
-      // Gather data from the selected address and payment method
-      const selectedAddress = document.querySelector('input[name="selectedAddress"]:checked').value;
-      const paymentMethod = selectedMethod
-      const total = document.querySelector('input[name="total[]"]').value;
-      console.log(paymentMethod,selectedAddress,"ceck 2");
-      // Check if both address and payment method are selected
-      if (selectedAddress && paymentMethod) {
-        // Prepare data to be sent in the fetch request
-        const data = {
-          selectedAddress: selectedAddress,
-          paymentMethod: paymentMethod,
-          total: '100'
-        };
-        console.log(data);
 
-        // Make a fetch request
-        fetch('/checkoutPost', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
-            if (data.id) {
-              var options = {
-                key: "rzp_test_rII4CJ8DT2Ox30",  
-                amount: data.amount,
-                currency: data.currency,
-                name: "CHRONOCOVE",
-                description: "Test Transaction",
-                image: "https://example.com/your_logo",
-                order_id: data.id,
-                handler: function (response) {
-                  success(response)
-                },
-                prefill: {
-                  name: "Gaurav Kumar",
-                  email: "gaurav.kumar@example.com",
-                  contact: "9000090000"
-                },
-                notes: {
-                  address: "Razorpay Corporate Office"
-                },
-                theme: {
-                  color: "#3399cc"
-                }
-              };
-
-              var rzp1 = new Razorpay(options);
-              rzp1.on('payment.failed', function (response) {
-                alert(response.error.code);
-                alert(response.error.description);
-                alert(response.error.source);
-                alert(response.error.step);
-                alert(response.error.reason);
-                alert(response.error.metadata.order_id);
-                alert(response.error.metadata.payment_id);
-              });
-              rzp1.open();
-            } else {
-              // Handle the response from the backend (if needed)
-              console.log(data.redirectUrl)
-              window.location.href = '/thankyou';
-            }
-          })
-          .catch(error => console.error('Error:', error));
-      } else {
-        alert('Please select an address and payment method.');
-      }
-    }
-
-    function success(response) {
-      // Assuming 'response' is a JSON object containing order data
-
-      // Convert JavaScript object to JSON string
-      const jsonData = JSON.stringify({ order: response });
-
-      fetch("/saveOrder", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-          // Add other headers if needed
-        },
-        body: jsonData
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`Error saving order. Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (data.success) {
-            console.log("Order saved successfully", data);
-            window.location.href = data.redirectUrl;
-          } else {
-            console.log("hai");
-          }
-
-        })
-        .catch(error => {
-          console.error("Error saving order:", error.message);
-          alert("Error saving order. Please contact support.");
-        });
-
-    }
   </script>
-
-
 
 </body>
 
