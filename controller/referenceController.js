@@ -8,7 +8,7 @@ const claimReferenceCode = async (req, res) => {
         console.log("inside the tryyy!!!!")
       const { referenceCode } = req.body;
       const reference = await referenceColleciton.findOne({ referenceCode });
-  
+      console.log("the reference code is :",reference)
       if (!reference) {
         return res.status(400).json({ message: "Invalid reference code" });
       }
@@ -17,7 +17,7 @@ const claimReferenceCode = async (req, res) => {
         .findOne({ emailId: req.session.email })
         .populate("wallet");
 
-        console.log("User:",user)
+        console.log("User:",user.wallet)
   
       if (!user) {
         return res.status(500).json({ message: "Internal Server Error" });

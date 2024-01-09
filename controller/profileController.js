@@ -14,7 +14,7 @@ const referenceColleciton = require('../models/reference');
 
 const profile = async(req,res) => {
   try{
-    const userData = await collection.findOne({emailId:req.session.email})
+    const userData = await collection.findOne({emailId:req.session.email}).populate('wallet').exec();
     const reference = await referenceColleciton.findOne({ userId: userData._id });
 
     console.log("UserData:",userData)

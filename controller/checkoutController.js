@@ -39,7 +39,7 @@ const checkout = (async (req, res) => {
     };
   };
   const total = totalPrice.reduce((sum, item) => sum + item.totalPrice, 0);
-  const userAddress = await addressCollection.find({ userId: userData._id })
+  const userAddress = await addressCollection.findOne({ userId: userData._id })
   const populatedCart = await populateProductDetails(userCart);
 
   const currentDate = new Date()
@@ -48,8 +48,8 @@ const checkout = (async (req, res) => {
     expiryDate: { $gte: currentDate.toISOString() },
   })
 
-  console.log("populatedCart:", populatedCart)
-  res.render('User/checkout', { populatedCart, totalPrice, total, coupons, userAddress: userAddress ?? [] })
+  console.log("BOOO ", userAddress);
+  res.render('User/checkout', { populatedCart, totalPrice, total, coupons, userAddress: userAddress })
 })
 
 const addAddressPost = async (req, res) => {
@@ -94,7 +94,7 @@ const addAddressPost = async (req, res) => {
       userAddress.save()
     }
 
-    const userAddresss = await addressCollection.find({ userId: userData._id })
+    const userAddresss = await addressCollection.findOne({ userId: userData._id })
     console.log("UserAddress", userAddresss)
     const totalPrice = await cartCollection.aggregate([{ $match: { userId: userData._id } }, { $unwind: "$items" }, { $lookup: { from: "productdatas", localField: "items.productId", foreignField: "_id", as: "cartProduct" } }, { $project: { userId: 1, items: 1, productPrice: { $arrayElemAt: ["$cartProduct.productPrice", 0] }, calculatedPrice: { $multiply: ["$items.quantity", { $arrayElemAt: ["$cartProduct.productPrice", 0] }] } } }, { $group: { _id: "$items.productId", userId: { $first: "$userId" }, quantity: { $sum: "$items.quantity" }, totalPrice: { $sum: "$calculatedPrice" }, productPrice: { $first: "$productPrice" } } }]);
     const total = totalPrice.reduce((sum, item) => sum + item.totalPrice, 0);

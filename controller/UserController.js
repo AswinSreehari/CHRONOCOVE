@@ -124,7 +124,7 @@ const signupPost = async (req, res) => {
                 password: await passwordcrypt(req.body.password),
                 otp: otp,
                 otpExpiry: otpExpiry,
-                wallet: new wallet()
+                
 
             };
 
@@ -140,6 +140,10 @@ const signupPost = async (req, res) => {
                     userId: check._id,
                     referenceCode: referenceCode,
                 })
+                const newwallet =new wallet()
+                await newwallet.save()
+                check.wallet = newwallet
+                await check.save();
             }
 
                 if (check.isBlocked) {

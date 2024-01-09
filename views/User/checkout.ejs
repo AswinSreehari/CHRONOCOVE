@@ -221,8 +221,7 @@
             <h2 class="h3 mb-3 mt-5 text-black">Address Card</h2>
 
             <div class="row">
-              <% userAddress.forEach((addr, index)=> { %>
-                <% addr.Address.forEach(ad=> { %>
+              <% (locals.userAddress?.Address ?? []).forEach(ad=> { %> 
                   <div class="col-md-6 mb-4"   >
                     <div class="address-card   p-3 rounded text-black "
                       onclick="selectAddress('<%= ad._id %>')" style="  box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;">
@@ -256,7 +255,7 @@
                     </div>
                   </div>
                   <% }) %>
-                    <% }); %>
+                     
             </div>
       <!-- </form> -->
     </div>
@@ -311,12 +310,12 @@
           <div class="row" style="width:100%;">
             <div class="col-12">
               <div class="list-group" id="list-tab" role="tablist">
-                <a class="list-group-item list-group-item-action  " id="list-home-list" data-method="Cash On Delivery"
+                <a class="list-group-item list-group-item-action " name="paymentType" id="list-home-list" data-method="Cash On Delivery"
                   data-toggle="list" href="#" role="tab" aria-controls="home">Cash On
                   Delivery</a>
-                <a class="list-group-item list-group-item-action" id="list-profile-list" data-method="UPI"
-                  data-toggle="list" href="#" role="tab" aria-controls="profile">UPI</a>
-                <a class="list-group-item list-group-item-action" id="list-profile-list" data-method="Credit Card"
+                <a class="list-group-item list-group-item-action" name="paymentType" id="list-profile-list" data-method="NetBanking"
+                  data-toggle="list" href="#" role="tab" aria-controls="profile">NetBanking</a>
+                <a class="list-group-item list-group-item-action" name="paymentType" id="list-profile-list" data-method="Credit Card"
                   data-toggle="list" href="#" role="tab" aria-controls="profile">Credit Card</a>
               </div>
             </div>
@@ -526,7 +525,7 @@
 
     //<!----------------------------RazorPay------------------------------------->
 
-    document.querySelector('#checkOutForm').addEventListener('submit', function (event) {
+    document.querySelector('#placeOrderBtn').addEventListener('submit', function (event) {
       event.preventDefault();
       var paymentType = document.querySelector('input[name="paymentType"]:checked').value;
       console.log("payment ",paymentType);
@@ -534,13 +533,13 @@
       // Get the selected payment method
       if (paymentType == 'NetBanking') {
         console.log("inside net");
-        var razorpayKey = 'rzp_test_Jbmx59qoOc1tKj';
+        var razorpayKey = 'rzp_test_rII4CJ8DT2Ox30';
         
         // Fetch other necessary details for the payment
-        var totalPriceInRupees = document.querySelector('input[name="totalPrice"]').value;
+        var totalPriceInRupees = document.querySelector('input[name="total"]').value;
             var totalPriceInPaisa = Math.round(parseFloat(totalPriceInRupees) * 100);
 
-            fetch('/checkoutPost', {
+            fetch('/payOrder', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -554,11 +553,11 @@
             console.log(order);
             //  her iam  Initialize Razorpay
             const  options = {
-            key: 'rzp_test_Jbmx59qoOc1tKj',
+            key: 'rzp_test_rII4CJ8DT2Ox30',
             amount: order.amount,
             currency: order.currency,
             order_id: order.id,
-            name: 'ShopCartify',
+            name: 'CHRONOCOVE',
             description: 'Payment for your orders',
             theme:{
                 color:"#FFD333"
@@ -582,7 +581,7 @@
             console.error('Error creating Razorpay order:', error);
           });
       } else if (selectedPaymentMethod === 'CashOnDelivery') {
-        document.querySelector('#checkOutForm').submit();
+        document.querySelector('#placeOrderBtn').submit();
       } else {
         alert('Invalid payment method selected.');
       }

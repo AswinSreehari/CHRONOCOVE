@@ -59,8 +59,8 @@ router.get('/checkout',  userAuthentication.userAuthentication,checkoutControlle
 router.post('/checkoutPost',userAuthentication.userAuthentication,orderController.checkoutPost)
 router.post('/addAddressPost',userAuthentication.userAuthentication ,checkoutController.addAddressPost)
 router.get('/thankyou',userAuthentication.userAuthentication,checkoutController.thankyou)
-router.post('/saveOrder',userAuthentication.userAuthentication,orderController.saveOrder)
-
+// router.post('/saveOrder',userAuthentication.userAuthentication,orderController.saveOrder)
+ router.post('/payPost',userAuthentication.userAuthentication,orderController.payPost)
 //<---------------------------------User_Profile----------------------------------------->
 
 router.get('/profile',userAuthentication.userAuthentication,profileController.profile)
@@ -92,7 +92,7 @@ router.post('/claimReference',userAuthentication.userAuthentication,referenceCon
 
 //<---------------------------------Coupon----------------------------------------->
 
-router.post('/applyCoupon',userAuthentication.userAuthentication,couponController.applyCoupon)
-router.post('/removeCoupon',userAuthentication.userAuthentication,couponController.removeCoupon)
+// router.post('/applyCoupon',userAuthentication.userAuthentication,couponController.applyCoupon)
+// router.post('/removeCoupon',userAuthentication.userAuthentication,couponController.removeCoupon)
 
 module.exports = router;
