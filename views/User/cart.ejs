@@ -152,12 +152,12 @@
                         </div>
                       </td>
                       <td >
-                        <% totalPrice.forEach(price => { %>
+                       <p id="<%=item.productId%>"> <% totalPrice.forEach(price => { %>
                          
                           <% if (price._id.equals(item.productId)) { %>
                             $<%= price.totalPrice %>
                           <% } %>
-                        <% }); %>
+                        <% }); %></p>
                     
                       </td>
                       <td id="populatedCart-<%= item.productId %>">
@@ -349,15 +349,11 @@
       .then(res => res.json())
       .then(data => {
         if (data.success) {
+          console.log("Data")
           productQtyInput.value = newQuantity;
-        //   const newTotal = data.totalPrice
-        //   console.log('newTotalll:',newTotal)
+          document.getElementById(productId).innerHTML = data.total
 
-        //   const totalPriceElement = document.getElementById('total-price-' + productId);
-        // if (totalPriceElement) {
-        //   console.log('newTotal:',newTotal)
-        //   totalPriceElement.textContent = '$' + newTotal;
-        // }
+          
          }
       })
       .catch(err => alert(err.message));

@@ -56,9 +56,11 @@ const cart = async (req, res) => {
       const totalPrice = await cartCollection.aggregate([{$match: {userId: userData._id}}, {$unwind: "$items"}, {$lookup: {from: "productdatas", localField: "items.productId", foreignField: "_id", as: "cartProduct"}}, {$project: {userId: 1, items: 1, productPrice: {$arrayElemAt: ["$cartProduct.productPrice", 0]}, calculatedPrice: {$multiply: ["$items.quantity", {$arrayElemAt: ["$cartProduct.productPrice", 0]}]}}}, {$group: {_id: "$items.productId", userId: {$first: "$userId"}, quantity: {$sum: "$items.quantity"}, totalPrice: {$sum: "$calculatedPrice"}, productPrice: {$first: "$productPrice"}}}]);
       const total  = totalPrice.reduce((sum, item) => sum + item.totalPrice, 0);
       userCart.totalPrice = total
-      console.log("Tot:",userCart.totalPrice)
+      console.log("Tot:",totalPrice )
+      
       await userCart.save();
-      res.render('User/cart', { populatedCart: populatedCart ?? [] , totalPrice,total});
+      // res.render('User/cart', { populatedCart: populatedCart ?? [] , totalPrice,total});
+       res.redirect('/cartGet')
     } catch (err) {
       console.error("Error at god knows where.");
       console.error(err);
@@ -107,6 +109,7 @@ const cart = async (req, res) => {
 
       const total = totalPrice.reduce((sum, item) => sum + item.totalPrice, 0);
        
+      console.log('Total Price:',total)
       res.render("User/cart", { populatedCart: populatedCart ?? [], totalPrice ,total});
     } catch (error) {
       console.log(error);
@@ -137,16 +140,20 @@ const cart = async (req, res) => {
         return res.status(404).json({message: "Cart Not Found",success:false})
       }
       const populatedCart = await populateProductDetails(cartData);
-      console.log("I am IronMan!:",populatedCart)
-      const productInCartIndex = cartData.items.findIndex(prod => prod.productId.toString() === product._id.toString());
+       const productInCartIndex = cartData.items.findIndex(prod => prod.productId.toString() === product._id.toString());
       if (productInCartIndex === -1) {
         return res.status(404).json({ message: "product not in user's cart "});
       }
   
       cartData.items[productInCartIndex].quantity = newQuantity;
       await cartData.save();
-  
-      res.status(202).json({ message: "success", success:true});
+      const totalPrice = await cartCollection.findOne({ userId: userData._id }).populate('items.productId')
+      const singlePrice=  totalPrice.items[productInCartIndex].productId.productPrice
+      const total = singlePrice * totalPrice.items[productInCartIndex].quantity
+      console.log("Single:",total)
+      // const total = totalPrice.reduce((sum, item) => sum + item.totalPrice, 0);
+      
+      res.status(202).json({ message: "success", success:true,total });
   
     
     }catch(error){
