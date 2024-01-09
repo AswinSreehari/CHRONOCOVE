@@ -319,6 +319,18 @@ body{
     
 }
 
+.imagePreviewDiv img{
+    height: 100px;
+    max-width: 150px;
+}
+
+.imagePreviewDivMain img{
+    height: 100px;
+    max-width: 200px;
+}
+
+
+
 #cropper110Modal{
     position: absolute;
     width: 100vw;

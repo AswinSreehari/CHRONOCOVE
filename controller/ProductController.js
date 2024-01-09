@@ -162,8 +162,8 @@ const shop = (async(req,res)=>{
 
 
 const filter = async (req, res) => {
-    const minPrice = parseInt(req.query.minPrice ?? '50000');
-    const maxPrice = parseInt(req.query.maxPrice ?? '20000000');
+    const minPrice = parseInt(req.query.minPrice ?? '10');
+    const maxPrice = parseInt(req.query.maxPrice ?? '10000');
 const query = { productPrice: {$gt: minPrice, $lt: maxPrice} };
 // console.log(query);
     const products = await productCollection.find(query)
