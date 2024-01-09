@@ -257,17 +257,14 @@
                   <% }) %>
                      
             </div>
-      <!-- </form> -->
-    </div>
+     </div>
 
   </div>
-  <!-- <div class="site-section d-flex justify-content-center align-items-start "> -->
-  <div class="container-fluid">
+   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12 ">
         <h2 class="h3 mb-3 text-black">Your Order</h2>
-        <!-- <form action="/checkoutPost" method="post"> -->
-        <div class="p-3 p-lg-5 border">
+         <div class="p-3 p-lg-5 border">
           <table class="table site-block-order-table mb-5">
             <thead>
               <th>Product</th>
@@ -300,7 +297,7 @@
                 <tr>
                   <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
                   <td class="text-black font-weight-bold"><strong>$<%= total %></strong>
-                    <input type="hidden" name="total[]" value="<%= total %>">
+                    <input type="hidden" name="total" value="<%= total %>">
                   </td>
                 </tr>
           </table>
@@ -310,12 +307,12 @@
           <div class="row" style="width:100%;">
             <div class="col-12">
               <div class="list-group" id="list-tab" role="tablist">
-                <a class="list-group-item list-group-item-action " name="paymentType" id="list-home-list" data-method="Cash On Delivery"
+                <a class="list-group-item list-group-item-action " name="paymentType" id="list-home-list" data-method="CashOnDelivery"
                   data-toggle="list" href="#" role="tab" aria-controls="home">Cash On
                   Delivery</a>
                 <a class="list-group-item list-group-item-action" name="paymentType" id="list-profile-list" data-method="NetBanking"
                   data-toggle="list" href="#" role="tab" aria-controls="profile">NetBanking</a>
-                <a class="list-group-item list-group-item-action" name="paymentType" id="list-profile-list" data-method="Credit Card"
+                <a class="list-group-item list-group-item-action" name="paymentType" id="list-profile-list" data-method="Wallet"
                   data-toggle="list" href="#" role="tab" aria-controls="profile">Credit Card</a>
               </div>
             </div>
@@ -325,12 +322,10 @@
               Order</button>
           </div>
         </div>
-        <!-- </form> -->
-      </div>
+       </div>
     </div>
   </div>
-  <!-- </div> -->
-  </div>
+   </div>
   </form>
   </div>
   <!----------------------------------Default_Address--------------------------------------->
@@ -468,17 +463,18 @@
   <script src="/javascripts/jquery.magnific-popup.min.js"></script>
   <script src="/javascripts/aos.js"></script>
   <script src="/javascripts/main.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
   <script>
     //place order Button
-    document.getElementById('placeOrderBtn').addEventListener('click', () => {
-      document.getElementById('addressForm').submit();
-    });
+    // document.getElementById('placeOrderBtn').addEventListener('click', () => {
+    //   document.getElementById('addressForm').submit();
+    // });
 
     //Selcted address
+    var form = document.getElementById('addressForm');
     document.addEventListener('DOMContentLoaded', () => {
       var radioButtons = document.querySelectorAll('input[name="selectedAddress"]');
-      var form = document.getElementById('addressForm');
 
       if (radioButtons.length === 0 || !form) {
         console.error('Error: Radio buttons or form not found.');
@@ -497,22 +493,23 @@
         });
       });
 
-      form.addEventListener('submit', (event) => {
-        event.preventDefault(); // Prevent the actual form submission for testing
-        console.log('Form Submitted. Form Data:', new FormData(form));
-        // Uncomment the line below for actual form submission
-        // form.submit();
-      });
+      // form.addEventListener('submit', (event) => {
+      //   event.preventDefault(); // Prevent the actual form submission for testing
+      //   console.log('Form Submitted. Form Data:', new FormData(form));
+      //   // Uncomment the line below for actual form submission
+      //   // form.submit();
+      // });
     });
 
 
     //payment method
+    var selectedMethod
     document.addEventListener('DOMContentLoaded', function () {
       var paymentMethodButtons = document.querySelectorAll('.list-group-item');
 
       paymentMethodButtons.forEach(function (button) {
         button.addEventListener('click', function () {
-          var selectedMethod = this.getAttribute('data-method');
+          selectedMethod = this.getAttribute('data-method');
           document.getElementById('paymentMethod').value = selectedMethod;
 
           // Log to console for checking
@@ -524,10 +521,9 @@
      
 
     //<!----------------------------RazorPay------------------------------------->
-
-    document.querySelector('#placeOrderBtn').addEventListener('submit', function (event) {
+    form.addEventListener('submit', (event) => {
       event.preventDefault();
-      var paymentType = document.querySelector('input[name="paymentType"]:checked').value;
+      var paymentType = selectedMethod
       console.log("payment ",paymentType);
       
       // Get the selected payment method
@@ -560,13 +556,13 @@
             name: 'CHRONOCOVE',
             description: 'Payment for your orders',
             theme:{
-                color:"#FFD333"
+                color:"#7971ea"
             },
             handler: function (response) {
                 // here handling the success response
                 console.log('Payment success:', response);
   
-                document.querySelector('#checkOutForm').submit();
+                form.submit();
               },
               prefill: {
                 name: 'User Name',
@@ -580,8 +576,8 @@
           .catch(error => {
             console.error('Error creating Razorpay order:', error);
           });
-      } else if (selectedPaymentMethod === 'CashOnDelivery') {
-        document.querySelector('#placeOrderBtn').submit();
+      } else if (paymentType === 'CashOnDelivery') {
+        form.submit();
       } else {
         alert('Invalid payment method selected.');
       }

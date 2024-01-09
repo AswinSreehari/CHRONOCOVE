@@ -60,7 +60,7 @@ router.post('/checkoutPost',userAuthentication.userAuthentication,orderControlle
 router.post('/addAddressPost',userAuthentication.userAuthentication ,checkoutController.addAddressPost)
 router.get('/thankyou',userAuthentication.userAuthentication,checkoutController.thankyou)
 // router.post('/saveOrder',userAuthentication.userAuthentication,orderController.saveOrder)
- router.post('/payPost',userAuthentication.userAuthentication,orderController.payPost)
+ router.post('/payOrder',userAuthentication.userAuthentication,orderController.payPost)
 //<---------------------------------User_Profile----------------------------------------->
 
 router.get('/profile',userAuthentication.userAuthentication,profileController.profile)

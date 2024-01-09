@@ -5,7 +5,10 @@ const collection = require('../models/user')
 const cartCollection = require('../models/cart')
 const addressCollection = require('../models/address')
 const productCollection = require('../models/product')
+
 const Razorpay = require('razorpay')
+const { KEY_ID, KEY_SECRET } = process.env
+let instance = new Razorpay({ key_id: KEY_ID, key_secret: KEY_SECRET })
 const checkoutPost = async (req, res) => {
   try {
     const {
@@ -67,7 +70,7 @@ const payPost = async (req, res) => {
   try {
     console.log('paypost');
     const razorpayOrder = await instance.orders.create({
-      amount: req.body.total,
+      amount: 100, //chage the amount
       currency: 'INR',
       receipt: `order_${Date.now()}`,
     });
