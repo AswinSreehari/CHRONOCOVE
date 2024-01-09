@@ -69,9 +69,9 @@ const checkoutPost = async (req, res) => {
 const payPost = async (req, res) => {
   try {
     console.log('paypost');
-    const { total } = req.body;
+    const { totalPrice } = req.body;
     const razorpayOrder = await instance.orders.create({
-      amount: total, //change the amount
+      amount: totalPrice, //change the amount
       currency: 'INR',
       receipt: `order_${Date.now()}`,
     });
@@ -90,7 +90,7 @@ const payPost = async (req, res) => {
 
 const orderManagement = async(req,res)=>{
   const orderDetails = await orderCollection.find()
-  console.log("OrderDetails:",orderDetails)
+   console.log("OrderDetails:",orderDetails)
   res.render('admin/orderManagement',{orderDetails})
 }
 
@@ -116,26 +116,34 @@ const orderManagement = async(req,res)=>{
 
 const AdminViewOrderDetails = async (req, res) => {
   const orderId = req.params.id;
-  console.log("OrderId:",orderId)
   if (!mongoose.Types.ObjectId.isValid(orderId)) {
-    return res.status(400).send("Enter Valid MongoDB ID");
+    return res.status(400).send("You tried to mess with me. But I am not messable");
   }
 
   const orderData = await orderCollection.findById(orderId);
   if (!orderData) {
     return res.status(404).send("Order not found.");
   }
+ 
 
   console.log(req.params);
   console.log("This is orderId : ", orderId);
 
   const userData = await collection.findOne({ emailId: req.session.email });
+  const subId = orderData.selectedAddress
   const userId = userData._id;
+  const address = await addressCollection.findOne({userId})
+  const addressIndex = address.Address.findIndex(e => e._id.toString() === subId.toString())
+  console.log("addressIndex:",addressIndex)
+  const addressDetails = address.Address[addressIndex]
+  console.log("Address Details:",addressDetails)
+ 
+
+
 
   const orderProducts = await getProductDetails(orderData.items);
-  res.render('admin/viewOrderDetails', { orderData, orderProducts });
+  res.render('Admin/viewOrderDetails', { orderData, orderProducts , userData,addressDetails });
 };
-
 const getProductDetails = async (items) => {
   const productIds = items.map(item => item.productId);
 

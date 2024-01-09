@@ -196,8 +196,12 @@
         <p>Order Date:  <%= orderData.orderTime %></p>  
       </div>
       <div class="col-6"   >
-        <h4>Shipping Address:<%= orderData.selectedAddress %></h4>
-        <p>  </p>
+        <h4>Shipping Address: <%=addressDetails.firstName%> <%=addressDetails.lastName%></h4>
+        <p> Address : <%=addressDetails.address%></p>
+        <p> Landmark : <%=addressDetails.landmark%></p>
+        <p> State : <%=addressDetails.state%></p>
+        <p> Zip : <%=addressDetails.zip%></p>
+        <p> Ph No : <%=addressDetails.phone%></p>      
       </div>
     </div>      
     <div class="row mt-4">
