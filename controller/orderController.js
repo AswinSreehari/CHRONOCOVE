@@ -69,8 +69,9 @@ const checkoutPost = async (req, res) => {
 const payPost = async (req, res) => {
   try {
     console.log('paypost');
+    const { total } = req.body;
     const razorpayOrder = await instance.orders.create({
-      amount: 100, //chage the amount
+      amount: total, //change the amount
       currency: 'INR',
       receipt: `order_${Date.now()}`,
     });

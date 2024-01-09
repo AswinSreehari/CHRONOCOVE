@@ -167,27 +167,25 @@ const orderDetails = async (req, res) => {
   if (!orderData) {
     return res.status(404).send("Order not found.");
   }
-//   const addressId = orderData.selectedAddress
-//   const address = await addressCollection.findById({"Address._id":addressId})
-//   .then(data => {
-//     if (!data) return res.status(404).send('No data found');
-//     res.status(200).send(data);
-// })
-// .catch(err => {
-//     res.status(500).send(err);
-//     return;
-// });
-//   console.log("Got the address here:",address)
+ 
 
   console.log(req.params);
   console.log("This is orderId : ", orderId);
 
   const userData = await collection.findOne({ emailId: req.session.email });
+  const subId = orderData.selectedAddress
   const userId = userData._id;
+  const address = await addressCollection.findOne({userId})
+  const addressIndex = address.Address.findIndex(e => e._id.toString() === subId.toString())
+  console.log("addressIndex:",addressIndex)
+  const addressDetails = address.Address[addressIndex]
+  console.log("Address Details:",addressDetails)
+ 
+
 
 
   const orderProducts = await getProductDetails(orderData.items);
-  res.render('User/orderDetails', { orderData, orderProducts , userData });
+  res.render('User/orderDetails', { orderData, orderProducts , userData,addressDetails });
 };
 
 const getProductDetails = async (items) => {

@@ -199,11 +199,22 @@
 
             <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
             <div class="input-group w-75">
-              <input type="text" class="form-control" id="c_code" placeholder="Coupon Code" aria-label="Coupon Code"
-                aria-describedby="button-addon2">
+              <input type="text" class="form-control border" name="availableCoupons" id="availableCoupons"
+              placeholder="Coupon code" >
               <div class="input-group-append">
                 <button class="btn btn-primary btn-sm" type="button" id="button-addon2">Apply</button>
               </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Available Coupons:</label>
+              <select class="form-select" id="availableCoupons">
+                <option value="">Select a coupon</option>
+                <% coupons.forEach(function(coupon) { %>
+                  <option value="<%= coupon.couponName %>">
+                    <%= coupon.couponName %>
+                  </option>
+                  <% }); %>
+              </select>
             </div>
 
           </div>
