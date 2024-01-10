@@ -164,29 +164,35 @@ const ITEMS_PER_PAGE = 6;
 
 const shop = async (req, res) => {
     try {
-        const searchQuery = req.query.searchQuery || '';
-        const page = parseInt(req.query.page) || 1;
-
-        // Calculate the skip value based on the page number
-        const skip = (page - 1) * ITEMS_PER_PAGE;
-
-        // Query the products with pagination and search
-        const products = await productCollection
-            .find({ productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false })
-            .skip(skip)
-            .limit(ITEMS_PER_PAGE);
-
-        // Count total number of products for pagination
-        const totalProducts = await productCollection.countDocuments({ productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false });
-
-        // res.render('User/shop', { products, searchQuery, currentPage: page, totalPages: Math.ceil(totalProducts / ITEMS_PER_PAGE) });
-        res.render('User/shop', { products, searchQuery, currentPage: page, totalPages: Math.ceil(totalProducts / ITEMS_PER_PAGE) });
-
+      const searchQuery = req.query.searchQuery || '';
+      const page = parseInt(req.query.page) || 1;
+      const sortBy = req.query.sort || 'latest';  
+       const skip = (page - 1) * ITEMS_PER_PAGE;
+  
+       let sortCriteria = {};
+      if (sortBy === 'lowToHigh') {
+        sortCriteria = { productPrice: 1 };
+      } else if (sortBy === 'highToLow') {
+        sortCriteria = { productPrice: -1 };
+      } else {
+        sortCriteria = { createdAt: -1 };  
+      }
+  
+       const products = await productCollection
+        .find({ productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false })
+        .skip(skip)
+        .limit(ITEMS_PER_PAGE)
+        .sort(sortCriteria);
+  
+       const totalProducts = await productCollection.countDocuments({ productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false });
+  
+      res.render('User/shop', { products, searchQuery, currentPage: page, totalPages: Math.ceil(totalProducts / ITEMS_PER_PAGE), currentSort: sortBy });
     } catch (error) {
-        console.log('Shop', error);
-        res.redirect('/error');
+      console.log('Shop', error);
+      res.redirect('/error');
     }
-};
+  };
+  
 
 
 const filter = async (req, res) => {

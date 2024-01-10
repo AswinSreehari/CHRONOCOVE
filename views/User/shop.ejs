@@ -174,7 +174,8 @@
               </div>
             </div> -->
 
-            <!-- Pagination Links -->
+
+<!------------------------------ Pagination Links ----------------------------------->
 <div class="row" data-aos="fade-up">
   <div class="col-md-12 text-center">
     <div class="site-block-27">
@@ -221,14 +222,17 @@
               
               <div class="mb-4">
                 <h3 class="mb-3 h6 text-uppercase text-black d-block">Sort by price</h3>
-               
+              
+                <!-- Use radio buttons instead of checkboxes for exclusive selection -->
                 <label for="s_md" class="d-flex">
-                  <input type="checkbox" id="s_md" class="mr-2 mt-1"> <span class="text-black">Low - High</span>
+                  <input type="radio" id="s_md" name="sortOption" class="mr-2 mt-1" onclick="changeSort('lowToHigh')"> <span class="text-black">Low - High</span>
                 </label>
                 <label for="s_lg" class="d-flex">
-                  <input type="checkbox" id="s_lg" class="mr-2 mt-1"> <span class="text-black">High - Low</span>
+                  <input type="radio" id="s_lg" name="sortOption" class="mr-2 mt-1" onclick="changeSort('highToLow')"> <span class="text-black">High - Low</span>
                 </label>
               </div>
+              
+
               
               <!-- <div class="mb-4">
                 <h3 class="mb-3 h6 text-uppercase text-black d-block">Color</h3>
@@ -387,6 +391,16 @@
   <script src="/javascripts/jquery.magnific-popup.min.js"></script>
   <script src="/javascripts/aos.js"></script>
   <script src="/javascripts/main.js"></script>
+
+  <script>
+    function changeSort(sortBy) {
+      const currentUrl = window.location.href;
+      const url = new URL(currentUrl);
+      url.searchParams.set('sort', sortBy);
+      window.location.href = url.toString();
+    }
+  </script>
+  
     
     
   </body>
