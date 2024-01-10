@@ -7,7 +7,8 @@ const cartCollection = require('../models/cart');
 const productCollection = require('../models/product');
 const bcrypt = require('bcrypt');
 const referenceColleciton = require('../models/reference');
- 
+const walletCollection = require('../models/wallet');
+
 
 //<!-------------------------------User_Profile--------------------------------------->
 
@@ -244,22 +245,68 @@ const changePasswordPost = async (req, res) => {
 };
 
 
-const cancelOrder = async(req,res) => {
+// const cancelOrder = async(req,res) => {
+//   const orderId = req.params.orderId;
+
+//     try {
+//         const updatedOrder = await orderCollection.findByIdAndUpdate(
+//             orderId,
+//             { status: 'Cancelled' },
+//             { new: true }
+//         );
+
+//         res.json({ success: true, updatedOrder });
+//     } catch (error) {
+//         console.error('Error cancelling order:', error);
+//         res.status(500).json({ success: false, error: 'Internal Server Error' });
+//     }
+// }
+
+const cancelOrder = async (req, res) => {
   const orderId = req.params.orderId;
 
-    try {
-        const updatedOrder = await orderCollection.findByIdAndUpdate(
-            orderId,
-            { status: 'Cancelled' },
-            { new: true }
-        );
-
-        res.json({ success: true, updatedOrder });
-    } catch (error) {
-        console.error('Error cancelling order:', error);
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
+  try {
+    const order = await orderCollection.findById(orderId);
+    console.log("cancelled order is :",order.paymentMethod)
+    if (!order) {
+      return res.status(404).json({ success: false, error: 'Order not found' });
     }
-}
+    // Check if the payment method is netbanking
+    if (order.paymentMethod === 'NetBanking') {
+      // Credit the order amount to the user's wallet
+      const user = await collection.findById(order.userId).populate('wallet');
+      if (!user) {
+        return res.status(404).json({ success: false, error: 'User not found' });
+      }
+        
+
+      // Update the wallet balance and add a credit transaction
+      const creditAmount = order.orderTotal;
+      user.wallet.balance += creditAmount;
+      user.wallet.transactions.push({
+        amount: creditAmount,
+        type: 'Credit',
+        date: new Date(),
+      });
+       
+      // Save the updated user and wallet
+      await user.wallet.save();
+    }
+
+    // Update the order status to 'Cancelled'
+    const updatedOrder = await orderCollection.findByIdAndUpdate(
+      orderId,
+      { status: 'Cancelled', isCancelled: true },
+      { new: true }
+    );
+
+    res.json({ success: true, updatedOrder });
+  } catch (error) {
+    console.error('Error cancelling order:', error);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+};
+
 
 module.exports = { 
     profile,  

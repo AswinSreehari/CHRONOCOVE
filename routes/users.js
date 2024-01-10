@@ -92,7 +92,7 @@ router.post('/claimReference',userAuthentication.userAuthentication,referenceCon
 
 //<---------------------------------Coupon----------------------------------------->
 
-// router.post('/applyCoupon',userAuthentication.userAuthentication,couponController.applyCoupon)
+ router.post('/applyCoupon',userAuthentication.userAuthentication,couponController.applyCoupon)
 // router.post('/removeCoupon',userAuthentication.userAuthentication,couponController.removeCoupon)
 
 module.exports = router;

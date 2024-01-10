@@ -71,7 +71,7 @@ const payPost = async (req, res) => {
     console.log('paypost');
     const { totalPrice } = req.body;
     const razorpayOrder = await instance.orders.create({
-      amount: totalPrice, //change the amount
+      amount: Number(totalPrice), //change the amount
       currency: 'INR',
       receipt: `order_${Date.now()}`,
     });
@@ -105,8 +105,14 @@ const orderManagement = async(req,res)=>{
 
     try {
          const updatedOrder = await orderCollection.findByIdAndUpdate(orderId, { status: newStatus }, { new: true });
-        res.json({ success: true, updatedOrder });
-    } catch (error) {
+        if(updatedOrder){
+          res.json({ success: true, updatedOrder });
+
+        }else{
+          res.json({ success: false });
+
+        }
+        } catch (error) {
         console.error('Error updating order status:', error);
       res.status(500).json({ success: false, error: 'Internal Server Error' });
     }

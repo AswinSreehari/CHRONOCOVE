@@ -197,7 +197,7 @@
                             <td>Cash On Delivery</td>
                             <td>$<%= odr.orderTotal %></td>
                             <td>
-                                <select class="form-select" id="orderStatus-<%= odr._id %>" onchange="updateOrderStatus('<%= odr._id %>', this.value)">
+                                <select class="form-select" id="orderStatus-<%= odr._id %>" onchange="updateOrderStatus('<%= odr._id %>')">
                                     <option value="Pending" <% if (odr.status === 'Pending') { %>selected<% } %>>Pending</option>
                                     <option value="Processing" <% if (odr.status === 'Processing') { %>selected<% } %>>Processing</option>
                                     <option value="Delivered" <% if (odr.status === 'Delivered') { %>selected<% } %>>Delivered</option>
@@ -260,7 +260,7 @@
     <script src="/javascripts/adminmain.js"></script>
     
  <script>
-   document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const selectElements = document.querySelectorAll('[id^="orderStatus-"]');
     selectElements.forEach(selectElement => {
         selectElement.addEventListener('change', async (event) => {
@@ -276,7 +276,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ status: newStatus }),
+                    body: JSON.stringify({ newStatus }), // Fix here
                 });
 
                 if (!response.ok) {
@@ -298,6 +298,7 @@
         });
     });
 });
+
 
 
 

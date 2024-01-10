@@ -395,6 +395,7 @@ const forgotPasswordPost = async (req, res) => {
  
         // Send OTP to the  's email
         await sendOTPByEmail(email, otp);
+        
 
         // Render the page where the user can enter the OTP
         res.render('User/otp', { email, message: 'Please enter the OTP sent to your email' });

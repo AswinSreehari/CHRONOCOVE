@@ -199,10 +199,10 @@
 
             <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
             <div class="input-group w-75">
-              <input type="text" class="form-control border" name="availableCoupons" id="availableCoupons"
+              <input type="text" class="form-control border" name="couponCode" id="couponCodeInput"
               placeholder="Coupon code" >
               <div class="input-group-append">
-                <button class="btn btn-primary btn-sm" type="button" id="button-addon2">Apply</button>
+                <button class="btn btn-primary btn-sm" type="submit" id="applyCouponButton">Apply</button>
               </div>
             </div>
             <div class="form-group">
@@ -307,7 +307,7 @@
 
                 <tr>
                   <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-                  <td class="text-black font-weight-bold"><strong>$<%= total %></strong>
+                  <td class="text-black font-weight-bold" id="totalPrice"><strong>$<%= total %></strong>
                     <input type="hidden" name="total" value="<%= total %>">
                   </td>
                 </tr>
@@ -475,6 +475,101 @@
   <script src="/javascripts/aos.js"></script>
   <script src="/javascripts/main.js"></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+    <!--  script for copying the coupon code into the text field -->
+    
+    <script>
+      document.getElementById('availableCoupons').addEventListener('change', function () {
+        const selectedCoupon = this.value;
+        document.getElementById('couponCodeInput').value = selectedCoupon;
+      });
+    </script>
+  
+    <script>
+      $(document).ready(function () {
+        $('#availableCoupons').on('change', function () {
+          const selectedCouponName = $('#availableCoupons option:selected').text().trim();
+  
+  
+          $('#couponCodeInput').val(selectedCouponName);
+        });
+  
+        $('#applyCouponButton').on('click', function () {
+          const couponCode = $('#couponCodeInput').val();
+  
+        });
+      });
+    </script>
+
+<!-- script for applying the coupon and also removing the applied coupon -->
+<script>
+  $(document).ready(function () {
+    // Update coupon input when selecting from the dropdown
+    $('#availableCoupons').on('change', function () {
+      const selectedCouponName = $('#availableCoupons option:selected').text().trim();
+      $('#couponCodeInput').val(selectedCouponName);
+    });
+
+    // Apply or remove coupon logic
+    $('#applyCouponButton').on('click', function (event) {
+      event.preventDefault();
+
+      const couponCode = $('#couponCodeInput').val();
+      const totalPrice = parseFloat($('#totalPrice').text());
+      const button = $(this);
+
+      // Check if the button text is "Apply" or "Remove"
+      if (button.text() === "Apply") {
+        // Apply coupon logic here
+
+        $.ajax({
+          type: 'POST',
+          url: '/applyCoupon',
+          data: { couponCode: couponCode, totalPrice: totalPrice },
+          success: function (data) {
+            $('#grantTotal').text(data.grantTotal);
+            $('#couponDiscount').text(data.couponDiscount);
+            // Change button text to "Remove" after applying the coupon
+            button.text("Remove");
+          },
+          error: function (xhr) {
+            const errorMessage = xhr.responseJSON.error;
+            if (errorMessage) {
+              alert("Insufficient purchase amount to claim this Coupon!!!");
+            } else {
+              alert('An error occurred while applying the coupon.');
+            }
+          }
+        });
+      } else if (button.text() === "Remove") {
+        // Remove coupon logic here
+
+        $.ajax({
+          type: 'POST',
+          url: '/removeCoupon',
+          data: { totalPrice: totalPrice },
+          success: function (data) {
+            $('#grantTotal').text(data.grantTotal);
+            $('#couponDiscount').text(data.couponDiscount);
+            // Change button text back to "Apply" after removing the coupon
+            button.text("Apply");
+            // location.reload()
+          },
+          error: function (xhr) {
+            alert('An error occurred while removing the coupon.');
+          }
+        });
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
 
   <script>
     //place order Button

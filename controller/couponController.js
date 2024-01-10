@@ -62,10 +62,10 @@ const deleteCoupon = async (req, res) => {
 
 const applyCoupon = async (req, res) => {
     try {
-        console.log("Inside Apply Coupon!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        console.log("Inside Apply Couponsss!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
       // Get the coupon code and total price from the request body
-      let { couponCode, grandTotal } = req.body;
-        console.log("req.body:",couponCode , grandTotal)
+      let { couponCode, totalPrice } = req.body;
+        console.log("req.body:",couponCode , totalPrice)
       // Find the coupon data by coupon code
       const couponData = await couponCollection.findOne({ couponName: couponCode });
         console.log("CouponData:",couponData)
@@ -76,13 +76,13 @@ const applyCoupon = async (req, res) => {
       }
   
       // Check if the total price is greater than the minimum value of the coupon
-      if (grandTotal < couponData.minValue) {
+      if (totalPrice < couponData.minValue) {
         return res.status(400).json({ error: 'Total price is less than the minimum value required for this coupon' });
       }
   
       // Calculate coupon discount and grant total
-      const couponDiscount = Math.floor((grandTotal * couponData.couponValue) / 100);
-        grandTotal = grandTotal - couponDiscount;
+      const couponDiscount = Math.floor((totalPrice * couponData.couponValue) / 100);
+        totalPrice = totalPrice - couponDiscount;
   
       // Assuming userId is available in your request or from your authentication system
       const user = await collection.findOne({emailId: req.session.email });
@@ -95,8 +95,9 @@ const applyCoupon = async (req, res) => {
         // Save the coupon data with the updated appliedUsers array
         await couponData.save();
       }
-      console.log("Grand Total:",grandTotal)
-      res.json({ grandTotal, couponDiscount });
+      console.log("Grand Total:",totalPrice)
+      console.log("coupon discount is :",couponDiscount)
+      res.json({ totalPrice, couponDiscount });
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
@@ -107,7 +108,7 @@ const applyCoupon = async (req, res) => {
   const removeCoupon = async (req, res) => {
     try {
       
-      const { grandTotal } = req.body;
+      const { totalPrice } = req.body;
   
      
       const user = await collection.findOne({emailId: req.session.email });
@@ -130,18 +131,18 @@ const applyCoupon = async (req, res) => {
       }
   
       // removing the coupon discount
-      console.log("total price is :",grandTotal);
+      console.log("total price is :",totalPrice);
       
-      const couponDiscount = Math.floor((grandTotal * couponData.couponValue) / 100);
-       grandTotal = grandTotal - couponDiscount;
-      // grandTotal= grandTotal;
-      console.log("new grandTotal is :",grandTotal);
-      console.log("grandTotal is :",grandTotal);
+      const couponDiscount = Math.floor((totalPrice * couponData.couponValue) / 100);
+       totalPrice = totalPrice - couponDiscount;
+      // totalPrice= totalPrice;
+      console.log("new totalPrice is :",totalPrice);
+      console.log("totalPrice is :",totalPrice);
   
      
       await couponData.save();
   
-      res.json({ grandTotal, couponDiscount });
+      res.json({ totalPrice, couponDiscount });
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
