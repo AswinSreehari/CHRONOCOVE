@@ -156,11 +156,9 @@
                 </div>
               </div>
               <% }) %>
-              
-
 
             </div>
-            <div class="row" data-aos="fade-up">
+            <!-- <div class="row" data-aos="fade-up">
               <div class="col-md-12 text-center">
                 <div class="site-block-27">
                   <ul>
@@ -174,7 +172,33 @@
                   </ul>
                 </div>
               </div>
-            </div>
+            </div> -->
+
+            <!-- Pagination Links -->
+<div class="row" data-aos="fade-up">
+  <div class="col-md-12 text-center">
+    <div class="site-block-27">
+      <ul>
+        <% if (currentPage > 1) { %>
+          <li><a href="?page=<%= currentPage - 1 %>">&lt;</a></li>
+        <% } %>
+
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <li class="<%= i === currentPage ? 'active' : '' %>">
+            <a href="?page=<%= i %>"><%= i %></a>
+          </li>
+        <% } %>
+
+        <% if (currentPage < totalPages) { %>
+          <li><a href="?page=<%= currentPage + 1 %>">&gt;</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- End Pagination Links -->
+
+            
           </div>
   <!-----------------------------------Filter Area--------------------------------------->
   

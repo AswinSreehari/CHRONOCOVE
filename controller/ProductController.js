@@ -147,18 +147,46 @@ const deleteProduct = (async(req,res)=>{
 
 //Shop
 
-const shop = (async(req,res)=>{
-    try{
-    const searchQuery = req.query.searchQuery || ''
-    const products = await productCollection.find({productName:{$regex:searchQuery, $options: 'i'}},{isDeleted:false})
-    console.log('Shop data recived!!')
-    console.log("searchQUery :",searchQuery)
-    res.render('User/shop',{products,searchQuery})
-    }catch(error){
-        console.log("Shop",error)
-        res.redirect('/error')
+// const shop = (async(req,res)=>{
+//     try{
+//     const searchQuery = req.query.searchQuery || ''
+//     const products = await productCollection.find({productName:{$regex:searchQuery, $options: 'i'}},{isDeleted:false})
+//     console.log('Shop data recived!!')
+//     console.log("searchQUery :",searchQuery)
+//     res.render('User/shop',{products,searchQuery})
+//     }catch(error){
+//         console.log("Shop",error)
+//         res.redirect('/error')
+//     }
+// })
+
+const ITEMS_PER_PAGE = 6; 
+
+const shop = async (req, res) => {
+    try {
+        const searchQuery = req.query.searchQuery || '';
+        const page = parseInt(req.query.page) || 1;
+
+        // Calculate the skip value based on the page number
+        const skip = (page - 1) * ITEMS_PER_PAGE;
+
+        // Query the products with pagination and search
+        const products = await productCollection
+            .find({ productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false })
+            .skip(skip)
+            .limit(ITEMS_PER_PAGE);
+
+        // Count total number of products for pagination
+        const totalProducts = await productCollection.countDocuments({ productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false });
+
+        // res.render('User/shop', { products, searchQuery, currentPage: page, totalPages: Math.ceil(totalProducts / ITEMS_PER_PAGE) });
+        res.render('User/shop', { products, searchQuery, currentPage: page, totalPages: Math.ceil(totalProducts / ITEMS_PER_PAGE) });
+
+    } catch (error) {
+        console.log('Shop', error);
+        res.redirect('/error');
     }
-})
+};
 
 
 const filter = async (req, res) => {

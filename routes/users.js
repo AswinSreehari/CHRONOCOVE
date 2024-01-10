@@ -12,6 +12,7 @@ const wishlistController = require('../controller/wishlistController');
 const walletcontroller = require('../controller/walletController')
 const referenceController = require('../controller/referenceController')
 const couponController = require('../controller/couponController')
+const { shop } = require('../controller/ProductController')
 const hpp = require('hpp');
 
 
@@ -41,7 +42,7 @@ router.post('/forgotPasswordPost',userController.forgotPasswordPost)
 
 //<-----------------------------Product_Route----------------------------->
 
-router.get('/shop',productController.shop)
+router.get('/shop',shop,productController.shop)
 router.get('/filter-products', productController.filter);
 
 
