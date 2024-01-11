@@ -109,14 +109,12 @@ const editProductPost = async (req, res) => {
         console.log(updatedProduct)
         console.log('after updated')
 
-        // Check if additionalProductImage exists in req.files
-        if (req.files && req.files['additionalProductImage']) {
+         if (req.files && req.files['additionalProductImage']) {
             updatedProduct.additionalProductImage = [...req.files['additionalProductImage'].map(file => file.filename),... updatedProduct.additionalProductImage];
            
         }
 
-        // Check if mainProductImage exists in req.files
-        if (req.files && req.files['mainProductImage']) {
+         if (req.files && req.files['mainProductImage']) {
             updatedProduct.mainProductImage = req.files['mainProductImage'][0].filename;
         }
 
@@ -162,36 +160,67 @@ const deleteProduct = (async(req,res)=>{
 
 const ITEMS_PER_PAGE = 6; 
 
+// const shop = async (req, res) => {
+//     try {
+//       const searchQuery = req.query.searchQuery || '';
+//       const page = parseInt(req.query.page) || 1;
+//       const sortBy = req.query.sort || 'latest';  
+//        const skip = (page - 1) * ITEMS_PER_PAGE;
+  
+//        let sortCriteria = {};
+//       if (sortBy === 'lowToHigh') {
+//         sortCriteria = { productPrice: 1 };
+//       } else if (sortBy === 'highToLow') {
+//         sortCriteria = { productPrice: -1 };
+//       } else {
+//         sortCriteria = { createdAt: -1 };  
+//       }
+  
+//        const products = await productCollection
+//         .find({ productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false })
+//         .skip(skip)
+//         .limit(ITEMS_PER_PAGE)
+//         .sort(sortCriteria);
+//         console.log("products:",products)
+//         const cat = products.productCategory
+//         console.log("cat:",cat)
+//        const totalProducts = await productCollection.countDocuments({ productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false });
+//         const category  = await categoryCollection.findOne( )
+  
+//       res.render('User/shop', { products, searchQuery, currentPage: page, totalPages: Math.ceil(totalProducts / ITEMS_PER_PAGE), currentSort: sortBy });
+//     } catch (error) {
+//       console.log('Shop', error);
+//       res.redirect('/error');
+//     }
+//   };
+
 const shop = async (req, res) => {
     try {
-      const searchQuery = req.query.searchQuery || '';
-      const page = parseInt(req.query.page) || 1;
-      const sortBy = req.query.sort || 'latest';  
-       const skip = (page - 1) * ITEMS_PER_PAGE;
-  
-       let sortCriteria = {};
-      if (sortBy === 'lowToHigh') {
-        sortCriteria = { productPrice: 1 };
-      } else if (sortBy === 'highToLow') {
-        sortCriteria = { productPrice: -1 };
-      } else {
-        sortCriteria = { createdAt: -1 };  
-      }
-  
-       const products = await productCollection
-        .find({ productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false })
-        .skip(skip)
-        .limit(ITEMS_PER_PAGE)
-        .sort(sortCriteria);
-  
-       const totalProducts = await productCollection.countDocuments({ productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false });
-  
-      res.render('User/shop', { products, searchQuery, currentPage: page, totalPages: Math.ceil(totalProducts / ITEMS_PER_PAGE), currentSort: sortBy });
+        const searchQuery = req.query.searchQuery || '';
+        const page = parseInt(req.query.page) || 1;
+        const sortBy = req.query.sort || 'latest';
+        const skip = (page - 1) * ITEMS_PER_PAGE;
+
+        let sortCriteria = {};
+        if (sortBy === 'lowToHigh') {
+            sortCriteria = { productPrice: 1 };
+        } else if (sortBy === 'highToLow') {
+            sortCriteria = { productPrice: -1 };
+        } else {
+            sortCriteria = { createdAt: -1 };
+        }
+
+        const products = await productCollection.aggregate([{ $match: { productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false } }, { $lookup: { from: 'categorydatas', localField: 'productCategory', foreignField: '_id', as: 'category' } }, { $unwind: '$category' }, { $sort: sortCriteria }, { $skip: skip }, { $limit: ITEMS_PER_PAGE }]);
+            
+        const totalProducts = await productCollection.countDocuments({ productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false });
+
+        res.render('User/shop', { products, searchQuery, currentPage: page, totalPages: Math.ceil(totalProducts / ITEMS_PER_PAGE), currentSort: sortBy });
     } catch (error) {
-      console.log('Shop', error);
-      res.redirect('/error');
+        console.log('Shop', error);
+        res.redirect('/error');
     }
-  };
+};
+
   
 
 
