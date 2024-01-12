@@ -213,54 +213,97 @@ const changePassword = (req,res) => {
   res.render('User/changePassword')
 }
 
+// const changePasswordPost = async (req, res) => {
+//   try {
+//     const data = req.body;
+//     const userData = await collection.findOne({ emailId: req.session.email });
+//     const isValid = await bcrypt.compare(data.newPass, userData.password);
+
+//     if (!isValid) {
+//       return res.render('User/changePassword', {
+//         showAlert: true,
+//         alertMessage: 'Old password is incorrect',
+//         alertType: 'error'
+//       });
+//     }
+
+//     if (data.newPass !== data.confPass) {
+//       return res.render('User/changePassword', {
+//         showAlert: true,
+//         alertMessage: 'New password and Confirm password do not match!',
+//         alertType: 'error'
+//       }); 
+//     }
+
+//     const hashedPassword = await bcrypt.hash(data.newPass, 10);
+//     await collection.updateOne({ emailId: req.session.email }, { $set: { password: hashedPassword } });
+
+//     console.log('Password Changed Successfully!!');
+
+//     return res.render('User/changePassword', {
+//       showAlert: true,
+//       alertMessage: 'Password changed successfully!',
+//       alertType: 'success'
+//     });
+//   } catch (err) {
+//     console.log(err);
+
+//     return res.render('User/changePassword', {
+//       showAlert: true,
+//       alertMessage: 'Internal Server Error',
+//       alertType: 'error'
+//     });
+//   }
+// };
+
 const changePasswordPost = async (req, res) => {
   try {
     const data = req.body;
-    console.log("Data:", data);
     const userData = await collection.findOne({ emailId: req.session.email });
-    console.log("UserData in the change password :", userData);
+    console.log("Data:", data);
+    console.log("UserData:", userData);
+    console.log("pass:", data.newPass, userData.password);
 
-    console.log("Old password : ", data.oldPass); 
-    console.log('New Password : ', data.newPass);
-    const isValid = await bcrypt.compare(data.oldPass, userData.password); 
+    const isValid = await bcrypt.compare(data.oldPass, userData.password);
 
     if (!isValid) {
-      return res.status(400).send('Old password is incorrect');
+      const msg = 'Old password is incorrect';
+      return res.render('User/changePassword',{msg}) 
+      
     }
 
     if (data.newPass !== data.confPass) {
-      return res.status(400).send('New password and Confirm password do not match!');
-    }else{
-
+      const msg = 'Incorrect password'
+      return res.render('User/changePassword',{msg})
     }
 
     const hashedPassword = await bcrypt.hash(data.newPass, 10);
     await collection.updateOne({ emailId: req.session.email }, { $set: { password: hashedPassword } });
+
     console.log('Password Changed Successfully!!');
-    res.redirect('/changePassword');
-  } catch (err) {
-    console.log(err);
-    res.status(500).send('Internal Server Error');
-  }
+    console.log("OldPass:", data.oldPass);
+    console.log("NewPass:", data.newPass);
+    const msg = 'Password Changed successfully'
+
+
+    const successMsg = 'Password Changed successfully';
+    return res.render('User/changePassword', { successMsg });
+   } catch (err) {
+    console.error(err);
+    const msg = 'Internal server error'
+    return res.render('User/changePassword', {msg})
 };
 
 
-// const cancelOrder = async(req,res) => {
-//   const orderId = req.params.orderId;
+}
 
-//     try {
-//         const updatedOrder = await orderCollection.findByIdAndUpdate(
-//             orderId,
-//             { status: 'Cancelled' },
-//             { new: true }
-//         );
 
-//         res.json({ success: true, updatedOrder });
-//     } catch (error) {
-//         console.error('Error cancelling order:', error);
-//         res.status(500).json({ success: false, error: 'Internal Server Error' });
-//     }
-// }
+
+
+
+
+
+ 
 
 const cancelOrder = async (req, res) => {
   const orderId = req.params.orderId;
