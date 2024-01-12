@@ -29,6 +29,9 @@
 
     <!-- Template Stylesheet -->
     <link href="/stylesheets/adminstyle.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy4rLUm1a9z1+9H5e14W1C5PwBWE8it6S5" crossorigin="anonymous">
+
 </head>
 
 <body>
@@ -65,6 +68,8 @@
                             <a href="/admin/categorymanagement" class="nav-item nav-link "><i class="fa fa-keyboard me-2"></i>Category </a>
                             <a href="/admin/productmanagement" class="nav-item nav-link active"><i class="fa fa-table me-2"></i>Product  </a>
                             <a href="/admin/orderManagement" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Order</a>
+                            <a href="/admin/couponManagement" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Coupon</a>
+
                             <!-- <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a> -->
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
@@ -182,7 +187,7 @@
     </div>
  
  <!-- product card Start -->
-<div class="row mt-4">
+ <div class="row mt-4">
     <% products.forEach(product => { %>
         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
             <div class="card shadow-2-strong" style="width: 100%;">
@@ -210,7 +215,58 @@
         </div>
     <% }); %>
 </div>
-<!-- product card end -->
+
+<!-- Add these styles for Bootstrap-style pagination links -->
+<style>
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+  
+    .pagination .page-item {
+      margin: 0 2px;
+    }
+  
+    .pagination .page-link {
+      padding: 10px;
+      text-decoration: none;
+      border: 1px solid #dee2e6;
+      color: #007bff;
+      background-color: #fff;
+    }
+  
+    .pagination .page-item.active .page-link {
+      background-color: #007bff;
+      color: #fff;
+    }
+  </style>
+  
+  <!-- Pagination Links -->
+<div class="row mt-4">
+    <div class="col-md-12 text-center">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <% if (currentPage > 1) { %>
+            <li class="page-item"><a class="page-link" href="?page=<%= currentPage - 1 %>">&laquo; Previous</a></li>
+          <% } %>
+  
+          <% for (let i = 1; i <= locals.totalPages; i++) { %>
+            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+              <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+            </li>
+          <% } %>
+  
+          <% if (currentPage < locals.totalPages) { %>
+            <li class="page-item"><a class="page-link" href="?page=<%= currentPage + 1 %>">Next &raquo;</a></li>
+          <% } %>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  
+<!-- End Pagination Links -->
+
 
 
             <!-- Footer Start -->

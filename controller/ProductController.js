@@ -5,17 +5,22 @@ const ejs = require('ejs');
 
 //Product_Management
 
-const productmanagement = (async(req,res)=>{
-    try{
-    const products = await productCollection.find()
-    
-    res.render('admin/productmanagement',{products})
-    
-    }catch(error){
-        console.log(error)
-        res.redirect('/admin/error')
+const ITEMS_PER_PRODUCT_PAGE = 8;  
+
+const productmanagement = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const skip = (page - 1) * ITEMS_PER_PRODUCT_PAGE;
+
+        const products = await productCollection.find().skip(skip).limit(ITEMS_PER_PRODUCT_PAGE);
+
+        res.render('admin/productmanagement', { products, currentPage: page });
+    } catch (error) {
+        console.log(error);
+        res.redirect('/admin/error');
     }
-})
+};
+
 
 //Add_Products
 
@@ -144,56 +149,7 @@ const deleteProduct = (async(req,res)=>{
 })
 
 //Shop
-
-// const shop = (async(req,res)=>{
-//     try{
-//     const searchQuery = req.query.searchQuery || ''
-//     const products = await productCollection.find({productName:{$regex:searchQuery, $options: 'i'}},{isDeleted:false})
-//     console.log('Shop data recived!!')
-//     console.log("searchQUery :",searchQuery)
-//     res.render('User/shop',{products,searchQuery})
-//     }catch(error){
-//         console.log("Shop",error)
-//         res.redirect('/error')
-//     }
-// })
-
 const ITEMS_PER_PAGE = 6; 
-
-// const shop = async (req, res) => {
-//     try {
-//       const searchQuery = req.query.searchQuery || '';
-//       const page = parseInt(req.query.page) || 1;
-//       const sortBy = req.query.sort || 'latest';  
-//        const skip = (page - 1) * ITEMS_PER_PAGE;
-  
-//        let sortCriteria = {};
-//       if (sortBy === 'lowToHigh') {
-//         sortCriteria = { productPrice: 1 };
-//       } else if (sortBy === 'highToLow') {
-//         sortCriteria = { productPrice: -1 };
-//       } else {
-//         sortCriteria = { createdAt: -1 };  
-//       }
-  
-//        const products = await productCollection
-//         .find({ productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false })
-//         .skip(skip)
-//         .limit(ITEMS_PER_PAGE)
-//         .sort(sortCriteria);
-//         console.log("products:",products)
-//         const cat = products.productCategory
-//         console.log("cat:",cat)
-//        const totalProducts = await productCollection.countDocuments({ productName: { $regex: searchQuery, $options: 'i' }, isDeleted: false });
-//         const category  = await categoryCollection.findOne( )
-  
-//       res.render('User/shop', { products, searchQuery, currentPage: page, totalPages: Math.ceil(totalProducts / ITEMS_PER_PAGE), currentSort: sortBy });
-//     } catch (error) {
-//       console.log('Shop', error);
-//       res.redirect('/error');
-//     }
-//   };
-
 const shop = async (req, res) => {
     try {
         const searchQuery = req.query.searchQuery || '';
@@ -228,12 +184,9 @@ const filter = async (req, res) => {
     const minPrice = parseInt(req.query.minPrice ?? '10');
     const maxPrice = parseInt(req.query.maxPrice ?? '10000');
 const query = { productPrice: {$gt: minPrice, $lt: maxPrice} };
-// console.log(query);
-    const products = await productCollection.find(query)
-    // console.log(products);
-    const html = await ejs.renderFile('./views/User/_products-container.ejs', { products })
-    // console.log(html);
-    res.send(html);
+     const products = await productCollection.find(query)
+     const html = await ejs.renderFile('./views/User/_products-container.ejs', { products })
+     res.send(html);
 }
 
 //Image_Delete
