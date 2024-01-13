@@ -72,11 +72,6 @@ const deleteWishlistProduct = async (req, res) => {
 
 const addtoCart = async (req, res) => {
 
-  // Does product already exist in cart?
-  // Increase Qty
-  // Else
-  // Add item to cart with qty 1
-
   const productId = req.params.id;
   const product = await productCollection.findById(productId);
   if (!product) {
@@ -124,8 +119,7 @@ const addtoCart = async (req, res) => {
     await userCart.save();
     res.render('User/cart', { populatedCart: populatedCart ?? [], totalPrice, total });
   } catch (err) {
-    console.error("Error at god knows where.");
-    console.error(err);
+     console.error(err);
     res.redirect('/error');
   }
 }

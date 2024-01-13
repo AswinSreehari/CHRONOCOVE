@@ -78,13 +78,15 @@ const generateRandomReferenceCode = (length) => {
 
 const home = async (req, res) => {
     try {
-        const products = await productCollection.find({ isDeleted: false })
+        // const products = await productCollection.find({ isDeleted: false })
+        const products = await productCollection.aggregate([{ $match: { isDeleted: false }  }, { $lookup: { from: 'categorydatas', localField: 'productCategory', foreignField: '_id', as: 'category' } }, { $unwind: '$category' }]).limit(6);
+
+         console.log("Productsss:",products)
         const email = req.session.email
         if (req.session.user) {
             user = true;
             res.render('User/index', { email, products, user })
-            console.log("home products :", products)
-
+ 
         } else {
             user = false;
             res.render('User/index', { email, products, user })
@@ -360,8 +362,7 @@ const signupPost = async (req, res) => {
         try {
             const products = await productCollection.findById(productId)
             res.render('User/product_details', { products })
-            console.log("this is the products:", products)
-        } catch (error) {
+         } catch (error) {
             console.log(error)
             res.redirect("/error")
         }

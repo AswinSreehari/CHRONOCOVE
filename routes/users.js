@@ -49,7 +49,6 @@ router.get('/filter-products', productController.filter);
 //<------------------------------Cart_Route--------------------------------------------->
 
 router.get('/counts',userAuthentication.userAuthentication,cartController.getCounts)
-
 router.get('/cartGet',userAuthentication.userAuthentication,cartController.cartGet)
 router.post("/cart/:id",userAuthentication.userAuthentication,cartController.cart)
 router.put('/cart/:productId',userAuthentication.userAuthentication,cartController.updateQty)
@@ -83,7 +82,7 @@ router.put('/cancelOrder/:orderId',userAuthentication.userAuthentication,profile
 router.get('/wishlist', userAuthentication.userAuthentication,wishlistController.wishlist);
 router.post('/addWish/:id',userAuthentication.userAuthentication,wishlistController.addWish)
 router.delete('/wishlist/:productId',userAuthentication.userAuthentication,wishlistController.deleteWishlistProduct)
-router.post('/addtoCart/:id',userAuthentication.userAuthentication,wishlistController.addtoCart)
+router.post("/cart/:id",userAuthentication.userAuthentication,wishlistController.addtoCart)
 
 //<---------------------------------Wallet----------------------------------------->
 

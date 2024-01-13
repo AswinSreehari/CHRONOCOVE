@@ -144,9 +144,16 @@
                         <h6>$<%=data.productPrice%></h6>
                       </td>       
                       <td>
-                          <button type="submit" class="buy-now btn btn-sm btn-primary "onclick="window.location('/wishlist/<%=data._id%>')" <% if (data.productQuantity <= 0) { %>disabled<% } %>>
+                          <!-- <button type="submit" class="buy-now btn btn-sm btn-primary "onclick="window.location('/wishlist/<%=data._id%>')" <% if (data.productQuantity <= 0) { %>disabled<% } %>>
                               Add to Cart <i class="fa-solid fa-cart-shopping"></i>
-                          </button>
+                          </button> -->
+
+                          <form action="/cart/<%=products._id%>" method="post">
+                            <input type="hidden" name="productId" value="<%= products._id %>">
+                            <button type="submit" class="buy-now btn btn-sm btn-primary" <% if (products.productQuantity <= 0) { %>disabled<% } %>>
+                                Add to Cart <i class="fa-solid fa-cart-shopping"></i>
+                            </button>
+                        </form>
                       </td>       
                       <td id="wishlist-<%=data._id %>">
                         <a href="/wishlist" class="btn btn-primary btn-sm" onclick="deleteWishlistProduct('<%= data._id %>',event)">X</a>
@@ -277,45 +284,6 @@
 
 </html>
 
-
-<!-- <script>
-  //Close Button 
- 
-  const deleteWishlistProduct = (productId) => {
-     fetch(`/wishlist/${productId}`, {
-       method: "DELETE",
-       headers: {
-         "Content-Type": "application/json"
-       },
-     })
-       .then(res => {
-         if (!res.ok) {
-           throw new Error(`HTTP error! Status: ${res.status}`);
-         }
-         return res.json();
-       })
-       .then(data => {
-         console.log('Data:', data)
-         if (data.success) {
-           const productRow = document.getElementById(`wishlist-${productId}`)
-           
-           if (productRow) {
-             productRow.remove();
-           }
-         } else {
-           alert(`Failed to delete product.`);
-         }
-       })
-       .catch(err => {
-         console.error("Error deleting product:", err);
-         alert("An error occurred. Please try again!!");
-       });
- 
-     }
-  
- 
-  
- </script> -->
 
   
 

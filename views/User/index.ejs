@@ -172,36 +172,33 @@
       </div>
     </div>
 
-    <div class="site-section  ">
+    <div class="site-section">
       <div class="container">
         <div class="row">
           <% products.forEach(product => { %>
-          <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
-            <a class="block-2-item" href="/productDetails/<%=product._id%>">
-              <figure class="image">
-                <img  src="/uploads/<%= product.mainProductImage %>" alt="<%= product.productName %>" class="img-fluid">
-              </figure>
-               
-              <div class="text">
-                <span class="text-uppercase"><%= product.productCategory %></span>
-                <h3><%= product.productName %></h3>
-                <!-- Price and Category -->
-        <p>Price: <%= product.productPrice %></p>
-
-        <!-- Buttons (View Details and Add to Cart) -->
-        <div class="buttons">
-          <a href="/productDetails/<%=product._id%>" class="btn btn-primary">View Details</a>
-          <a href="/cart/<%=product._id%>" class="btn btn-success">Add to Cart</a>
-        </div>
+            <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="">
+              <div class="block-4 text-center border" style="height: 100%; display: flex; flex-direction: column;">
+                <figure class="block-4-image" style="flex: 2; overflow: hidden;">
+                  <a href="/productDetails/<%=product._id%>">
+                    <img src="/uploads/<%= product.mainProductImage %>" alt="<%= product.productName %>" class="img-fluid" style="object-fit: cover; height: 100%; width: 100%;">
+                  </a>
+                </figure>
+                <div class="block-4-text p-4" style="flex: 1; overflow: hidden;">
+                  <h3><a href="/productDetails/<%=product._id%>"><%= product.productName %></a></h3>
+                  <p class="mb-0"><%= product.category %></p>
+                  <p class="text-primary font-weight-bold">$<%= product.productPrice %></p>
+                  <div class="buttons">
+                    <a href="/productDetails/<%=product._id%>" class="btn btn-primary">View Details</a>
+                    <a href="/cart/<%=product._id%>" class="btn btn-success">Add to Cart</a>
+                  </div>
+                </div>
               </div>
-            </a>
-          </div>
+            </div>
           <% }) %>
-
- 
         </div>
       </div>
     </div>
+    
 
     <div class="site-section block-3 site-blocks-2 bg-light">
       <div class="container">
