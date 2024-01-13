@@ -32,8 +32,6 @@
         right: 10px;
       } */
     </style>
-
-
   </head>
   <body>
   
@@ -60,11 +58,14 @@
               <div class="site-top-icons">
                 <ul>
                   <li><a href="/profile"><span class="icon icon-person"></span></a></li>
-                  <li><a href="/wishlist"><span class="icon icon-heart-o"></span></a></li>
+                  <li><a href="/wishlist" class="site-cart">
+                    <span class="icon icon-heart-o"></span>
+                    <span class="count" id="wishlistCount">0</span>
+                  </a></li>
                   <li>
                     <a href="/cartGet" class="site-cart">
                       <span class="icon icon-shopping_cart"></span>
-                      <span class="count">2</span>
+                      <span class="count" id="cartCount">0</span>
                     </a>
                   </li> 
                   <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>
@@ -374,14 +375,7 @@
     </footer>
   </div>
 
-  <!-- <script src="js/jquery-3.3.1.min.js"></script>
-  <script src="js/jquery-ui.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/owl.carousel.min.js"></script>
-  <script src="js/jquery.magnific-popup.min.js"></script>
-  <script src="js/aos.js"></script>
-  <script src="js/main.js"></script> -->
+ 
 
   <!-- <script src="/javascripts/jquery-3.3.1.min.js"></script> -->
   <script src="/javascripts/jquery-3.3.1.min.js"></script>
@@ -393,6 +387,19 @@
   <script src="/javascripts/jquery.magnific-popup.min.js"></script>
   <script src="/javascripts/aos.js"></script>
   <script src="/javascripts/main.js"></script>
+
+  <script>
+    const wishlistCount = document.getElementById('wishlistCount');
+    const cartCount = document.getElementById('cartCount');
+    if (wishlistCount && cartCount) {
+      fetch('/counts')
+      .then(res => res.json())
+      .then(data => {
+        wishlistCount.innerText = data.wishlist;
+        cartCount.innerText = data.cart;
+      }).catch(console.error)
+    }
+  </script>
     
   </body>
 </html>

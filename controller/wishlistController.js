@@ -9,12 +9,13 @@ const cartCollection = require('../models/cart')
 const wishlist = async (req, res) => {
   try {
     const userData = await userCollection.find({ emailId: req.session.email })
-    console.log("This is the user: ", userData)
-    const wishData = await wishlistCollection.find(userData._id)
-    console.log("wishData:", wishData)
-    const productIds = wishData.map(item => item.productId);
+     const wishData = await wishlistCollection.find(userData._id)
+     const productIds = wishData.map(item => item.productId);
     const products = await productCollection.find({ _id: { $in: productIds } });
     console.log("products:", products)
+
+    const wishNo = wishData.length;
+    console.log("Wish Count:",wishNo)
 
     //Cart Icon Values
     const cartData = await cartCollection.findOne(userData._id);
@@ -23,7 +24,7 @@ const wishlist = async (req, res) => {
     console.log("Cart items count:",cartNo)
      
 
-    res.render('User/wishlist', { products , cartNo })
+    res.render('User/wishlist', { products , cartNo , wishNo })
   } catch (error) {
     console.log('Error : ', error)
     res.redirect('User/error')

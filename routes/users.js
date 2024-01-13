@@ -48,6 +48,8 @@ router.get('/filter-products', productController.filter);
 
 //<------------------------------Cart_Route--------------------------------------------->
 
+router.get('/counts',userAuthentication.userAuthentication,cartController.getCounts)
+
 router.get('/cartGet',userAuthentication.userAuthentication,cartController.cartGet)
 router.post("/cart/:id",userAuthentication.userAuthentication,cartController.cart)
 router.put('/cart/:productId',userAuthentication.userAuthentication,cartController.updateQty)

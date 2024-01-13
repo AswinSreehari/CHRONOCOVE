@@ -62,11 +62,15 @@
               <div class="site-top-icons">
                 <ul>
                   <li><a href="/profile"><span class="icon icon-person"></span></a></li>
-                  <li><a href="/wishlist"><span class="icon icon-heart-o"></span></a></li>
+                  <li>
+                    <a href="/wishlist" class="site-cart"><span class="icon icon-heart-o"></span>
+                      <span class="count"><%=locals.wishNo%></span>
+                      </a>
+                  </li>
                   <li>
                     <a href="/cartGet" class="site-cart">
                       <span class="icon icon-shopping_cart"></span>
-                      <span class="count" style="color: white;"><%=locals.cartNo%></span>
+                      <span class="count"><%=locals.cartNo%></span>
                     </a>
                   </li>
                   <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span
