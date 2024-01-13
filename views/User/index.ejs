@@ -178,18 +178,18 @@
           <% products.forEach(product => { %>
             <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="">
               <div class="block-4 text-center border" style="height: 100%; display: flex; flex-direction: column;">
-                <figure class="block-4-image" style="flex: 2; overflow: hidden;">
+                <figure class="block-4-image" style="flex: 3; overflow: hidden;">
                   <a href="/productDetails/<%=product._id%>">
                     <img src="/uploads/<%= product.mainProductImage %>" alt="<%= product.productName %>" class="img-fluid" style="object-fit: cover; height: 100%; width: 100%;">
                   </a>
                 </figure>
                 <div class="block-4-text p-4" style="flex: 1; overflow: hidden;">
                   <h3><a href="/productDetails/<%=product._id%>"><%= product.productName %></a></h3>
-                  <p class="mb-0"><%= product.category %></p>
+                  <p class="mb-0"><%= product.category.categoryName %></p>
                   <p class="text-primary font-weight-bold">$<%= product.productPrice %></p>
                   <div class="buttons">
                     <a href="/productDetails/<%=product._id%>" class="btn btn-primary">View Details</a>
-                    <a href="/cart/<%=product._id%>" class="btn btn-success">Add to Cart</a>
+                    <!-- <a href="/cart/<%=product._id%>" class="btn btn-success">Add to Cart</a> -->
                   </div>
                 </div>
               </div>
@@ -392,9 +392,13 @@
       fetch('/counts')
       .then(res => res.json())
       .then(data => {
-        wishlistCount.innerText = data.wishlist;
-        cartCount.innerText = data.cart;
+        wishlistCount.innerText = data.wishlist ?? 0;
+        cartCount.innerText = data.cart ?? 0;
       }).catch(console.error)
+      .finally(() => {
+        wishlistCount.innerText === '0' && wishlistCount.remove();
+        cartCount.innerText === '0' && cartCount.remove();
+      })
     }
   </script>
     

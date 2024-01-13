@@ -41,12 +41,12 @@ const sendOTPByEmail = async (email, otp) => {
 
 
     const mailOptions = {
-        from: process.env.EMAIL_ID, // me/admin
-        to: email, // user email
-        subject: 'OTP verification',//subject
+        from: process.env.EMAIL_ID, 
+        to: email,  
+        subject: 'OTP verification', 
         html: `<h2> OTP Verifictaion</h2>
         <p>Your OTP for verification is:  </p>
-         <h3> Your OTP is: ${otp}</h3>`, //passing otp with email
+         <h3> Your OTP is: ${otp}</h3>`,  
     };
 
     // Sending   email
@@ -78,11 +78,8 @@ const generateRandomReferenceCode = (length) => {
 
 const home = async (req, res) => {
     try {
-        // const products = await productCollection.find({ isDeleted: false })
-        const products = await productCollection.aggregate([{ $match: { isDeleted: false }  }, { $lookup: { from: 'categorydatas', localField: 'productCategory', foreignField: '_id', as: 'category' } }, { $unwind: '$category' }]).limit(6);
-
-         console.log("Productsss:",products)
-        const email = req.session.email
+         const products = await productCollection.aggregate([{ $match: { isDeleted: false }  }, { $lookup: { from: 'categorydatas', localField: 'productCategory', foreignField: '_id', as: 'category' } }, { $unwind: '$category' }]).limit(6);
+         const email = req.session.email
         if (req.session.user) {
             user = true;
             res.render('User/index', { email, products, user })
@@ -111,15 +108,11 @@ const signupPost = async (req, res) => {
     if (userFound) {
         const msg = "Email is already Registered";
         res.render("User/signup", { msg });
-        console.log("Inside user found!!");
-    } else {
+     } else {
         try {
             const { otp, otpExpiry } = generateOTPWithExpiry();
             console.log(otp);
-
-             
-
-
+ 
             const data = {
                 username: req.body.name,
                 emailId: req.body.email,
@@ -182,15 +175,11 @@ const signupPost = async (req, res) => {
     }
 
     const signInPost = async (req, res) => {
-        console.log("inside signinPost  ");
-        const email = req.body.email;
-        console.log("email is:", email);
-
+         const email = req.body.email;
+ 
         try {
-            console.log("inside try");
-            const check = await collection.findOne({ emailId: email });
-            console.log("checked user", check);
-
+             const check = await collection.findOne({ emailId: email });
+ 
             if (!check) {
                 console.log("User name cannot be found");
             } else {
@@ -203,8 +192,7 @@ const signupPost = async (req, res) => {
                     req.session.email = check.emailId;
                     req.session.user = req.session.email
                     req.session.isBlocked = false;
-                    //   console.log("The SID is: ", req.session.id);
-                    check.sessionId = req.session.id;
+                     check.sessionId = req.session.id;
                     await check.save();
                     return res.redirect("/");
                 } else {

@@ -115,8 +115,7 @@ const addtoCart = async (req, res) => {
     const totalPrice = await cartCollection.aggregate([{ $match: { userId: userData._id } }, { $unwind: "$items" }, { $lookup: { from: "productdatas", localField: "items.productId", foreignField: "_id", as: "cartProduct" } }, { $project: { userId: 1, items: 1, productPrice: { $arrayElemAt: ["$cartProduct.productPrice", 0] }, calculatedPrice: { $multiply: ["$items.quantity", { $arrayElemAt: ["$cartProduct.productPrice", 0] }] } } }, { $group: { _id: "$items.productId", userId: { $first: "$userId" }, quantity: { $sum: "$items.quantity" }, totalPrice: { $sum: "$calculatedPrice" }, productPrice: { $first: "$productPrice" } } }]);
     const total = totalPrice.reduce((sum, item) => sum + item.totalPrice, 0);
     userCart.totalPrice = total
-    console.log("Tot:", userCart.totalPrice)
-    await userCart.save();
+     await userCart.save();
     res.render('User/cart', { populatedCart: populatedCart ?? [], totalPrice, total });
   } catch (err) {
      console.error(err);

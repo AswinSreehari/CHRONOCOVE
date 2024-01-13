@@ -63,11 +63,11 @@ body {
 ::selection {
   background: #000;
   color: #fff; }
-
+/* 
 a {
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
-  transition: .3s all ease; }
+  transition: .3s all ease; } */
   a:hover {
     text-decoration: none; }
 

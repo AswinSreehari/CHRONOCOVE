@@ -83,9 +83,6 @@ const payPost = async (req, res) => {
   }
 };
 
-
-
-
 //<!--------------------------Admin_Order_Management------------------------------------------->
 
 const orderManagement = async(req,res)=>{
@@ -133,19 +130,13 @@ const AdminViewOrderDetails = async (req, res) => {
  
 
   console.log(req.params);
-  console.log("This is orderId : ", orderId);
-
+ 
   const userData = await collection.findOne({ emailId: req.session.email });
   const subId = orderData.selectedAddress
   const userId = userData._id;
   const address = await addressCollection.findOne({userId})
   const addressIndex = address.Address.findIndex(e => e._id.toString() === subId.toString())
-  console.log("addressIndex:",addressIndex)
-  const addressDetails = address.Address[addressIndex]
-  console.log("Address Details:",addressDetails)
- 
-
-
+   const addressDetails = address.Address[addressIndex]
 
   const orderProducts = await getProductDetails(orderData.items);
   res.render('Admin/viewOrderDetails', { orderData, orderProducts , userData,addressDetails });
