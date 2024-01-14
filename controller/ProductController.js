@@ -89,6 +89,7 @@ const editProduct = async (req, res) => {
 
 
 const editProductPost = async (req, res) => {
+    console.log("helloe i am inside the editpoduct post!!!!!!")
     let toDelArr = []
     if(req.body.deleteImage){
         toDelArr.push(...JSON.parse(req.body.deleteImage))
@@ -102,13 +103,30 @@ const editProductPost = async (req, res) => {
         if (!product) {
             return res.redirect('/admin/error');
         }
+// adding the code for applying the product offer
+let updatedPrice;
+
+        if (req.body.offer > 0) {
+            const offerAmount = (req.body.offer / 100) * req.body.productPrice;  
+            updatedPrice = Math.floor(req.body.productPrice - offerAmount);  
+        }
+        const offerPrice = updatedPrice
+        console.log("offer price is :",offerPrice)
+
+
+
+
+
+
         const productCat = categoryCollection.findOne({categoryName : req.body.productCategory})
         const updatedProduct = {
             productName: req.body.productName,
             productDescription: req.body.productDescription,
             productCategory: productCat._id,
             productQuantity: Number(req.body.productQuantity),
-            productPrice: Number(req.body.productPrice)
+            productPrice: Number(req.body.productPrice),
+            offer:Number(req.body.offer),
+            offerPrice:offerPrice
              
         };
 

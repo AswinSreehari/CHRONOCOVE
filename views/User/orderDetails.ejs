@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <%-include("../partials/head.ejs")%>
+  <script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
 
   <body>
   
@@ -35,6 +36,8 @@
           <p> Ph No : <%=addressDetails.phone%></p>
         </div>
       </div>      
+      <button class="btn btn-primary" onclick="dwnlodInvoice()"> DownLoad Invoice</button>
+
       <div class="row mt-4">
         <div class="col-12">
             <div class="scrollable-div" style="max-height: 300px; overflow-y: auto; box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">
@@ -81,5 +84,200 @@
   <script src="/javascripts/aos.js"></script>
   <script src="/javascripts/main.js"></script>
     
+  <script src="https://cdn.jsdelivr.net/npm/easyinvoice/dist/easyinvoice.min.js"></script>
+  <script>
+    function dwnlodInvoice() {
+     const orderId = '<%=orderData._id %>';
+  
+    fetch(`/downloadInvoice/${orderId}`)
+      .then(response => response.json())
+      .then(data => {
+
+        console.log("data recived for invoice dowload is :",data)
+        
+        const{orderData,orderProducts,userData,addressDetails}=data
+        console.log(data.username);
+        console.log(orderProducts);
+        console.log(userData);
+        console.log(addressDetails);
+         var data = {
+          "images": {
+        // The logo on top of your invoice
+        "logo": "https://public.budgetinvoice.com/img/logo_en_original.png",
+        // The invoice background
+        "background": "https://public.easyinvoice.cloud/img/watermark-draft.jpg"
+    },
+          "sender": {
+            "company": "CHRONOCOVE",
+            "address": "CHRONOCOVE Pvt limited",
+            "zip": "689508",
+            "city": "Kerala",
+            "country": "India"
+          },
+          "client": {
+            // Use orderData.addressId to populate client details
+            "company": userData.username,
+            "address":addressDetails.address + ', ' + addressDetails.landmark + ', ' + addressDetails.state + ' - ' + addressDetails.zip
+            // ... (rest of the client details)
+          },
+          "information": {
+              "number": orderData._id,
+              "date": new Date(orderData.orderTime).toLocaleDateString(),
+                "due-date": (() => {
+            const orderDate = new Date(orderData.orderTime);
+            const dueDate = new Date(orderDate.setDate(orderDate.getDate() + 15));
+            return dueDate.toLocaleDateString();
+         })(), // Due date is now 15 days after the order date
+       },
+       "products": orderData.items.map(item => ({ 
+  "quantity": item.quantity,
+  "description": orderProducts[item.productId].productName,
+  "tax-rate": 0, // You may need to fetch tax information from your database
+  "price": orderProducts[item.productId]?.productPrice || 0
+})),
+
+          "bottom-notice": "Kindly pay your invoice within 15 days.",
+          "settings": {
+        "currency": "INR", // See documen'Locales and Currency' for more info. Leave empty for no currency.
+        "locale": "nl-NL", // Defaults to,used for number formatting (See documentation 'Locales and Currency')        
+        "margin-top": 25, // Defaults to "margin-right": 25, // Defaults t          
+        "margin-left": 25, // Defaults to     
+        "margin-bottom": 25, // Defaults   '
+        "format": "A4", // Defaults to A4ons: A3, A4, A5, Legal, Letter, Tabloid
+        "height": "1000px", // allowed unm, cm, in, px
+        "width": "500px", // allowed unit cm, in, px
+        "orientation": "landscape", // po or landscape, defaults to portrait
+    },
+    "translate": {
+        "invoice": "CHRONOCOVE",  // Default to 'INVOICE'
+        "number": "Order_ID", // Defaults to 'Number'
+        "date": "Date", // Default to 'Date'
+        "due-date": "Due-Date", // Defaults to 'Due Date'
+        "subtotal": "Subtotal", // Defaults to 'Subtotal'
+        "products": "Products", // Defaults to 'Products'
+        "quantity": "Quantity", // Default to 'Quantity'
+        "price": "Price", // Defaults to 'Price'
+        "product-total": "Total", // Defaults to 'Total'
+        "total": "Grant Total", // Defaults to 'Total'
+        "vat": "btw" // Defaults to 'vat'
+    },
+        };
+        console.log("Downliading started!!!!!!!!!!!!!!!!!!!!!!!!")
+        // Create and download the invoice
+        easyinvoice.createInvoice(data, async function (result) {
+          // The response will contain a base64 encoded PDF file
+          easyinvoice.download("invoice.pdf");
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching order data:', error);
+        // Handle error as needed
+      });
+  }
+  
+  </script>
+
+
+
+<!-- <script>
+    async function dwnlodInvoice() {
+        try {
+            const orderId = '<%=orderData?._id %>';
+
+            if (!orderId) {
+                console.error('Order ID is not defined.');
+                return;
+            }
+
+            const response = await fetch(`/downloadInvoice/${orderId}`);
+            const data = await response.json();
+
+            console.log('Received data:', data);
+
+            // const { orderData, orderProducts, userData, addressDetails } = data;
+console.log("helleo",data.username)
+            if (!data.orderData) {
+                console.error('Order data is undefined.');
+                return;
+            }
+
+            console.log(orderData);
+            console.log(orderProducts);
+            console.log(userData);
+            console.log(addressDetails);
+
+            var invoiceData = {
+                "images": {
+                    "logo": "/images/Logo.png",
+                    "background": "https://public.easyinvoice.cloud/img/watermark-draft.jpg"
+                },
+                "sender": {
+                    "company": "CHRONOCOVE",
+                    "address": "CHRONOCOVE Pvt limited",
+                    "zip": "689508",
+                    "city": "Kerala",
+                    "country": "India"
+                },
+                "client": {
+                    "company": userData.username,
+                    "address": `${addressDetails.address}, ${addressDetails.landmark}, ${addressDetails.state} - ${addressDetails.zip}`
+                },
+                "information": {
+                    "number": orderData._id,
+                    "date": new Date(orderData.orderTime).toLocaleDateString(),
+                    "due-date": (() => {
+                        const orderDate = new Date(orderData.orderTime);
+                        const dueDate = new Date(orderDate.setDate(orderDate.getDate() + 15));
+                        return dueDate.toLocaleDateString();
+                    })(),
+                },
+                "products": orderData.items.map(item => ({
+                    "quantity": item.quantity,
+                    "description": orderProducts[item.productId]?.productName || '',
+                    "tax-rate": 0,
+                    "price": orderProducts[item.productId]?.productPrice || 0
+                })),
+                "bottom-notice": "Kindly pay your invoice within 15 days.",
+                "settings": {
+                    "currency": "INR",
+                    "locale": "nl-NL",
+                    "margin-top": 25,
+                    "margin-right": 25,
+                    "margin-left": 25,
+                    "margin-bottom": 25,
+                    "format": "A4",
+                    "height": "1000px",
+                    "width": "500px",
+                    "orientation": "landscape",
+                },
+                "translate": {
+                    "invoice": "CHRONOCOVE",
+                    "number": "Order_ID",
+                    "date": "Date",
+                    "due-date": "Due-Date",
+                    "subtotal": "Subtotal",
+                    "products": "Products",
+                    "quantity": "Quantity",
+                    "price": "Price",
+                    "product-total": "Total",
+                    "total": "Grant Total",
+                    "vat": "btw"
+                },
+            };
+
+            console.log("Downloading started!!!!!!!!!!!!!!!!!!!!!!!!")
+            // Create and download the invoice
+            easyinvoice.createInvoice(invoiceData, async function (result) {
+                // The response will contain a base64 encoded PDF file
+                easyinvoice.download("invoice.pdf");
+            });
+        } catch (error) {
+            console.error('Error fetching order data:', error);
+            // Handle error as needed
+        }
+    }
+</script> -->
+
+
   </body>
 </html>

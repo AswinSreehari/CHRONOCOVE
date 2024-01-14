@@ -77,6 +77,7 @@ router.get('/orderDetails/:id',userAuthentication.userAuthentication,profileCont
 router.get('/changePassword',userAuthentication.userAuthentication,profileController.changePassword)
 router.post('/changePasswordPost',userAuthentication.userAuthentication,profileController.changePasswordPost)
 router.put('/cancelOrder/:orderId',userAuthentication.userAuthentication,profileController.cancelOrder)
+router.get('/downloadInvoice/:orderId',userAuthentication.userAuthentication,profileController.downloadInvoice)
 
 //<---------------------------------Wishlist----------------------------------------->
 router.get('/wishlist', userAuthentication.userAuthentication,wishlistController.wishlist);
@@ -94,7 +95,10 @@ router.post('/claimReference',userAuthentication.userAuthentication,referenceCon
 
 //<---------------------------------Coupon----------------------------------------->
 
- router.post('/applyCoupon',userAuthentication.userAuthentication,couponController.applyCoupon)
+router.post('/applyCoupon',userAuthentication.userAuthentication,couponController.applyCoupon)
 // router.post('/removeCoupon',userAuthentication.userAuthentication,couponController.removeCoupon)
+
+
+
 
 module.exports = router;

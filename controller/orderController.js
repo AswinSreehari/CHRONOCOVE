@@ -116,18 +116,18 @@ const orderManagement = async(req,res)=>{
  }
 
  //<!--------------------------------Admin Oder Details-------------------------------------->
-
-const AdminViewOrderDetails = async (req, res) => {
-  const orderId = req.params.id;
-  if (!mongoose.Types.ObjectId.isValid(orderId)) {
-    return res.status(400).send("You tried to mess with me. But I am not messable");
-  }
+ 
+ const AdminViewOrderDetails = async (req, res) => {
+   const orderId = req.params.id;
+   if (!mongoose.Types.ObjectId.isValid(orderId)) {
+     return res.status(400).send("You tried to mess with me. But I am not messable");
+    }
 
   const orderData = await orderCollection.findById(orderId);
   if (!orderData) {
     return res.status(404).send("Order not found.");
   }
- 
+  
 
   console.log(req.params);
  
@@ -143,21 +143,23 @@ const AdminViewOrderDetails = async (req, res) => {
 };
 const getProductDetails = async (items) => {
   const productIds = items.map(item => item.productId);
-
+  
   try {
     const products = await productCollection.find({ _id: { $in: productIds } });
     const productDetails = {};
-
+    
     products.forEach(product => {
       productDetails[product._id] = product;
     });
-
+    
     return productDetails;
   } catch (error) {
     console.error('Error fetching product details:', error);
     return null;
   }
 };
+
+
 
 module.exports = {
   checkoutPost,
@@ -167,4 +169,3 @@ module.exports = {
   payPost,
 };
 
- 

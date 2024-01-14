@@ -178,10 +178,8 @@ const orderDetails = async (req, res) => {
   const userId = userData._id;
   const address = await addressCollection.findOne({userId})
   const addressIndex = address.Address.findIndex(e => e._id.toString() === subId.toString())
-  console.log("addressIndex:",addressIndex)
-  const addressDetails = address.Address[addressIndex]
-  console.log("Address Details:",addressDetails)
- 
+   const addressDetails = address.Address[addressIndex]
+  
 
 
 
@@ -213,48 +211,6 @@ const changePassword = (req,res) => {
   res.render('User/changePassword')
 }
 
-// const changePasswordPost = async (req, res) => {
-//   try {
-//     const data = req.body;
-//     const userData = await collection.findOne({ emailId: req.session.email });
-//     const isValid = await bcrypt.compare(data.newPass, userData.password);
-
-//     if (!isValid) {
-//       return res.render('User/changePassword', {
-//         showAlert: true,
-//         alertMessage: 'Old password is incorrect',
-//         alertType: 'error'
-//       });
-//     }
-
-//     if (data.newPass !== data.confPass) {
-//       return res.render('User/changePassword', {
-//         showAlert: true,
-//         alertMessage: 'New password and Confirm password do not match!',
-//         alertType: 'error'
-//       }); 
-//     }
-
-//     const hashedPassword = await bcrypt.hash(data.newPass, 10);
-//     await collection.updateOne({ emailId: req.session.email }, { $set: { password: hashedPassword } });
-
-//     console.log('Password Changed Successfully!!');
-
-//     return res.render('User/changePassword', {
-//       showAlert: true,
-//       alertMessage: 'Password changed successfully!',
-//       alertType: 'success'
-//     });
-//   } catch (err) {
-//     console.log(err);
-
-//     return res.render('User/changePassword', {
-//       showAlert: true,
-//       alertMessage: 'Internal Server Error',
-//       alertType: 'error'
-//     });
-//   }
-// };
 
 const changePasswordPost = async (req, res) => {
   try {
@@ -296,14 +252,6 @@ const changePasswordPost = async (req, res) => {
 
 
 }
-
-
-
-
-
-
-
- 
 
 const cancelOrder = async (req, res) => {
   const orderId = req.params.orderId;
@@ -350,6 +298,40 @@ const cancelOrder = async (req, res) => {
   }
 };
 
+//<!--------------------------------Download Invoice---------------------------------->
+
+const downloadInvoice=async (req, res) => {
+  console.log("InsideDownloadInvoice")
+  const orderId = req.params.orderId;
+  console.log("orderID:",orderId)
+  if (!mongoose.Types.ObjectId.isValid(orderId)) {
+    return res.status(400).send("Not a valid objectId");
+  }
+  const orderData = await orderCollection.findById(orderId);
+  if (!orderData) {
+    return res.status(404).send("Order not found.");
+  }
+ 
+
+  console.log(req.params);
+  console.log("This is orderId : ", orderId);
+  console.log("Order Data : ", orderData);
+
+  const userData = await collection.findOne({ emailId: req.session.email });
+  const subId = orderData.selectedAddress
+  const userId = userData._id;
+  const address = await addressCollection.findOne({userId})
+  const addressIndex = address.Address.findIndex(e => e._id.toString() === subId.toString())
+   const addressDetails = address.Address[addressIndex]
+  console.log("addr:",addressDetails)
+  const orderProducts = await getProductDetails(orderData.items);
+  console.log("ord Pro:",orderProducts)
+  console.log("the order data for invoice is :",orderData)
+   res.json ({orderData, orderProducts , userData,addressDetails });
+};
+
+ 
+ 
 
 module.exports = { 
     profile,  
@@ -363,7 +345,8 @@ module.exports = {
     orderDetails,
     changePassword,
     changePasswordPost,
-    cancelOrder
+    cancelOrder,
+    downloadInvoice,
     
     
 }
