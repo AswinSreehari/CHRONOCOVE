@@ -7,6 +7,7 @@ const productController = require('../controller/ProductController')
 const categoryController = require('../controller/CategoryController')
 const orderController = require('../controller/orderController')
 const couponController = require('../controller/couponController')
+const chartController = require('../controller/chartController')
 const storage = require('../storage/multer')
 const upload = multer({storage})
 
@@ -71,5 +72,7 @@ router.get('/delete-coupon/:couponId',adminauthenticaton.adminauthenticaton,coup
 router.post('/applyOffer',adminauthenticaton.adminauthenticaton, categoryController.applyOffer);
 router.get('/sendCategoryOffer', adminauthenticaton.adminauthenticaton,categoryController.sendCategoryOffer);
 
+//route for chart for admin
+router.get("/chartData",adminauthenticaton.adminauthenticaton,chartController.chart)
 
 module.exports = router;
