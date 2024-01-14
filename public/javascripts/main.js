@@ -210,3 +210,20 @@ jQuery(document).ready(function ($) {
 
 
 });
+
+//Cart and wishlist Count_!
+    const wishlistCount = document.getElementById('wishlistCount');
+    const cartCount = document.getElementById('cartCount');
+    if (wishlistCount && cartCount) {
+      fetch('/counts')
+      .then(res => res.json())
+      .then(data => {
+        wishlistCount.innerText = data.wishlist ?? 0;
+        cartCount.innerText = data.cart ?? 0;
+      }).catch(console.error)
+      .finally(() => {
+        wishlistCount.innerText === '0' && wishlistCount.remove();
+        cartCount.innerText === '0' && cartCount.remove();
+      })
+    }
+ 

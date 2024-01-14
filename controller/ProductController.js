@@ -47,8 +47,8 @@ const addProductsPost = async (req, res) => {
         let updatedPrice;
 
         if (offer > 0) {
-            const offerAmount = (offer / 100) * productPrice; // Calculate offer amount
-            updatedPrice = Math.floor(productPrice - offerAmount); // Calculate updated price after applying offer
+            const offerAmount = (offer / 100) * productPrice;  
+            updatedPrice = Math.floor(productPrice - offerAmount);  
         }
         const offerPrice = updatedPrice
         console.log("offer price is :",offerPrice)
