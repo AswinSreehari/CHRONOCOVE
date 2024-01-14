@@ -247,6 +247,10 @@
                     <input type="file" class="form-control" id="additionalProductImage" data-image-preview="#imagePreview" name="additionalProductImage" multiple  accept=".jpeg,.png,.jpg">
                     <div id="imagePreview"></div>
                 </div>
+                <div class="form-group">
+                    <label for="offer">Product Offer (%)</label>
+                    <input type="number" placeholder="optional" id="offer" name="offer" class="form-control" min="0" max="100">
+                </div>
                 <button type="submit" class="btn btn-primary">Add Product</button>
                 <button type="button" class="btn btn-secondary" onclick="cancelAddProduct()">Cancel</button>
             </form>

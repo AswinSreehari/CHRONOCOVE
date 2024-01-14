@@ -34,6 +34,12 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default:false
     },
+    offer:{
+        type:Number
+    },
+    offPrice:{
+        type:Number,   
+      },
     
 })
 const productCollection = new mongoose.model('productData',productSchema)

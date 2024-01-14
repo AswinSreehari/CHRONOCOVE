@@ -30,7 +30,7 @@ const addProducts = (async(req,res)=>{
 })
 
 const addProductsPost = async (req, res) => {
-    const { productName, productDescription, productCategory, productQuantity , productPrice} = req.body;
+    const { productName, productDescription, productCategory, productQuantity , productPrice,offer} = req.body;
     const mainProductImage = req.files.mainProductImage[0] ? req.files.mainProductImage[0].filename : '';
 
     console.log('Its an Object ID')
@@ -44,8 +44,16 @@ const addProductsPost = async (req, res) => {
     }else{
   
     try {
+        let updatedPrice;
+
+        if (offer > 0) {
+            const offerAmount = (offer / 100) * productPrice; // Calculate offer amount
+            updatedPrice = Math.floor(productPrice - offerAmount); // Calculate updated price after applying offer
+        }
+        const offerPrice = updatedPrice
+        console.log("offer price is :",offerPrice)
   
-      const newProduct = new productCollection({  productName, productDescription, productCategory, productQuantity , productPrice ,  mainProductImage,additionalProductImage });
+      const newProduct = new productCollection({  productName, productDescription, productCategory, productQuantity , productPrice ,  mainProductImage,additionalProductImage,offer,offerPrice });
       await newProduct.save();
   
       res.redirect('/admin/productmanagement');

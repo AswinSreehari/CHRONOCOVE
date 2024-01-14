@@ -65,4 +65,11 @@ router.post('/addCoupons',adminauthenticaton.adminauthenticaton,couponController
 router.get('/delete-coupon/:couponId',adminauthenticaton.adminauthenticaton,couponController.deleteCoupon);
 
 
+//route for category offer
+
+
+router.post('/applyOffer',adminauthenticaton.adminauthenticaton, categoryController.applyOffer);
+router.get('/sendCategoryOffer', adminauthenticaton.adminauthenticaton,categoryController.sendCategoryOffer);
+
+
 module.exports = router;

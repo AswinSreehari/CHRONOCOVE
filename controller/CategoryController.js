@@ -1,5 +1,5 @@
 const categoryCollection = require('../models/category')
-
+const productCollection  = require('../models/product')
 //Category_Management
 
 const categorymanagement = (async(req,res)=>{
@@ -101,6 +101,54 @@ const deleteCategory = (async(req,res)=>{
 })
 
 
+
+const sendCategoryOffer = async (req, res) => {
+    console.log("hello there");
+    try {
+        const activeCategories = await categoryCollection.find({ isDeleted: false });
+        console.log("active categories are:",activeCategories)
+        const categories = await categoryCollection.find();
+        res.render('admin/categoryoffer', { activeCategories, categories });
+    } catch (error) {
+        console.error(error);
+        res.render('admin/404')
+    }
+};  
+
+
+
+const applyOffer = async (req, res) => {
+    const { categoryId, percentage } = req.body;
+
+    try {
+        // Find the category by its ID
+        const category = await categoryCollection.findById(categoryId);
+
+        if (!category) {
+            return res.status(404).json({ success: false, message: 'Category not found' });
+        }
+
+        // Find all products belonging to the category
+        const products = await productCollection.find({ productCategory: categoryId });
+        console.log("products that belong to given ategoey is :",products)
+         for (const product of products) {
+            const updatedPrice = Math.floor(product.productPrice - (product.productPrice * (percentage / 100)));
+            // const realPrice=product.price;
+            // product.price = updatedPrice;
+            product.offPrice=updatedPrice;
+            await product.save();
+        }
+
+        console.log("product after applying category offer is :",products)
+
+        return res.json({ success: true, message: 'Offer applied successfully' });
+    } catch (error) {
+        console.error(error);
+        res.render('admin/404')
+    }
+};
+
+
 module.exports={
     categorymanagement,
     addCategory,
@@ -108,4 +156,6 @@ module.exports={
     editCategory,
     editCategoryPost,
     deleteCategory,
+    sendCategoryOffer,
+    applyOffer
 }
