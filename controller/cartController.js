@@ -91,6 +91,7 @@ const populateProductDetails = async function (cart) {
       mainProductImage: 1,
       productPrice: 1,
     });
+     
 
     return {
       productId: item.productId,
@@ -112,10 +113,13 @@ const populateProductDetails = async function (cart) {
 
 const cartGet = async (req, res) => {
   try {
+    console.log("Inside get!!!!")
     const userData = await collection.findOne({ emailId: req.session.email });
+    console.log("Userdata:",userData)
     let userCart = await cartCollection.findOne({ userId: userData._id });
+    console.log("Usercart:",userCart)
     const populatedCart = await populateProductDetails(userCart);
-
+    console.log("popppp:",populatedCart)
     const totalPrice = await cartCollection.aggregate([{ $match: { userId: userData._id } }, { $unwind: "$items" }, { $lookup: { from: "productdatas", localField: "items.productId", foreignField: "_id", as: "cartProduct" } }, { $project: { userId: 1, items: 1, productPrice: { $arrayElemAt: ["$cartProduct.productPrice", 0] }, calculatedPrice: { $multiply: ["$items.quantity", { $arrayElemAt: ["$cartProduct.productPrice", 0] }] } } }, { $group: { _id: "$items.productId", userId: { $first: "$userId" }, quantity: { $sum: "$items.quantity" }, totalPrice: { $sum: "$calculatedPrice" }, productPrice: { $first: "$productPrice" } } }]);
 
     const total = totalPrice.reduce((sum, item) => sum + item.totalPrice, 0);

@@ -1,22 +1,14 @@
 
 const categoryCollection = require('../models/category')
-const addressCollection = require('../models/address')
-const collection = require('../models/user')
+ const collection = require('../models/user')
 const orderCollection = require('../models/order')
 const productCollection = require('../models/product');
-const referenceColleciton = require('../models/reference');
-const walletCollection = require('../models/wallet');
-
-
-
-
-
+ 
 
 
 
 const chart = async (req, res) => {
-    console.log("hai");
-    if (req.session.admin) {
+     if (req.session.admin) {
         try {
             // Aggregate data for the daily chart
             const dayChart = await orderCollection.aggregate([
@@ -101,7 +93,7 @@ const chart = async (req, res) => {
                     $group: {
                         _id: null,
                         totalRevenue: { $sum: "$orderTotal" },
-                        count: { $sum: 1 } // Debugging: count the documents
+                        count: { $sum: 1 }  
                     }
                 }
             ]);

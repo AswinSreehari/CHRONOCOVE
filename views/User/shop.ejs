@@ -47,7 +47,7 @@
                 <% products.forEach(product => { %>
                   <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
                     <div class="block-4 text-center border" style="display: flex; flex-direction: column; height: 450px;">
-                      <figure class="block-4-image" style="flex: 5; overflow: hidden;">
+                      <figure class="block-4-image" style="flex: 3; overflow: hidden;">
                         <a href="/productDetails/<%=product._id%>">
                           <img src="/uploads/<%= product.mainProductImage %>" alt="Image placeholder" class="img-fluid" style="object-fit: cover; height: 100%; width: 100%;">
                         </a>
@@ -55,8 +55,13 @@
                       <div class="block-4-text p-4" style="flex: 1; overflow: hidden;">
                         <h3><a href="/productDetails/<%=product._id%>"><%= product.productName %></a></h3>
                         <p class="mb-0"><%= product.category.categoryName %></p>
-                        <p class="text-primary font-weight-bold">$<%= product.productPrice %></p>
-                      </div>
+                        <% if (product.productPrice !== product.offerPrice) { %>
+                          <del class="">$<%= product.productPrice %></del>
+                          <p class="text-primary font-weight-bold">$<%= product.offerPrice %></p>
+                          <% } else{ %>
+                            <p class="text-primary font-weight-bold">$<%= product.productPrice %></p>
+                            <% } %>
+                        </div>
                     </div>
                   </div>
                 <% }) %>
@@ -159,7 +164,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-md-12">
             <div class="site-section site-blocks-2">
               <div class="row justify-content-center text-center mb-5">
@@ -205,7 +210,7 @@
               
             </div>
           </div>
-        </div>
+        </div> -->
         
 <!----------------------------------------------------/Filter Area----------------------------------------->
       </div>

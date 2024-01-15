@@ -54,7 +54,9 @@ const addProductsPost = async (req, res) => {
         console.log("offer price is :",offerPrice)
   
       const newProduct = new productCollection({  productName, productDescription, productCategory, productQuantity , productPrice ,  mainProductImage,additionalProductImage,offer,offerPrice });
+      console.log("New Product:",newProduct)
       await newProduct.save();
+
   
       res.redirect('/admin/productmanagement');
     } catch (error) {
