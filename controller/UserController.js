@@ -397,11 +397,6 @@ const forgotPasswordPost = async (req, res) => {
 
 
 
-
- 
-
-
-
     //About
 
     const about = ((req, res) => {

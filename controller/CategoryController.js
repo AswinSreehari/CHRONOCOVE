@@ -95,23 +95,21 @@ const editCategoryPost = async (req, res) => {
 
 const deleteCategory = (async(req,res)=>{
     const data = req.params.id
-    console.log('Data is :',data)
-    await categoryCollection.findOneAndDelete({_id:data})
+     await categoryCollection.findOneAndDelete({_id:data})
     res.redirect('/admin/categorymanagement')
 })
 
 
 
 const sendCategoryOffer = async (req, res) => {
-    console.log("hello there");
-    try {
+     try {
         const activeCategories = await categoryCollection.find({ isDeleted: false });
         console.log("active categories are:",activeCategories)
         const categories = await categoryCollection.find();
         res.render('admin/categoryoffer', { activeCategories, categories });
     } catch (error) {
         console.error(error);
-        res.render('admin/404')
+        res.render('admin/error')
     }
 };  
 
@@ -130,8 +128,7 @@ const applyOffer = async (req, res) => {
 
         // Find all products belonging to the category
         const products = await productCollection.find({ productCategory: categoryId });
-        console.log("products that belong to given ategoey is :",products)
-         for (const product of products) {
+          for (const product of products) {
             const updatedPrice = Math.floor(product.productPrice - (product.productPrice * (percentage / 100)));
             // const realPrice=product.price;
             // product.price = updatedPrice;
@@ -140,11 +137,10 @@ const applyOffer = async (req, res) => {
         }
 
         console.log("product after applying category offer is :",products)
-
-        return res.json({ success: true, message: 'Offer applied successfully' });
+        return res.json({ success: true, message: 'Offer applied successfully!' });
     } catch (error) {
         console.error(error);
-        res.render('admin/404')
+        res.render('admin/error')
     }
 };
 
