@@ -48,8 +48,7 @@ const checkout = (async (req, res) => {
     expiryDate: { $gte: currentDate.toISOString() },
   })
 
-  console.log("BOOO ", userAddress);
-  res.render('User/checkout', { populatedCart, totalPrice, total, coupons, userAddress: userAddress })
+   res.render('User/checkout', { populatedCart, totalPrice, total, coupons, userAddress: userAddress })
 })
 
 const addAddressPost = async (req, res) => {

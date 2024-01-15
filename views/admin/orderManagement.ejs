@@ -220,11 +220,60 @@
     </div>
 </div>
 <!-- Order Management Table End -->
+<!-- Add these styles for Bootstrap-style pagination links -->
+<style>
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .pagination .page-item {
+      margin: 0 2px;
+    }
+
+    .pagination .page-link {
+      padding: 10px;
+      text-decoration: none;
+      border: 1px solid #dee2e6;
+      color: #EB1616;
+      background-color: #fff;
+    }
+
+    .pagination .page-item.active .page-link {
+      background-color: #EB1616;
+      color: #fff;
+    }
+</style>
+
+<!-- Pagination Links -->
+<div class="row mt-4">
+    <div class="col-md-12 text-center">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <% if (currentPage > 1) { %>
+                    <li class="page-item"><a class="page-link" href="?page=<%= currentPage - 1 %>">&laquo; Previous</a></li>
+                <% } %>
+
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+
+                <% if (currentPage < totalPages) { %>
+                    <li class="page-item"><a class="page-link" href="?page=<%= currentPage + 1 %>">Next &raquo;</a></li>
+                <% } %>
+            </ul>
+        </nav>
+    </div>
+</div>
+
 
 
 
             <!-- Footer Start -->
-            <div class="container-fluid pt-4 px-4 fixed-bottom">
+            <div class="container-fluid pt-4 px-4 ">
                 <div class="bg-secondary rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">

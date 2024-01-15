@@ -177,7 +177,7 @@
 
 
  <!-- Table Start -->
-<table class="table">
+ <table class="table">
     <thead>
         <tr>
             <th scope="col">User_id</th>
@@ -203,6 +203,29 @@
         <% }); %>
     </tbody>
 </table>
+
+<!-- Centered Pagination Links -->
+<div class="d-flex justify-content-center mt-4">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <% if (currentPage > 1) { %>
+                <li class="page-item"><a class="page-link" href="?page=<%= currentPage - 1 %>">&laquo; Previous</a></li>
+            <% } %>
+
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                    <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                </li>
+            <% } %>
+
+            <% if (currentPage < totalPages) { %>
+                <li class="page-item"><a class="page-link" href="?page=<%= currentPage + 1 %>">Next &raquo;</a></li>
+            <% } %>
+        </ul>
+    </nav>
+</div>
+
+
 <!-- Table End -->
 
 <script>

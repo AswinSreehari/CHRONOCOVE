@@ -1,14 +1,21 @@
 <% products.forEach(product => { %>
-    <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-      <div class="block-4 text-center border">
-        <figure class="block-4-image">
-          <a href="/productDetails/<%=product._id%>"><img src="/uploads/<%= product.mainProductImage %>" alt="Image placeholder" class="img-fluid"></a>
-        </figure>
-        <div class="block-4-text p-4">
-          <h3><a href="/productDetails/<%=product._id%>"><%= product.productName %></a></h3>
-          <p class="mb-0"><%= product.productCategory %></p>
-          <p class="text-primary font-weight-bold">$<%= product.productPrice %></p>
+  <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+    <div class="block-4 text-center border" style="display: flex; flex-direction: column; height: 450px;">
+      <figure class="block-4-image" style="flex: 2; overflow: hidden;">
+        <a href="/productDetails/<%=product._id%>">
+          <img src="/uploads/<%= product.mainProductImage %>" alt="Image placeholder" class="img-fluid" style="object-fit: cover; height: 100%; width: 100%;">
+        </a>
+      </figure>
+      <div class="block-4-text p-4" style="flex: 1; overflow: hidden;">
+        <h3><a href="/productDetails/<%=product._id%>"><%= product.productName %></a></h3>
+        <p class="mb-0"><%= product.category.categoryName %></p>
+        <% if ( product.offerPrice) { %>
+          <del class="">$<%= product.productPrice %></del>
+          <p class="text-primary font-weight-bold">$<%= product.offerPrice %></p>
+          <% } else{ %>
+            <p class="text-primary font-weight-bold">$<%= product.productPrice %></p>
+            <% } %>
         </div>
-      </div>
     </div>
+  </div>
 <% }) %>

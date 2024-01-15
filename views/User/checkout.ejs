@@ -356,19 +356,19 @@
       event.preventDefault();
 
       const couponCode = $('#couponCodeInput').val();
-      const totalPrice = parseFloat($('#totalPrice').text());
+      const tPrice=$('#totalPrice').text().substring(1)
+      const totalPrice = parseFloat(tPrice);
       const button = $(this);
-
       // Check if the button text is "Apply" or "Remove"
       if (button.text() === "Apply") {
         // Apply coupon logic here
-
+ 
         $.ajax({
           type: 'POST',
           url: '/applyCoupon',
           data: { couponCode: couponCode, totalPrice: totalPrice },
           success: function (data) {
-            $('#grantTotal').text(data.grantTotal);
+            $('#totalPrice').text(`₹ ${data.totalPrice}`);
             $('#couponDiscount').text(data.couponDiscount);
             // Change button text to "Remove" after applying the coupon
             button.text("Remove");
@@ -413,9 +413,9 @@
 
   <script>
     //place order Button
-    // document.getElementById('placeOrderBtn').addEventListener('click', () => {
-    //   document.getElementById('addressForm').submit();
-    // });
+    document.getElementById('placeOrderBtn').addEventListener('click', () => {
+      document.getElementById('addressForm').submit();
+    });
 
     //Selcted address
     var form = document.getElementById('addressForm');

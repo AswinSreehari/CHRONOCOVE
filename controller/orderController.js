@@ -14,6 +14,7 @@ const checkoutPost = async (req, res) => {
     const {
       selectedAddress,paymentMethod,productName,quantity,totalPrice,total} = req.body;
       console.log("reqBody :",req.body)
+      console.log("This is Totalll:",total)
       console.log("Product ID is here! :",productName)
       if ( !productName || !quantity || !totalPrice || !total || !paymentMethod) {
         return res.status(400).send('Invalid request. Missing required fields.');
@@ -85,11 +86,25 @@ const payPost = async (req, res) => {
 
 //<!--------------------------Admin_Order_Management------------------------------------------->
 
-const orderManagement = async(req,res)=>{
-  const orderDetails = await orderCollection.find()
-   console.log("OrderDetails:",orderDetails)
-  res.render('admin/orderManagement',{orderDetails})
-}
+const ITEMS_PER_PAGE = 10;  
+
+const orderManagement = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const skip = (page - 1) * ITEMS_PER_PAGE;
+
+        const totalOrders = await orderCollection.countDocuments();
+        const totalPages = Math.ceil(totalOrders / ITEMS_PER_PAGE);
+
+        const orderDetails = await orderCollection.find().skip(skip).limit(ITEMS_PER_PAGE);
+
+        res.render('admin/orderManagement', { orderDetails, currentPage: page, totalPages });
+    } catch (error) {
+        console.error(error);
+        res.redirect('/admin/error');
+    }
+};
+
 
  //<!------------------------------------order Status---------------------------------------->
 

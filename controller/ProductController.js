@@ -5,21 +5,25 @@ const ejs = require('ejs');
 
 //Product_Management
 
-const ITEMS_PER_PRODUCT_PAGE = 8;  
+const ITEMS_PER_PRODUCT_PAGE = 8;
 
 const productmanagement = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const skip = (page - 1) * ITEMS_PER_PRODUCT_PAGE;
 
+        const totalProducts = await productCollection.countDocuments();
+        const totalPages = Math.ceil(totalProducts / ITEMS_PER_PRODUCT_PAGE);
+
         const products = await productCollection.find().skip(skip).limit(ITEMS_PER_PRODUCT_PAGE);
 
-        res.render('admin/productmanagement', { products, currentPage: page });
+        res.render('admin/productmanagement', { products, currentPage: page, totalPages });
     } catch (error) {
         console.log(error);
         res.redirect('/admin/error');
     }
 };
+
 
 
 //Add_Products
@@ -208,11 +212,12 @@ const shop = async (req, res) => {
   
 
 
-const filter = async (req, res) => {
+const filter = async (req, res) => {    
     const minPrice = parseInt(req.query.minPrice ?? '10');
     const maxPrice = parseInt(req.query.maxPrice ?? '10000');
-const query = { productPrice: {$gt: minPrice, $lt: maxPrice} };
-     const products = await productCollection.find(query)
+const query =  {$gt: minPrice, $lt: maxPrice};
+    //  const products = await productCollection.find(query).populate('category')
+     const products = await productCollection.aggregate([{ $match: { productPrice: query, isDeleted: false } }, { $lookup: { from: 'categorydatas', localField: 'productCategory', foreignField: '_id', as: 'category' } }, { $unwind: '$category' }]);
      const html = await ejs.renderFile('./views/User/_products-container.ejs', { products })
      res.send(html);
 }

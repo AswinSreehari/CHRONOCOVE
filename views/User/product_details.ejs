@@ -29,7 +29,13 @@
       <div class="col-md-6">
         <h2 class="text-black"><%= products.productName %></h2>
         <p><%= products.productDescription %></p>
-        <p class="mb-4"><strong class="text-primary h4">$<%=products.productPrice %></strong></p>
+        
+        <% if (  products.offerPrice) { %>
+          <del class="">$<%= products.productPrice %></del>
+           <p class="mb-4"><strong class="text-primary h4">$<%=products.offerPrice %></strong></p>
+          <% } else{ %>
+            <p class="mb-4"><strong class="text-primary h4">$<%=products.productPrice %></strong></p>
+             <% } %>
 
        
        

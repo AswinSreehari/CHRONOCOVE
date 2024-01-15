@@ -65,16 +65,24 @@ const Dashboard =((req,res)=>{
 
 //User_Management
 
-const usermanagement = async(req,res)=>{
-    try{
-    const data = await collection.find()
-    console.log("data:",data)
-    res.render('admin/usermanagement',{data})
-    }catch(error){
-        console.log(error)
-        res.redirect('/admin/error')
+const ITEMS_PER_PAGE = 10;  
+
+const usermanagement = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const skip = (page - 1) * ITEMS_PER_PAGE;
+
+        const totalUsers = await collection.countDocuments();
+        const totalPages = Math.ceil(totalUsers / ITEMS_PER_PAGE);
+
+        const data = await collection.find().skip(skip).limit(ITEMS_PER_PAGE);
+
+        res.render('admin/usermanagement', { data, currentPage: page, totalPages });
+    } catch (error) {
+        console.error(error);
+        res.redirect('/admin/error');
     }
-} 
+};
 
 
 //Blank_Page

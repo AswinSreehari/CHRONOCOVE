@@ -2,15 +2,25 @@ const categoryCollection = require('../models/category')
 const productCollection  = require('../models/product')
 //Category_Management
 
-const categorymanagement = (async(req,res)=>{
-    try{
-    const data = await categoryCollection.find()
-    res.render('admin/categorymanagement',{data})
-    }catch(error){
-        console.log(error)
-        res.redirect('/admin/error')
+const ITEMS_PER_PAGE = 8;  
+
+const categorymanagement = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const skip = (page - 1) * ITEMS_PER_PAGE;
+
+        const totalCategories = await categoryCollection.countDocuments();
+        const totalPages = Math.ceil(totalCategories / ITEMS_PER_PAGE);
+
+        const data = await categoryCollection.find().skip(skip).limit(ITEMS_PER_PAGE);
+
+        res.render('admin/categorymanagement', { data, currentPage: page, totalPages });
+    } catch (error) {
+        console.error(error);
+        res.redirect('/admin/error');
     }
-})
+};
+
 
 //Add_Category
 

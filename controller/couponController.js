@@ -1,17 +1,24 @@
 const couponCollection = require('../models/coupon')
 const collection = require('../models/user')
 
-const couponManagement = async (req,res) => {
-    try{ 
-      const coupons= await couponCollection.find()
-        console.log(coupons);
-        res.render('admin/CouponManagement',{coupons})}
-        catch(error)
-        {
-            console.log(error);
-            res.json("internal server error")
-        }
-}
+const ITEMS_PER_PAGE = 6;  
+const couponManagement = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const skip = (page - 1) * ITEMS_PER_PAGE;
+
+        const totalCoupons = await couponCollection.countDocuments();
+        const totalPages = Math.ceil(totalCoupons / ITEMS_PER_PAGE);
+
+        const coupons = await couponCollection.find().skip(skip).limit(ITEMS_PER_PAGE);
+
+        res.render('admin/CouponManagement', { coupons, currentPage: page, totalPages });
+    } catch (error) {
+        console.error(error);
+        res.json("Internal server error");
+    }
+};
+
 
 const addCouponGet = (req,res) => {
     res.render('admin/addCoupons')
@@ -65,7 +72,9 @@ const applyCoupon = async (req, res) => {
         console.log("Inside Apply Couponsss!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
       // Get the coupon code and total price from the request body
       let { couponCode, totalPrice } = req.body;
+      console.log("ReqBody::",req.body)
         console.log("req.body:",couponCode , totalPrice)
+         
       // Find the coupon data by coupon code
       const couponData = await couponCollection.findOne({ couponName: couponCode });
         console.log("CouponData:",couponData)
@@ -76,24 +85,21 @@ const applyCoupon = async (req, res) => {
       }
   
       // Check if the total price is greater than the minimum value of the coupon
-      if (totalPrice < couponData.minValue) {
+      if (Number(totalPrice) < couponData.minValue) {
         return res.status(400).json({ error: 'Total price is less than the minimum value required for this coupon' });
       }
-  
+      console.log('total price',totalPrice);
       // Calculate coupon discount and grant total
-      const couponDiscount = Math.floor((totalPrice * couponData.couponValue) / 100);
-        totalPrice = totalPrice - couponDiscount;
+      const couponDiscount = Math.floor((Number(totalPrice) * couponData.couponValue) / 100);
+        totalPrice = Number(totalPrice) - couponDiscount;
   
-      // Assuming userId is available in your request or from your authentication system
-      const user = await collection.findOne({emailId: req.session.email });
-      const userId = user._id; // Adjust this based on how you store user information
-  console.log(userId);
+       const user = await collection.findOne({emailId: req.session.email });
+      const userId = user._id;  
+      console.log("UserId:",userId);
       if (!couponData.appliedUsers.includes(userId)) {
-        // Push the user's ID to the appliedUsers array
-        couponData.appliedUsers.push(userId);
+         couponData.appliedUsers.push(userId);
   
-        // Save the coupon data with the updated appliedUsers array
-        await couponData.save();
+         await couponData.save();
       }
       console.log("Grand Total:",totalPrice)
       console.log("coupon discount is :",couponDiscount)
