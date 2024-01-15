@@ -223,14 +223,14 @@
 
                 <tr>
                   <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-                  <td class="text-black font-weight-bold" id="totalPrice"><strong>$<%= total %></strong>
-                    <input type="hidden" name="total" value="<%= total %>">
+                  <td class="text-black font-weight-bold" id="total"><strong>$<%= total %></strong>
+
                   </td>
                 </tr>
           </table>
 
           <input type="hidden" name="paymentMethod" id="paymentMethod" value="">
-
+          <input type="hidden" name="totalValue" id="totalValue" value="<%= total %>">
           <div class="row" style="width:100%;">
             <div class="col-12">
               <div class="list-group" id="list-tab" role="tablist">
@@ -253,8 +253,8 @@
     </div>
   </div>
    </div>
-  </form>
   </div>
+</form>
   <!----------------------------------Default_Address--------------------------------------->
 
 
@@ -356,8 +356,8 @@
       event.preventDefault();
 
       const couponCode = $('#couponCodeInput').val();
-      const tPrice=$('#totalPrice').text().substring(1)
-      const totalPrice = parseFloat(tPrice);
+      const tPrice=$('#total').text().substring(1)
+      const total = parseFloat(tPrice);
       const button = $(this);
       // Check if the button text is "Apply" or "Remove"
       if (button.text() === "Apply") {
@@ -366,9 +366,10 @@
         $.ajax({
           type: 'POST',
           url: '/applyCoupon',
-          data: { couponCode: couponCode, totalPrice: totalPrice },
+          data: { couponCode: couponCode, total: total },
           success: function (data) {
-            $('#totalPrice').text(`₹ ${data.totalPrice}`);
+            $('#total').text(`₹ ${data.total}`);
+            $("#totalValue").val(data.total)
             $('#couponDiscount').text(data.couponDiscount);
             // Change button text to "Remove" after applying the coupon
             button.text("Remove");
@@ -388,7 +389,7 @@
         $.ajax({
           type: 'POST',
           url: '/removeCoupon',
-          data: { totalPrice: totalPrice },
+          data: { total: total },
           success: function (data) {
             $('#grantTotal').text(data.grantTotal);
             $('#couponDiscount').text(data.couponDiscount);

@@ -59,6 +59,7 @@
         const inputBoxes = document.querySelectorAll('.otp-input');
 
         inputBoxes[0].focus();
+        inputBoxes[0].onclick = () => inputBoxes[0].select();
 
         inputBoxes[0].addEventListener('paste', (e) => {
             let paste = (e.clipboardData || window.clipboardData).getData("text");

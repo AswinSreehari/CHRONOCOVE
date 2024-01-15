@@ -12,11 +12,11 @@ let instance = new Razorpay({ key_id: KEY_ID, key_secret: KEY_SECRET })
 const checkoutPost = async (req, res) => {
   try {
     const {
-      selectedAddress,paymentMethod,productName,quantity,totalPrice,total} = req.body;
+      selectedAddress,paymentMethod,productName,quantity,totalPrice,totalValue} = req.body;
       console.log("reqBody :",req.body)
-      console.log("This is Totalll:",total)
+      console.log("This is Totalll:",totalValue)
       console.log("Product ID is here! :",productName)
-      if ( !productName || !quantity || !totalPrice || !total || !paymentMethod) {
+      if ( !productName || !quantity || !totalPrice || !totalValue || !paymentMethod) {
         return res.status(400).send('Invalid request. Missing required fields.');
       }
       const userData = await collection.findOne({ emailId: req.session.email });
@@ -37,7 +37,7 @@ const checkoutPost = async (req, res) => {
         quantity: quantity[index],
         total: ProductTotalPrice[index].totalPrice,
       })),
-      orderTotal: parseFloat(total),
+      orderTotal: parseFloat(totalValue),
       paymentMethod: paymentMethod
     });
     
