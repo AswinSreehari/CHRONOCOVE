@@ -414,9 +414,9 @@
 
   <script>
     //place order Button
-    document.getElementById('placeOrderBtn').addEventListener('click', () => {
-      document.getElementById('addressForm').submit();
-    });
+    // document.getElementById('placeOrderBtn').addEventListener('click', () => {
+    //   document.getElementById('addressForm').submit();
+    // });
 
     //Selcted address
     var form = document.getElementById('addressForm');
@@ -479,9 +479,9 @@
         var razorpayKey = 'rzp_test_rII4CJ8DT2Ox30';
         
         // Fetch other necessary details for the payment
-        var totalPriceInRupees = document.querySelector('input[name="total"]').value;
+        var totalPriceInRupees = document.querySelector('input[name="totalValue"]').value;
             var totalPriceInPaisa = Math.round(parseFloat(totalPriceInRupees) * 100);
-
+            console.log(totalPriceInPaisa);
             fetch('/payOrder', {
               method: 'POST',
               headers: {
@@ -525,7 +525,10 @@
           });
       } else if (paymentType === 'CashOnDelivery') {
         form.submit();
-      } else {
+      } else if(paymentType === 'Wallet') {
+        form.submit();
+        
+      }else{
         alert('Invalid payment method selected.');
       }
     });

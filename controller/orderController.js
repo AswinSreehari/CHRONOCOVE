@@ -9,6 +9,7 @@ const productCollection = require('../models/product')
 const Razorpay = require('razorpay')
 const { KEY_ID, KEY_SECRET } = process.env
 let instance = new Razorpay({ key_id: KEY_ID, key_secret: KEY_SECRET })
+
 const checkoutPost = async (req, res) => {
   try {
     const {
@@ -19,9 +20,13 @@ const checkoutPost = async (req, res) => {
       if ( !productName || !quantity || !totalPrice || !totalValue || !paymentMethod) {
         return res.status(400).send('Invalid request. Missing required fields.');
       }
-      const userData = await collection.findOne({ emailId: req.session.email });
-      const userId = userData._id
 
+    
+
+
+      const userData = await collection.findOne({ emailId: req.session.email }).populate("wallet");;
+      const userId = userData._id
+      
       const ProductTotalPrice = await cartCollection.aggregate([{$match: {userId: userData._id}}, {$unwind: "$items"}, {$lookup: {from: "productdatas", localField: "items.productId", foreignField: "_id", as: "cartProduct"}}, {$project: {userId: 1, items: 1, productPrice: {$arrayElemAt: ["$cartProduct.productPrice", 0]}, calculatedPrice: {$multiply: ["$items.quantity", {$arrayElemAt: ["$cartProduct.productPrice", 0]}]}}}, {$group: {_id: "$items.productId", userId: {$first: "$userId"}, quantity: {$sum: "$items.quantity"}, totalPrice: {$sum: "$calculatedPrice"}, productPrice: {$first: "$productPrice"}}}]);
   
       const ourAddress = await addressCollection.findOne({ 'Address._id': new ObjectId(selectedAddress) });
@@ -40,11 +45,39 @@ const checkoutPost = async (req, res) => {
       orderTotal: parseFloat(totalValue),
       paymentMethod: paymentMethod
     });
+
+    // cheythathu by sanal for payment using wallet-- start here
     
-  
+    if(paymentMethod==="Wallet"){
+      console.log("inside wallet!!")
+      if (order.orderTotal <= userData.wallet.balance) {
+        await order.save();
+        console.log("order total:",order.orderTotal)
+        
+        const transactionAmount = -order.orderTotal; // Debit from the wallet
+        const transactionType = 'Debit';
+    
+        // Update the wallet balance
+        userData.wallet.balance -= order.orderTotal;
+    
+        // Add a new transaction to the 'transactions' array
+        userData.wallet.transactions.push({
+          amount: transactionAmount,
+          type: transactionType,
+        });
+    
+        // Save the changes to the wallet
+        await userData.wallet.save();
+      }
+    }
+    
+    // cheythathu by sanal for payment using wallet-- start end here
+    else{
+      await order.save();
+    }
     
     
-    await order.save();
+   
     
     //updating Quantity
     for (const productId of productName) {
@@ -71,8 +104,9 @@ const payPost = async (req, res) => {
   try {
     console.log('paypost');
     const { totalPrice } = req.body;
+    console.log("the price of the product is :",totalPrice)
     const razorpayOrder = await instance.orders.create({
-      amount: Number(totalPrice), //change the amount
+      amount: Number(totalPrice),  
       currency: 'INR',
       receipt: `order_${Date.now()}`,
     });
