@@ -147,15 +147,41 @@ res.redirect('/myAddress')
 
 //<!--------------------------My_Orders---------------------------------------------------->
 
-const myOrders = async(req,res) => {
-  const userData = await collection.findOne({emailId:req.session.email})
-  const userId = userData._id  
-  const populatedOrders = await orderCollection.aggregate([{ $match: { userId: userId } }, { $unwind: "$items" }, { $lookup: { from: "productdatas", localField: "items.productId", foreignField: "_id", as: "items.productData" } }]);
-  if (populatedOrders.length < 1) {
-    //console.log("populatedOrders:", JSON.stringify(populatedOrders[0].items, null, 2));
-  }
-  res.render('User/myOrders',{orderData : populatedOrders})
-}
+const ITEMS_PER_PAGE = 10;  
+
+const myOrders = async (req, res) => {
+    try {
+        const userData = await collection.findOne({ emailId: req.session.email });
+        const userId = userData._id;
+
+        const currentPage = parseInt(req.query.page) || 1;
+        const skip = (currentPage - 1) * ITEMS_PER_PAGE;
+
+        const populatedOrders = await orderCollection
+            .aggregate([
+                { $match: { userId: userId } },
+                { $unwind: "$items" },
+                { $lookup: { from: "productdatas", localField: "items.productId", foreignField: "_id", as: "items.productData" } },
+            ])
+            .skip(skip)
+            .limit(ITEMS_PER_PAGE);
+
+        if (populatedOrders.length < 1) {
+            // console.log("populatedOrders:", JSON.stringify(populatedOrders[0].items, null, 2));
+        }
+
+        const totalOrders = await orderCollection.countDocuments({ userId: userId });
+
+        const totalPages = Math.ceil(totalOrders / ITEMS_PER_PAGE);
+
+        res.render('User/myOrders', { orderData: populatedOrders, currentPage, totalPages });
+    } catch (error) {
+        console.log(error);
+        res.redirect('/error');
+    }
+};
+
+
 //<!--------------------------Orders_Details----------------------------------------------->
 
 const orderDetails = async (req, res) => {

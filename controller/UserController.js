@@ -372,20 +372,18 @@ const forgotPasswordPost = async (req, res) => {
             return res.render('User/forgotPassword', { error: 'User not found' });
         }
 
-        // Generate OTP and OTP expiry
-        const { otp, otpExpiry } = generateOTPWithExpiry();
+         const { otp, otpExpiry } = generateOTPWithExpiry();
 
-         user.otp = otp;
+        user.otp = otp;
         user.otpExpiry = otpExpiry;
         await user.save();
 
-         console.log("Generated OTP:", otp);
- 
-         await sendOTPByEmail(email, otp);
-        
+        console.log("Generated OTP:", otp);
 
-         res.render('User/otp', { email, message: 'Please enter the OTP sent to your email' });
-        
+         await sendOTPByEmail(email, otp, true);  
+
+        res.render('User/otp', { email, message: 'Please enter the OTP sent to your email' });
+
     } catch (error) {
         console.error(error);
         res.redirect('/error');

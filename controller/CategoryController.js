@@ -129,15 +129,13 @@ const applyOffer = async (req, res) => {
     const { categoryId, percentage } = req.body;
 
     try {
-        // Find the category by its ID
-        const category = await categoryCollection.findById(categoryId);
+         const category = await categoryCollection.findById(categoryId);
 
         if (!category) {
             return res.status(404).json({ success: false, message: 'Category not found' });
         }
 
-        // Find all products belonging to the category
-        const products = await productCollection.find({ productCategory: categoryId });
+         const products = await productCollection.find({ productCategory: categoryId });
           for (const product of products) {
             const updatedPrice = Math.floor(product.productPrice - (product.productPrice * (percentage / 100)));
             // const realPrice=product.price;

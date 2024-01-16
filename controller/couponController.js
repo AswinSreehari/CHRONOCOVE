@@ -33,21 +33,30 @@ const addCoupon = async (req, res) => {
         console.log(maxValue);
         console.log(minValue);
         console.log(expiryDate);
-        const newCoupon = new couponCollection({
-            couponName,
-            couponValue,
-            maxValue,
-            minValue,
-            expiryDate,
-        });
-         
-        console.log(newCoupon);
-        await newCoupon.save();
-        console.log("Coupon Saved!!");
-        res.redirect('/admin/couponManagement'); 
+        const existingCoupon = await couponCollection.findOne({ couponName });
+
+        if (existingCoupon) {
+             console.log("Coupon already exists!");
+              return res.status(400).send("Coupon already exist!!")
+ 
+          } else {
+          const newCoupon = new couponCollection({
+              couponName,
+              couponValue,
+              maxValue,
+              minValue,
+              expiryDate,
+          });
+          console.log(newCoupon);
+          await newCoupon.save();
+          console.log("Coupon Saved!!");
+          res.redirect('/admin/couponManagement'); 
+        }
+
+        
     } catch (error) {
         console.log(error)
-        res.redirect('admin/error')
+        res.redirect('/error')
     }
 };
 

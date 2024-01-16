@@ -10,8 +10,7 @@ const productCollection = require('../models/product');
 const chart = async (req, res) => {
      if (req.session.admin) {
         try {
-            // Aggregate data for the daily chart
-            const dayChart = await orderCollection.aggregate([
+             const dayChart = await orderCollection.aggregate([
                 {
                     $group: {
                         _id: { $dateToString: { format: "%Y-%m-%d", date: "$orderTime" } },
@@ -19,10 +18,10 @@ const chart = async (req, res) => {
                     }
                 },
                 {
-                    $sort: { _id: 1 } // Sort by date in ascending order
+                    $sort: { _id: 1 }  
                 },
                 {
-                    $limit: 30 // Limit to the last 30 days
+                    $limit: 30  
                 }
             ]);
 
@@ -35,7 +34,7 @@ const chart = async (req, res) => {
                     }
                 },
                 {
-                    $sort: { _id: 1 } // Sort by month in ascending order
+                    $sort: { _id: 1 }  
                 }
             ]);
 
@@ -48,7 +47,7 @@ const chart = async (req, res) => {
                     }
                 },
                 {
-                    $sort: { _id: 1 } // Sort by year in ascending order
+                    $sort: { _id: 1 }  
                 }
             ]);
 
@@ -130,8 +129,7 @@ const chart = async (req, res) => {
             const orderCountsByPaymentMethod = paymentMethodChart.map(item => item.count);
             let paymentMethodData = { labels: paymentMethodLabels, orderCounts: orderCountsByPaymentMethod };
 
-            // Send data as JSON response
-            res.json({
+             res.json({
                 dayData,
                 monthData,
                 yearData,
