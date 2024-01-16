@@ -83,9 +83,9 @@ router.get('/downloadInvoice/:orderId',userAuthentication.userAuthentication,pro
 router.get('/wishlist', userAuthentication.userAuthentication,wishlistController.wishlist);
 router.post('/addWish/:id',userAuthentication.userAuthentication,wishlistController.addWish)
 router.delete('/wishlist/:productId',userAuthentication.userAuthentication,wishlistController.deleteWishlistProduct)
-router.post("/cart/:id",userAuthentication.userAuthentication,wishlistController.addtoCart)
+ router.post("/wishToCart/:id",userAuthentication.userAuthentication,wishlistController.addtoCart)
 
-//<---------------------------------Wallet----------------------------------------->
+//<--------------------------------------Wallet------------------------------------------->
 
 router.get('/walletHistory',userAuthentication.userAuthentication,walletcontroller.walletHistory)
 
@@ -93,7 +93,7 @@ router.get('/walletHistory',userAuthentication.userAuthentication,walletcontroll
 
 router.post('/claimReference',userAuthentication.userAuthentication,referenceController.claimReferenceCode)
 
-//<---------------------------------Coupon----------------------------------------->
+//<-----------------------------------Coupon------------------------------------------->
 
 router.post('/applyCoupon',userAuthentication.userAuthentication,couponController.applyCoupon)
 // router.post('/removeCoupon',userAuthentication.userAuthentication,couponController.removeCoupon)

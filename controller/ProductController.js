@@ -36,8 +36,6 @@ const addProducts = (async(req,res)=>{
 const addProductsPost = async (req, res) => {
     const { productName, productDescription, productCategory, productQuantity , productPrice,offer} = req.body;
     const mainProductImage = req.files.mainProductImage[0] ? req.files.mainProductImage[0].filename : '';
-
-    console.log('Its an Object ID')
    
     const additionalProductImage = req.files.additionalProductImage ? req.files.additionalProductImage.map(file => file.filename) : [];
   

@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const productCollection = require('../models/product')
 const userCollection = require('../models/user')
 const wishlistCollection = require('../models/wishlist')
-
+const { addToCart } = require('./cartController');
 const { collection } = require('../models/cart')
 const cartCollection = require('../models/cart')
 
@@ -71,58 +71,17 @@ const deleteWishlistProduct = async (req, res) => {
 //<!-------------------------Add to Cart--------------------------------------->
 
 const addtoCart = async (req, res) => {
-
   const productId = req.params.id;
-  const product = await productCollection.findById(productId);
-  if (!product) {
-    return res.status(404).send('Product Not Found!!');
-  }
-
-  const userData = await collection.findOne({ emailId: req.session.email });
-
+  console.log("productId is!", productId);
   try {
-    let userCart = await cartCollection.findOne({ userId: userData._id });
-
-    if (!userCart) {
-      const newCart = new cartCollection({
-        userId: userData._id,
-        items: [{
-          productId: product._id,
-          quantity: 1
-        }],
-        totalPrice: product.productPrice
-
-      });
-
-      userCart = await newCart.save();
+    const result = await addToCart(productId, req.session.email);
+    if (result) {
+      res.redirect('/cartGet');
     }
-
-    const existingItemIndex = userCart.items.findIndex(item => item.productId.equals(product._id));
-    if (existingItemIndex !== -1) {
-      userCart.items[existingItemIndex].quantity += 1;
-      userCart.totalPrice = userCart.items.reduce((total, item) => total + (item.totalPrice || 0), 0);
-    } else {
-      userCart.items.push({
-        productId: product._id,
-        quantity: 1,
-        totalPrice: product.productPrice,
-      })
-
-    }
-
-    const populatedCart = await populateProductDetails(userCart);
-    console.log(JSON.stringify(populatedCart, null, 2))
-    const totalPrice = await cartCollection.aggregate([{ $match: { userId: userData._id } }, { $unwind: "$items" }, { $lookup: { from: "productdatas", localField: "items.productId", foreignField: "_id", as: "cartProduct" } }, { $project: { userId: 1, items: 1, productPrice: { $arrayElemAt: ["$cartProduct.productPrice", 0] }, calculatedPrice: { $multiply: ["$items.quantity", { $arrayElemAt: ["$cartProduct.productPrice", 0] }] } } }, { $group: { _id: "$items.productId", userId: { $first: "$userId" }, quantity: { $sum: "$items.quantity" }, totalPrice: { $sum: "$calculatedPrice" }, productPrice: { $first: "$productPrice" } } }]);
-    const total = totalPrice.reduce((sum, item) => sum + item.totalPrice, 0);
-    userCart.totalPrice = total
-     await userCart.save();
-    res.render('User/cart', { populatedCart: populatedCart ?? [], totalPrice, total });
   } catch (err) {
-     console.error(err);
-    res.redirect('/error');
+    res.status(err.statusCode).send(err.message);
   }
 }
-
 
 const populateProductDetails = async function (cart) {
   if (!cart || !cart.items) {
