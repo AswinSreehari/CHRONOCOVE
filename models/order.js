@@ -56,7 +56,10 @@ const orderSchema = new mongoose.Schema({
     enum: ['Pending', 'Processing', 'Delivered', 'Cancelled'],
     default: 'Pending',
   },
-   
+    cancelReason: {
+    type: String,
+    }
+  
 });
 
 const orderCollection = mongoose.model('orderData', orderSchema);

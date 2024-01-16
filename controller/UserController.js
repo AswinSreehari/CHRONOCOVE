@@ -375,19 +375,16 @@ const forgotPasswordPost = async (req, res) => {
         // Generate OTP and OTP expiry
         const { otp, otpExpiry } = generateOTPWithExpiry();
 
-        // Update user's OTP and OTP expiry in the database
-        user.otp = otp;
+         user.otp = otp;
         user.otpExpiry = otpExpiry;
         await user.save();
 
          console.log("Generated OTP:", otp);
  
-        // Send OTP to the  's email
-        await sendOTPByEmail(email, otp);
+         await sendOTPByEmail(email, otp);
         
 
-        // Render the page where the user can enter the OTP
-        res.render('User/otp', { email, message: 'Please enter the OTP sent to your email' });
+         res.render('User/otp', { email, message: 'Please enter the OTP sent to your email' });
         
     } catch (error) {
         console.error(error);
