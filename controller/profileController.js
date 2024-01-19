@@ -161,7 +161,7 @@ const myOrders = async (req, res) => {
             .aggregate([
                 { $match: { userId: userId } },
                 { $unwind: "$items" },
-                { $lookup: { from: "productdatas", localField: "items.productId", foreignField: "_id", as: "items.productData" } },
+                { $lookup: { from: "productdatas", localField: "items.productId", foreignField: "_id", as: "items.productData" } },{ $sort: { "_id": -1 }}
             ])
             .skip(skip)
             .limit(ITEMS_PER_PAGE);
