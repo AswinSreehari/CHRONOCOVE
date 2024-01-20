@@ -182,6 +182,7 @@ const signupPost = async (req, res) => {
  
             if (!check) {
                 console.log("User name cannot be found");
+                res.render('User/signin',{error:'User not found!'})
             } else {
                 if (check.isBlocked) {
                     return res.render('User/signin', { error: "You are blocked by admin" });

@@ -127,6 +127,8 @@ const sendCategoryOffer = async (req, res) => {
 
 const applyOffer = async (req, res) => {
     const { categoryId, percentage } = req.body;
+    console.log("offer percentage is :",percentage)
+    console.log("offer percentage is :",categoryId)
 
     try {
          const category = await categoryCollection.findById(categoryId);
@@ -140,7 +142,8 @@ const applyOffer = async (req, res) => {
             const updatedPrice = Math.floor(product.productPrice - (product.productPrice * (percentage / 100)));
             // const realPrice=product.price;
             // product.price = updatedPrice;
-            product.offPrice=updatedPrice;
+            product.offerPrice=updatedPrice;
+            product.offer = percentage
             await product.save();
         }
 
