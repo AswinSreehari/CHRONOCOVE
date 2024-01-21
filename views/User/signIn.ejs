@@ -14,8 +14,7 @@
             var loginForm = document.getElementById('login-form');
 
             loginForm.addEventListener('submit', function(event) {
-                // Prevent the form from submitting
-                event.preventDefault();
+                 event.preventDefault();
 
                 // Reset previous error messages
                 resetErrorMessages();
@@ -25,7 +24,7 @@
                 var password = document.getElementById('password').value;
 
                 if (email.trim() === '') {
-                    displayErrorMessage('email', 'Please enter your email.');
+                    displayErrorMessage('email', 'Please enter your email.')
                     return;
                 }
 
@@ -34,8 +33,7 @@
                     return;
                 }
 
-                // If validation passes, you can submit the form
-                loginForm.submit();
+                 loginForm.submit();
             });
 
             function displayErrorMessage(fieldId, message) {
